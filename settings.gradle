@@ -1,2 +1,4 @@
 rootProject.name = "FSPlayer"
 include ':app'
+include ':resources'
+include ':core'
