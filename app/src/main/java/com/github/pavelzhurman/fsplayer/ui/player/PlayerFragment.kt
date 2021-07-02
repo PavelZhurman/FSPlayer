@@ -3,8 +3,9 @@ package com.github.pavelzhurman.fsplayer.ui.player
 import android.os.Bundle
 import com.github.pavelzhurman.core.base.BaseFragment
 import com.github.pavelzhurman.fsplayer.R
+import com.github.pavelzhurman.fsplayer.databinding.FragmentPlayerBinding
 
-class PlayerFragment : BaseFragment<PlayerViewModel>() {
+class PlayerFragment : BaseFragment<FragmentPlayerBinding,PlayerViewModel>() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -16,5 +17,5 @@ class PlayerFragment : BaseFragment<PlayerViewModel>() {
     override fun initViews() {}
 
     override val viewModelClass: Class<PlayerViewModel> = PlayerViewModel::class.java
-    override val layout: Int = R.layout.fragment_player
+    override fun getViewBinding() = FragmentPlayerBinding.inflate(layoutInflater)
 }

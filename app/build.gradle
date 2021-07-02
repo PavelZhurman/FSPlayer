@@ -4,15 +4,15 @@ plugins {
 }
 
 android {
-    compileSdkVersion 30
-    buildToolsVersion "30.0.3"
+    compileSdkVersion build_versions.compileSdk
+    buildToolsVersion build_versions.buildTools
 
     defaultConfig {
         applicationId "com.github.pavelzhurman.fsplayer"
-        minSdkVersion 21
-        targetSdkVersion 30
-        versionCode 1
-        versionName "1.0"
+        minSdkVersion build_versions.minSdk
+        targetSdkVersion build_versions.targetSdk
+        versionCode build_versions.versionCode
+        versionName build_versions.versionName
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -47,33 +47,34 @@ android {
         jvmTarget = '1.8'
     }
 
-
-
+    buildFeatures {
+        viewBinding = true
+    }
 
 }
 
 dependencies {
-    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
-    implementation 'androidx.lifecycle:lifecycle-livedata-ktx:2.3.1'
-    implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.3.1'
-    def nav_version = "2.3.5"
-
     implementation project(":resources")
     implementation project(":core")
 
-    implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
-    implementation 'androidx.core:core-ktx:1.5.0'
-    implementation 'androidx.appcompat:appcompat:1.3.0'
-    implementation 'com.google.android.material:material:1.3.0'
-    implementation 'androidx.constraintlayout:constraintlayout:2.0.4'
-    testImplementation 'junit:junit:4.+'
-    androidTestImplementation 'androidx.test.ext:junit:1.1.2'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
+    implementation _kotlin.kotlin_stdlib
+    implementation androidx.core
+    implementation androidx.appcompat
+    implementation _android.material
+    implementation androidx.constraint_layout
+    testImplementation tests.junit
+    androidTestImplementation tests.androidx_junit
+    androidTestImplementation tests.espresso
+
+    implementation androidx.legacy
+    implementation androidx.lifecycle.livedata
+    implementation androidx.lifecycle.viewmodel
+
 
     // Navigation
-    implementation("androidx.navigation:navigation-fragment-ktx:$nav_version")
-    implementation("androidx.navigation:navigation-ui-ktx:$nav_version")
-    implementation("androidx.navigation:navigation-dynamic-features-fragment:$nav_version")
-    androidTestImplementation("androidx.navigation:navigation-testing:$nav_version")
+    implementation navigation.fragment
+    implementation navigation.ui_ktx
+    implementation navigation.dynamic_features_fragment
+    androidTestImplementation navigation.testing
 
 }

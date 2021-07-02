@@ -25,6 +25,9 @@
     <string name="register">Register</string>
     <string name="search_by">Search by</string>
     <string name="filter_by">Filter by</string>
+    <string name="search">Search</string>
+    <string name="player" translatable="false">player</string>
+    <string name="authorization">Authorization</string>
 
 
 </resources>

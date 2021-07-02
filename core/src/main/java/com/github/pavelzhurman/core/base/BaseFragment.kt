@@ -7,10 +7,13 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import androidx.viewbinding.ViewBinding
 
-abstract class BaseFragment<VM : ViewModel> : Fragment() {
+abstract class BaseFragment<VB : ViewBinding, VM : ViewModel> : Fragment() {
 
     private lateinit var viewModel: VM
+    protected lateinit var binding: VB
+
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -18,11 +21,10 @@ abstract class BaseFragment<VM : ViewModel> : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         viewModel = ViewModelProvider(this).get(viewModelClass)
-        val root = inflater.inflate(layout, container, false)
-
+        binding = getViewBinding()
         initObservers(viewModel)
 
-        return root
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -33,7 +35,8 @@ abstract class BaseFragment<VM : ViewModel> : Fragment() {
 
     abstract fun initObservers(viewModel: VM)
     abstract fun initViews()
+    abstract fun getViewBinding(): VB
 
     abstract val viewModelClass: Class<VM>
-    abstract val layout: Int
 }
+

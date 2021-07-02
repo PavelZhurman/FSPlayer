@@ -1,24 +1,30 @@
 package com.github.pavelzhurman.fsplayer.ui.freesound
 
-import android.widget.Button
 import androidx.navigation.Navigation
 import com.github.pavelzhurman.core.base.BaseFragment
 import com.github.pavelzhurman.fsplayer.R
+import com.github.pavelzhurman.fsplayer.databinding.FragmentFreeSoundAuthorizationBinding
+import com.github.pavelzhurman.fsplayer.ui.player.PlayerActivity
 
-class FreeSoundAuthorizationFragment : BaseFragment<FreeSoundAuthorizationViewModel>() {
-    lateinit var bLogin: Button
+class FreeSoundAuthorizationFragment :
+    BaseFragment<FragmentFreeSoundAuthorizationBinding, FreeSoundAuthorizationViewModel>() {
 
     override fun initObservers(viewModel: FreeSoundAuthorizationViewModel) {}
 
     override fun initViews() {
-        bLogin = requireView().findViewById(R.id.button_login)
-        bLogin.setOnClickListener {
-            Navigation.findNavController(requireView())
-                .navigate(R.id.action_freeSoundAuthorizationFragment_to_freeSoundSearchFragment)
+        with(binding) {
+            player.setOnClickListener { PlayerActivity.start(requireContext()) }
+            buttonLogin.setOnClickListener { openFreeSoundSearchFragment() }
         }
+    }
+
+    private fun openFreeSoundSearchFragment() {
+        Navigation.findNavController(requireView())
+            .navigate(R.id.action_freeSoundAuthorizationFragment_to_freeSoundSearchFragment)
     }
 
     override val viewModelClass: Class<FreeSoundAuthorizationViewModel> =
         FreeSoundAuthorizationViewModel::class.java
-    override val layout: Int = R.layout.fragment_free_sound_authorization
+
+    override fun getViewBinding() = FragmentFreeSoundAuthorizationBinding.inflate(layoutInflater)
 }

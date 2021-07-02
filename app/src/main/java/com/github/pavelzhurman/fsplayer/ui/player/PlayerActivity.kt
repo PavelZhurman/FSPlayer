@@ -1,15 +1,17 @@
 package com.github.pavelzhurman.fsplayer.ui.player
 
+import android.content.Context
+import android.content.Intent
+import androidx.core.content.ContextCompat
 import com.github.pavelzhurman.core.base.BaseActivity
 import com.github.pavelzhurman.fsplayer.R
+import com.github.pavelzhurman.fsplayer.databinding.ActivityPlayerBinding
 
-class PlayerActivity : BaseActivity<PlayerViewModel>() {
+class PlayerActivity : BaseActivity<ActivityPlayerBinding, PlayerViewModel>() {
     override fun initObservers(viewModel: PlayerViewModel) {}
 
     override fun initViews() {
-        setSupportActionBar(findViewById(R.id.toolbar_player))
-        supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        supportActionBar?.setDisplayShowHomeEnabled(true)
+        initToolbar()
     }
 
     override fun onSupportNavigateUp(): Boolean {
@@ -17,6 +19,23 @@ class PlayerActivity : BaseActivity<PlayerViewModel>() {
         return true
     }
 
+    private fun initToolbar() {
+        setSupportActionBar(findViewById(R.id.toolbar_player))
+        supportActionBar?.apply {
+            setDisplayHomeAsUpEnabled(true)
+            setDisplayShowHomeEnabled(true)
+        }
+    }
+
     override val viewModelClass: Class<PlayerViewModel> = PlayerViewModel::class.java
-    override val layout: Int = R.layout.activity_player
+    override fun getViewBinding() = ActivityPlayerBinding.inflate(layoutInflater)
+
+    companion object {
+        @JvmStatic
+        fun start(context: Context) {
+            val intent = Intent(context, PlayerActivity::class.java)
+            ContextCompat.startActivity(context, intent, null)
+        }
+
+    }
 }

@@ -23,6 +23,7 @@
     <string name="register">Зарегистрировать</string>
     <string name="search_by">Искать по</string>
     <string name="filter_by">Фильтровать по</string>
+    <string name="search">Поиск</string>
 
 
 </resources>

@@ -7,20 +7,14 @@
 
     <androidx.viewpager2.widget.ViewPager2
         android:id="@+id/view_pager"
-        android:layout_width="match_parent"
-        android:layout_height="340dp"
-        android:layout_marginTop="24dp"
+        style="@style/PlayerPager"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <ImageButton
         android:id="@+id/image_button_volume"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="30dp"
-        android:layout_marginTop="30dp"
-        android:background="@color/white"
+        style="@style/PlayerImageButton.Margin30"
         android:contentDescription="@string/change_volume"
         android:src="@drawable/ic_baseline_volume_down_24"
         app:layout_constraintStart_toStartOf="parent"
@@ -28,61 +22,45 @@
 
     <ImageButton
         android:id="@+id/image_button_shuffle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="30dp"
-        android:background="@color/white"
+        style="@style/PlayerImageButton.Margin30"
         android:contentDescription="@string/shuffle_playlist"
         android:src="@drawable/ic_baseline_shuffle_24"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/image_button_volume" />
+        app:layout_constraintTop_toBottomOf="@+id/view_pager" />
 
     <ImageButton
         android:id="@+id/image_button_repeat"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="12dp"
-        android:background="@color/white"
+        style="@style/PlayerImageButton.Repeat"
         android:contentDescription="@string/repeat_song"
         android:src="@drawable/ic_baseline_repeat_24"
         app:layout_constraintEnd_toStartOf="@+id/image_button_shuffle"
-        app:layout_constraintTop_toTopOf="@+id/image_button_volume" />
+        app:layout_constraintTop_toBottomOf="@+id/view_pager" />
 
     <TextView
         android:id="@+id/text_view_time_played"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="30dp"
-        android:layout_marginTop="60dp"
+        style="@style/Text.PlayerSongTime"
+        android:textColor="@color/player_time_text_color"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/image_button_volume"
         tools:text="00:10" />
 
     <TextView
         android:id="@+id/text_view_song_time"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="30dp"
+        style="@style/Text.PlayerSongTime"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/text_view_time_played"
+        app:layout_constraintTop_toBottomOf="@+id/image_button_volume"
         tools:text="04:00" />
 
-    <androidx.core.widget.ContentLoadingProgressBar
+    <androidx.appcompat.widget.AppCompatSeekBar
         android:id="@+id/progress_bar_song"
-        style="@style/Widget.AppCompat.ProgressBar.Horizontal"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="30dp"
-        android:layout_marginTop="35dp"
-        android:layout_marginEnd="30dp"
+        style="@style/SeekBar.Player"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/text_view_time_played" />
 
     <ImageButton
         android:id="@+id/image_button_previous"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        style="@style/PlayerImageButton"
         android:contentDescription="@string/previous_song"
         android:src="@drawable/ic_baseline_skip_previous_24"
         app:layout_constraintBottom_toBottomOf="@+id/image_button_play_pause"
@@ -92,8 +70,7 @@
 
     <ImageButton
         android:id="@+id/image_button_play_pause"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        style="@style/PlayerImageButton"
         android:contentDescription="@string/play_or_pause_song"
         android:src="@drawable/ic_baseline_pause_24"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -103,8 +80,7 @@
 
     <ImageButton
         android:id="@+id/image_button_play_next"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        style="@style/PlayerImageButton"
         android:contentDescription="@string/next_song"
         android:src="@drawable/ic_baseline_skip_next_24"
         app:layout_constraintBottom_toBottomOf="@+id/image_button_play_pause"
