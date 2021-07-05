@@ -1,0 +1,72 @@
+ext.build_versions = [
+        compileSdk : 30,
+        buildTools : '30.0.3',
+
+        minSdk     : 21,
+        targetSdk  : 30,
+        versionCode: 1,
+        versionName: "1.0",
+]
+
+ext.versions = [
+        kotlin           : '1.5.10',
+        gradle           : '4.2.1',
+
+        core             : '1.5.0',
+        appcompat        : '1.3.0',
+        material         : '1.3.0',
+        constraint_layout: '2.0.4',
+        legacy           : '1.0.0',
+
+        junit            : '4.+',
+        androidx_junit   : '1.1.2',
+        espresso         : '3.3.0',
+
+        lifecycle        : '2.3.1',
+        navigation       : '2.3.5',
+        glide            : '4.12.0'
+]
+
+ext.navigation = [
+        fragment                 : "androidx.navigation:navigation-fragment:$versions.navigation",
+        ui_ktx                   : "androidx.navigation:navigation-ui-ktx:$versions.navigation",
+        dynamic_features_fragment: "androidx.navigation:navigation-dynamic-features-fragment:$versions.navigation",
+        testing                  : "androidx.navigation:navigation-testing:$versions.navigation"
+]
+
+ext.build = [
+        gradle: "com.android.tools.build:gradle:$versions.gradle"
+]
+
+ext._kotlin = [
+        kotlin_gradle_plugin: "org.jetbrains.kotlin:kotlin-gradle-plugin:$versions.kotlin",
+        kotlin_stdlib       : "org.jetbrains.kotlin:kotlin-stdlib:$versions.kotlin"
+]
+
+ext.androidx = [
+        core             : "androidx.core:core-ktx:$versions.core",
+        appcompat        : "androidx.appcompat:appcompat:$versions.appcompat",
+        constraint_layout: "androidx.constraintlayout:constraintlayout:$versions.constraint_layout",
+
+        legacy           : "androidx.legacy:legacy-support-v4:$versions.legacy",
+        lifecycle        : [
+                livedata : "androidx.lifecycle:lifecycle-livedata-ktx:$versions.lifecycle",
+                viewmodel: "androidx.lifecycle:lifecycle-viewmodel-ktx:$versions.lifecycle"
+        ]
+]
+
+ext._android = [
+        material: "com.google.android.material:material:$versions.material"
+]
+
+ext.tests = [
+        junit         : "junit:junit:$versions.junit",
+        androidx_junit: "androidx.test.ext:junit:$versions.androidx_junit",
+        espresso      : "androidx.test.espresso:espresso-core:$versions.espresso"
+]
+
+ext.glide = [
+        glide   : "com.github.bumptech.glide:glide:$versions.glide",
+        compiler: "com.github.bumptech.glide:compiler:$versions.glide"
+]
+
