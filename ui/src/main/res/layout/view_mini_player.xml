@@ -3,13 +3,13 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="75dp"
+    android:layout_height="@dimen/root_layout_height"
     android:background="@color/player_background">
 
     <ImageView
         android:id="@+id/image_album"
-        android:layout_width="70dp"
-        android:layout_height="70dp"
+        android:layout_width="@dimen/poster_layout_width"
+        android:layout_height="@dimen/poster_layout_height"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
@@ -17,9 +17,9 @@
         android:id="@+id/text_view_artist"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
+        android:layout_marginStart="@dimen/tv_artist_margin_start"
         android:textColor="@color/artist_text"
-        android:textSize="18sp"
+        android:textSize="@dimen/tv_artist_text_size"
         app:layout_constraintBottom_toTopOf="@+id/text_view_song_name"
         app:layout_constraintStart_toEndOf="@+id/image_album"
         tools:text="Chaff &amp; Dust" />
@@ -28,19 +28,19 @@
         android:id="@+id/text_view_song_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="10dp"
-        android:layout_marginBottom="14dp"
+        android:layout_marginStart="@dimen/tv_song_name_margin_start"
+        android:layout_marginBottom="@dimen/tv_song_name_margin_bottom"
         android:textColor="@color/song_name_text"
-        android:textSize="14sp"
+        android:textSize="@dimen/tv_song_name_text_size"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toEndOf="@+id/image_album"
         tools:text="Hyonna" />
 
     <ImageButton
         android:id="@+id/image_button_next"
-        android:layout_width="48dp"
-        android:layout_height="48dp"
-        android:layout_marginEnd="16dp"
+        android:layout_width="@dimen/ib_layout_width"
+        android:layout_height="@dimen/ib_layout_height"
+        android:layout_marginEnd="@dimen/ib_next_margin_end"
         android:background="@color/player_background"
         android:src="@drawable/ic_baseline_skip_next_24"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -49,8 +49,8 @@
 
     <ImageButton
         android:id="@+id/image_button_play"
-        android:layout_width="48dp"
-        android:layout_height="48dp"
+        android:layout_width="@dimen/ib_layout_width"
+        android:layout_height="@dimen/ib_layout_height"
         android:background="@color/player_background"
         android:src="@drawable/ic_baseline_play_arrow_24"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -59,8 +59,8 @@
 
     <ImageButton
         android:id="@+id/image_button_previous"
-        android:layout_width="48dp"
-        android:layout_height="48dp"
+        android:layout_width="@dimen/ib_layout_width"
+        android:layout_height="@dimen/ib_layout_height"
         android:background="@color/player_background"
         android:src="@drawable/ic_baseline_skip_previous_24"
         app:layout_constraintBottom_toBottomOf="parent"
