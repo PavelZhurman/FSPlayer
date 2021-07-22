@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/mainFragment">
+
+    <fragment
+        android:id="@+id/mainFragment"
+        android:name="com.github.pavelzhurman.fsplayer.ui.main.MainFragment"
+        android:label="MainFragment">
+        <action
+            android:id="@+id/action_mainFragment_to_favouriteSongsFragment"
+            app:destination="@id/favouriteSongsFragment" />
+        <action
+            android:id="@+id/action_mainFragment_to_myPlaylistsFragment"
+            app:destination="@id/myPlaylistsFragment" />
+        <action
+            android:id="@+id/action_mainFragment_to_searchFragment"
+            app:destination="@id/searchFragment" />
+        <action
+            android:id="@+id/action_mainFragment_to_freeSoundAuthorizationFragment"
+            app:destination="@id/freeSoundAuthorizationFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/favouriteSongsFragment"
+        android:name="com.github.pavelzhurman.fsplayer.ui.favourite_songs.FavouriteSongsFragment"
+        android:label="FavouriteSongsFragment">
+        <action
+            android:id="@+id/action_favouriteSongsFragment_to_mainFragment"
+            app:destination="@id/mainFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/myPlaylistsFragment"
+        android:name="com.github.pavelzhurman.fsplayer.ui.my_playlists.MyPlaylistsFragment"
+        android:label="MyPlaylistsFragment">
+        <action
+            android:id="@+id/action_myPlaylistsFragment_to_playlistEditorFragment"
+            app:destination="@id/playlistEditorFragment" />
+        <action
+            android:id="@+id/action_myPlaylistsFragment_to_mainFragment"
+            app:destination="@id/mainFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/playlistEditorFragment"
+        android:name="com.github.pavelzhurman.fsplayer.ui.my_playlists.playlist_editor.PlaylistEditorFragment"
+        android:label="PlaylistEditorFragment">
+        <action
+            android:id="@+id/action_playlistEditorFragment_to_mainFragment"
+            app:destination="@id/mainFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/searchFragment"
+        android:name="com.github.pavelzhurman.fsplayer.ui.search.SearchFragment"
+        android:label="SearchFragment">
+        <action
+            android:id="@+id/action_searchFragment_to_mainFragment"
+            app:destination="@id/mainFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/freeSoundAuthorizationFragment"
+        android:name="com.github.pavelzhurman.fsplayer.ui.freesound.FreeSoundAuthorizationFragment"
+        android:label="FreeSoundAuthorizationFragment">
+        <action
+            android:id="@+id/action_freeSoundAuthorizationFragment_to_mainFragment"
+            app:destination="@id/mainFragment" />
+        <action
+            android:id="@+id/action_freeSoundAuthorizationFragment_to_freeSoundSearchFragment"
+            app:destination="@id/freeSoundSearchFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/freeSoundSearchFragment"
+        android:name="com.github.pavelzhurman.fsplayer.ui.freesound.search.FreeSoundSearchFragment"
+        android:label="FreeSoundSearchFragment">
+        <action
+            android:id="@+id/action_freeSoundSearchFragment_to_freeSoundAuthorizationFragment"
+            app:destination="@id/freeSoundAuthorizationFragment" />
+        <action
+            android:id="@+id/action_freeSoundSearchFragment_to_mainFragment"
+            app:destination="@id/mainFragment" />
+    </fragment>
+</navigation>
