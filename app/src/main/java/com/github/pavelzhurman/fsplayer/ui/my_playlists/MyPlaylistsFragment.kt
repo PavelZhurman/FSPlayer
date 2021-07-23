@@ -14,7 +14,6 @@ class MyPlaylistsFragment : BaseFragment<FragmentMyPlaylistsBinding, MyPlaylists
     override fun initViews() {
         with(binding) {
             recyclerView = recyclerViewMyPlaylists
-            player.setOnClickListener { PlayerActivity.start(requireContext()) }
         }
     }
 

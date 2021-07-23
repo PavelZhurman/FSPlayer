@@ -36,7 +36,6 @@ class MainFragment : BaseFragment<FragmentMainBinding, MainViewModel>() {
         with(binding) {
             textViewFavouriteSongs.setOnClickListener { openFavouriteSongsFragment() }
             textViewMyPlaylists.setOnClickListener { openMyPlaylistFragment() }
-//            player.setOnClickListener { PlayerActivity.start(requireContext()) }
         }
     }
 

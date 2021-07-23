@@ -9,11 +9,7 @@ class FavouriteSongsFragment :
 
     override fun initObservers(viewModel: FavouriteSongsViewModel) {}
 
-    override fun initViews() {
-        with(binding) {
-            player.setOnClickListener { PlayerActivity.start(requireContext()) }
-        }
-    }
+    override fun initViews() {}
 
     override val viewModelClass: Class<FavouriteSongsViewModel> =
         FavouriteSongsViewModel::class.java

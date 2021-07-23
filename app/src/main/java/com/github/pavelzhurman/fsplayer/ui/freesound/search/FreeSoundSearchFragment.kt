@@ -9,9 +9,7 @@ class FreeSoundSearchFragment :
     override fun initObservers(viewModel: FreeSoundSearchViewModel) {}
 
     override fun initViews() {
-        with(binding) {
-            player.setOnClickListener { PlayerActivity.start(requireContext()) }
-        }
+        with(binding) {}
     }
 
     override val viewModelClass: Class<FreeSoundSearchViewModel> =

@@ -13,7 +13,6 @@ class FreeSoundAuthorizationFragment :
 
     override fun initViews() {
         with(binding) {
-            player.setOnClickListener { PlayerActivity.start(requireContext()) }
             buttonLogin.setOnClickListener { openFreeSoundSearchFragment() }
         }
     }

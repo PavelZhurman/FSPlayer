@@ -9,9 +9,7 @@ class PlaylistEditorFragment :
     override fun initObservers(viewModel: PlaylistEditorViewModel) {}
 
     override fun initViews() {
-        with(binding) {
-            player.setOnClickListener { PlayerActivity.start(requireContext()) }
-        }
+        with(binding) {}
     }
 
     override val viewModelClass: Class<PlaylistEditorViewModel> =
