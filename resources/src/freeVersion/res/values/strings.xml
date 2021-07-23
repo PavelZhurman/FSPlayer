@@ -2,5 +2,32 @@
 <resources>
     <string name="app_name" translatable="false">FSPlayer Free</string>
 
+    //contentDescriptions
+    <string name="thumbnail_image">thumbnail image</string>
+    <string name="shuffle_playlist">shuffle playlist</string>
+    <string name="repeat_song">repeat song</string>
+    <string name="change_volume">change volume</string>
+    <string name="previous_song">previous song</string>
+    <string name="play_or_pause_song">play or pause song</string>
+    <string name="next_song">next song</string>
+    <string name="add_new_playlist">add new playlist</string>
+    <string name="open">Open</string>
+    <string name="close">Close</string>
+
     <string name="hello_world">Hello free world!</string>
+    <string name="favourite_songs">Favourite songs</string>
+    <string name="my_playlists">My playlists</string>
+    <string name="freesound_org" translatable="false">Freesound.org</string>
+    <string name="language">Language</string>
+    <string name="main_fragment">Main fragment</string>
+    <string name="login" translatable="false">Login</string>
+    <string name="password" translatable="false">Password</string>
+    <string name="register">Register</string>
+    <string name="search_by">Search by</string>
+    <string name="filter_by">Filter by</string>
+    <string name="search">Search</string>
+    <string name="player" translatable="false">player</string>
+    <string name="authorization">Authorization</string>
+
+
 </resources>

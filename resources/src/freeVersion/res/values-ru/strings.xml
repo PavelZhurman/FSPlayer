@@ -2,4 +2,28 @@
 <resources>
     <string name="hello_world">Привет бесплатный мир!</string>
 
+    <string name="favourite_songs">Избранные песни</string>
+    <string name="my_playlists">Плейлисты</string>
+
+
+
+    //contentDescriptions
+    <string name="thumbnail_image">миниатюра изображения</string>
+    <string name="repeat_song">повторить песню</string>
+    <string name="shuffle_playlist">играть вразнобой</string>
+    <string name="change_volume">изменить громкость</string>
+    <string name="previous_song">предыдущая песня</string>
+    <string name="play_or_pause_song">воспроизвести или приостановить песню</string>
+    <string name="next_song">следующая песня</string>
+    <string name="add_new_playlist">добавить новый плейлист</string>
+    <string name="language">Язык</string>
+    <string name="open">Открыть</string>
+    <string name="close">Закрыть</string>
+    <string name="main_fragment">Главный фрагмент</string>
+    <string name="register">Зарегистрировать</string>
+    <string name="search_by">Искать по</string>
+    <string name="filter_by">Фильтровать по</string>
+    <string name="search">Поиск</string>
+
+
 </resources>

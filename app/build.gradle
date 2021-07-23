@@ -8,6 +8,7 @@ android {
     buildToolsVersion build_versions.buildTools
 
     defaultConfig {
+        applicationId "com.github.pavelzhurman.fsplayer"
         minSdkVersion build_versions.minSdk
         targetSdkVersion build_versions.targetSdk
         versionCode build_versions.versionCode
@@ -45,6 +46,7 @@ android {
     kotlinOptions {
         jvmTarget = '1.8'
     }
+
     buildFeatures {
         viewBinding = true
     }
@@ -65,4 +67,15 @@ dependencies {
     testImplementation tests.junit
     androidTestImplementation tests.androidx_junit
     androidTestImplementation tests.espresso
+
+    implementation androidx.legacy
+    implementation androidx.lifecycle.livedata
+    implementation androidx.lifecycle.viewmodel
+
+    // Navigation
+    implementation navigation.fragment
+    implementation navigation.ui_ktx
+    implementation navigation.dynamic_features_fragment
+    androidTestImplementation navigation.testing
+
 }
