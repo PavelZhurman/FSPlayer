@@ -7,9 +7,13 @@ import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
+import com.github.pavelzhurman.core.Stubs
 import com.github.pavelzhurman.core.base.BaseActivity
 import com.github.pavelzhurman.fsplayer.R
 import com.github.pavelzhurman.fsplayer.databinding.ActivityMainBinding
+import com.github.pavelzhurman.fsplayer.ui.player.PlayerActivity
+import com.github.pavelzhurman.image_loader.ImageLoader
+import com.github.pavelzhurman.ui.player.MiniPlayerView
 
 
 class MainActivity : BaseActivity<ActivityMainBinding, MainViewModel>() {
@@ -22,7 +26,23 @@ class MainActivity : BaseActivity<ActivityMainBinding, MainViewModel>() {
         initToolbar()
         initDrawerLayout()
         initNavigation()
+        initMiniPlayerView()
     }
+
+    private fun initMiniPlayerView() {
+        val url = Stubs.Images().FAKE_POSTER_NYAN_CAT
+
+        val miniPlayerBinding = binding.appBar.contentMain.miniPlayerView.getBinding()
+
+        miniPlayerBinding?.apply {
+            root.setOnClickListener { PlayerActivity.start(this@MainActivity) }
+            textViewArtist.text = Stubs.Texts().ARTIST_EMINEM
+            textViewSongName.text = Stubs.Texts().SONG_LOSE_YOURSELF
+            seekBar.progress = 100
+            ImageLoader().loadPoster(this@MainActivity, url, imageAlbum)
+        }
+    }
+
 
     private fun initToolbar() {
         setSupportActionBar(findViewById(R.id.toolbar_main))

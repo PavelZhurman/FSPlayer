@@ -14,7 +14,7 @@
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recycler_view_my_playlists"
         style="@style/RecyclerViewVerticalList"
-        app:layout_constraintBottom_toTopOf="@+id/player"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/text_view_my_playlists" />
@@ -22,14 +22,7 @@
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         style="@style/FABMyPlaylists"
         android:contentDescription="@string/add_new_playlist"
-        app:layout_constraintBottom_toTopOf="@+id/player"
-        app:layout_constraintEnd_toEndOf="parent" />
-
-    <Button
-        android:id="@+id/player"
-        style="@style/ButtonAkaPlayer"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintEnd_toEndOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

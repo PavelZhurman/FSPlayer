@@ -15,4 +15,9 @@
         <item name="colorControlNormal">@color/white</item>
         <item name="android:layout_marginEnd">28dp</item>
     </style>
+
+    <style name="EditTextSearchSongsInPlayer" parent="Widget.AppCompat.EditText">
+        <item name="android:layout_margin">16dp</item>
+    </style>
+
 </resources>

@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/root_layout_height"
+    android:background="@color/player_background">
+
+    <ImageView
+        android:id="@+id/image_album"
+        android:layout_width="@dimen/poster_layout_width"
+        android:layout_height="@dimen/poster_layout_height"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <TextView
+        android:id="@+id/text_view_artist"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/tv_artist_margin_start"
+        android:textColor="@color/artist_text"
+        android:textSize="@dimen/tv_artist_text_size"
+        app:layout_constraintBottom_toTopOf="@+id/text_view_song_name"
+        app:layout_constraintStart_toEndOf="@+id/image_album"
+        tools:text="Chaff &amp; Dust" />
+
+    <TextView
+        android:id="@+id/text_view_song_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/tv_song_name_margin_start"
+        android:layout_marginBottom="@dimen/tv_song_name_margin_bottom"
+        android:textColor="@color/song_name_text"
+        android:textSize="@dimen/tv_song_name_text_size"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/image_album"
+        tools:text="Hyonna" />
+
+    <ImageButton
+        android:id="@+id/image_button_next"
+        android:layout_width="@dimen/ib_layout_width"
+        android:layout_height="@dimen/ib_layout_height"
+        android:layout_marginEnd="@dimen/ib_next_margin_end"
+        android:background="@color/player_background"
+        android:src="@drawable/ic_baseline_skip_next_24"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageButton
+        android:id="@+id/image_button_play"
+        android:layout_width="@dimen/ib_layout_width"
+        android:layout_height="@dimen/ib_layout_height"
+        android:background="@color/player_background"
+        android:src="@drawable/ic_baseline_play_arrow_24"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/image_button_next"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageButton
+        android:id="@+id/image_button_previous"
+        android:layout_width="@dimen/ib_layout_width"
+        android:layout_height="@dimen/ib_layout_height"
+        android:background="@color/player_background"
+        android:src="@drawable/ic_baseline_skip_previous_24"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/image_button_play"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.appcompat.widget.AppCompatSeekBar
+        android:id="@+id/seek_bar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

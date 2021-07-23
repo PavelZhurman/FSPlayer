@@ -26,16 +26,9 @@
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recycler_view_free_sound_search"
         style="@style/RecyclerViewVerticalList"
-        app:layout_constraintBottom_toTopOf="@+id/player"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/edit_text_search_by" />
-
-    <Button
-        android:id="@+id/player"
-        style="@style/ButtonAkaPlayer"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
-
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -88,5 +88,4 @@
         app:layout_constraintStart_toEndOf="@+id/image_button_play_pause"
         app:layout_constraintTop_toTopOf="@+id/image_button_play_pause" />
 
-
 </androidx.constraintlayout.widget.ConstraintLayout>

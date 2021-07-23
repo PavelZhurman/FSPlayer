@@ -13,4 +13,8 @@
     <color name="main_accent_color">#EAF0FF</color>
     <color name="player_time_text_color">#B3A5C0FF</color>
     <color name="red">#FF0000</color>
+
+    <color name="song_name_text">#B3A5C0FF</color>
+    <color name="artist_text">#EAF0FF</color>
+    <color name="player_background">#091227</color>
 </resources>
