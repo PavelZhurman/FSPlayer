@@ -9,7 +9,7 @@ ext.build_versions = [
 ]
 
 ext.versions = [
-        kotlin           : '1.5.10',
+        kotlin           : '1.5.21',
         gradle           : '4.2.1',
 
         core             : '1.5.0',
@@ -24,7 +24,9 @@ ext.versions = [
 
         lifecycle        : '2.3.1',
         navigation       : '2.3.5',
-        glide            : '4.12.0'
+        glide            : '4.12.0',
+        retrofit         : '2.9.0',
+        rxjava3          : '3.0.0'
 ]
 
 ext.navigation = [
@@ -70,3 +72,13 @@ ext.glide = [
         compiler: "com.github.bumptech.glide:compiler:$versions.glide"
 ]
 
+ext.retrofit = [
+        retrofit      : "com.squareup.retrofit2:retrofit:$versions.retrofit",
+        converter_gson: "com.squareup.retrofit2:converter-gson:$versions.retrofit",
+        adapter_rxjava: "com.squareup.retrofit2:adapter-rxjava3:$versions.retrofit"
+]
+
+ext.rxjava3 = [
+        rxandroid: "io.reactivex.rxjava3:rxandroid:$versions.rxjava3",
+        rxjava   : "io.reactivex.rxjava3:rxjava:$versions.rxjava3"
+]

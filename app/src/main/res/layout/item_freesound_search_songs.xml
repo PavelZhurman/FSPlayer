@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    style="@style/CardViewItemFreesoundSearchSongs"
+    android:backgroundTint="@color/background_item_freesound_search_songs">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <ImageView
+            android:id="@+id/image_view_poster"
+            style="@style/ImageViewPosterForFreesoundSearchSongItem"
+            android:background="@color/grey"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/text_view_name"
+            style="@style/Text.FreesoundSearchMarginStart"
+            app:layout_constraintStart_toEndOf="@+id/image_view_poster"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="File name.wav" />
+
+        <TextView
+            android:id="@+id/text_view_description"
+            style="@style/Text.FreesoundSearchMarginStart"
+            app:layout_constraintStart_toEndOf="@+id/image_view_poster"
+            app:layout_constraintTop_toBottomOf="@+id/text_view_name"
+            tools:text="Description description" />
+
+        <TextView
+            android:id="@+id/text_view_tags"
+            style="@style/Text.FreesoundSearchMarginStart"
+            app:layout_constraintStart_toEndOf="@+id/image_view_poster"
+            app:layout_constraintTop_toBottomOf="@+id/text_view_description"
+            tools:text="tags,tags,tags,tags,tags" />
+
+
+        <TextView
+            android:id="@+id/text_view_username"
+            style="@style/Text"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="User name" />
+
+        <ImageButton
+            android:id="@+id/image_button_play"
+            style="@style/FreesoundSearchSongsItemImageButton"
+            android:src="@drawable/ic_baseline_play_arrow_24"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/image_button_download"
+            app:layout_constraintTop_toTopOf="parent"
+            app:tint="@color/small_icons_color" />
+
+        <ImageButton
+            android:id="@+id/image_button_download"
+            style="@style/FreesoundSearchSongsItemImageButton"
+            android:src="@drawable/ic_download"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/text_view_number_of_downloads"
+            style="@style/Text"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            tools:text="number of downloads" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.cardview.widget.CardView>
