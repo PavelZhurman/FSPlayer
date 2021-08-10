@@ -7,18 +7,20 @@ import com.github.pavelzhurman.core.Logger
 import com.github.pavelzhurman.freesound_api.datasource.FreesoundRepositoryImpl
 import com.github.pavelzhurman.freesound_api.datasource.network.entities.FreesoundSongItem
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
+import io.reactivex.rxjava3.disposables.Disposable
+import io.reactivex.rxjava3.schedulers.Schedulers
 
 class FreeSoundSearchViewModel : ViewModel() {
 
     private val mutableFreesoundSongItemListLiveData = MutableLiveData<List<FreesoundSongItem>>()
     val freesoundSongItemListLiveData: LiveData<List<FreesoundSongItem>> =
         mutableFreesoundSongItemListLiveData
-
+    private var disposable: Disposable? = null
 
     fun fetchFreesoundSearchData(query: String) {
         val freesoundSongItemList = mutableListOf<FreesoundSongItem>()
-        FreesoundRepositoryImpl().getFreesoundSearchData(query)
-            .observeOn(AndroidSchedulers.mainThread())
+        disposable = FreesoundRepositoryImpl().getFreesoundSearchData(query)
+            .observeOn(Schedulers.io())
             .subscribe(
                 { freesoundSearchData ->
                     for (result in freesoundSearchData.results) {
@@ -35,4 +37,8 @@ class FreeSoundSearchViewModel : ViewModel() {
             )
     }
 
+    override fun onCleared() {
+        super.onCleared()
+        disposable?.dispose()
+    }
 }

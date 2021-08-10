@@ -16,20 +16,3 @@ data class FreesoundSongItem(
     val num_downloads: Int
 )
 
-data class Previews(
-    @SerializedName("preview-lq-ogg") val preview_lq_ogg: String,
-    @SerializedName("preview-lq-mp3") val preview_lq_mp3: String,
-    @SerializedName("preview-hq-ogg") val preview_hq_ogg: String,
-    @SerializedName("preview-hq-mp3") val preview_hq_mp3: String
-)
-
-data class Images(
-    val spectral_m: String,
-    val spectral_l: String,
-    val spectral_bw_l: String,
-    val waveform_bw_m: String,
-    val waveform_bw_l: String,
-    val waveform_l: String,
-    val waveform_m: String,
-    val spectral_bw_m: String
-)
