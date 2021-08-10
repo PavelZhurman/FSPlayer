@@ -1,5 +1,44 @@
 package com.github.pavelzhurman.fsplayer.ui.freesound.search
 
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.github.pavelzhurman.core.Logger
+import com.github.pavelzhurman.freesound_api.datasource.FreesoundRepositoryImpl
+import com.github.pavelzhurman.freesound_api.datasource.network.entities.FreesoundSongItem
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
+import io.reactivex.rxjava3.disposables.Disposable
+import io.reactivex.rxjava3.schedulers.Schedulers
 
-class FreeSoundSearchViewModel : ViewModel() {}
+class FreeSoundSearchViewModel : ViewModel() {
+
+    private val mutableFreesoundSongItemListLiveData = MutableLiveData<List<FreesoundSongItem>>()
+    val freesoundSongItemListLiveData: LiveData<List<FreesoundSongItem>> =
+        mutableFreesoundSongItemListLiveData
+    private var disposable: Disposable? = null
+
+    fun fetchFreesoundSearchData(query: String) {
+        val freesoundSongItemList = mutableListOf<FreesoundSongItem>()
+        disposable = FreesoundRepositoryImpl().getFreesoundSearchData(query)
+            .observeOn(Schedulers.io())
+            .subscribe(
+                { freesoundSearchData ->
+                    for (result in freesoundSearchData.results) {
+                        FreesoundRepositoryImpl().getSongInfo(result.id.toString())
+                            .observeOn(AndroidSchedulers.mainThread())
+                            .subscribe { freesoundSongItem ->
+                                freesoundSongItemList.add(freesoundSongItem)
+                                mutableFreesoundSongItemListLiveData.value =
+                                    freesoundSongItemList
+                            }
+                    }
+                },
+                { error -> Logger().logcatD("FREESOUND_API", error.message.toString()) }
+            )
+    }
+
+    override fun onCleared() {
+        super.onCleared()
+        disposable?.dispose()
+    }
+}

@@ -1,6 +1,7 @@
 package com.github.pavelzhurman.image_loader
 
 import android.app.Activity
+import android.content.Context
 import android.graphics.drawable.Drawable
 import android.widget.ImageView
 import com.bumptech.glide.Glide
@@ -14,6 +15,33 @@ class ImageLoader {
 
     fun loadPoster(activity: Activity, url: String, imageView: ImageView) {
         Glide.with(activity).load(url).listener(object : RequestListener<Drawable> {
+            override fun onLoadFailed(
+                e: GlideException?,
+                model: Any?,
+                target: Target<Drawable>?,
+                isFirstResource: Boolean
+            ): Boolean {
+                e?.logRootCauses("TAGTAG")
+                return false
+            }
+
+            override fun onResourceReady(
+                resource: Drawable?,
+                model: Any?,
+                target: Target<Drawable>?,
+                dataSource: DataSource?,
+                isFirstResource: Boolean
+            ): Boolean {
+                Logger().logcatD("TAGTAG", "resourceReady")
+                imageView.setImageDrawable(resource)
+                return true
+                // TODO: 7/5/2021
+            }
+        }).into(imageView)
+    }
+
+    fun loadPoster(context: Context, url: String, imageView: ImageView) {
+        Glide.with(context).load(url).listener(object : RequestListener<Drawable> {
             override fun onLoadFailed(
                 e: GlideException?,
                 model: Any?,

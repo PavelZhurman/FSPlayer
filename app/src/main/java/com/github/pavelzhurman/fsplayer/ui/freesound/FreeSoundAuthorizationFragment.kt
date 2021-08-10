@@ -4,7 +4,6 @@ import androidx.navigation.Navigation
 import com.github.pavelzhurman.core.base.BaseFragment
 import com.github.pavelzhurman.fsplayer.R
 import com.github.pavelzhurman.fsplayer.databinding.FragmentFreeSoundAuthorizationBinding
-import com.github.pavelzhurman.fsplayer.ui.player.PlayerActivity
 
 class FreeSoundAuthorizationFragment :
     BaseFragment<FragmentFreeSoundAuthorizationBinding, FreeSoundAuthorizationViewModel>() {
