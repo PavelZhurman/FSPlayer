@@ -1,12 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <style name="ButtonAkaPlayer" parent="TextAppearance.AppCompat.Widget.Button">
-        <item name="android:layout_width">match_parent</item>
-        <item name="android:layout_height">75dp</item>
-        <item name="android:text">@string/player</item>
-    </style>
-
     <style name="ButtonAuthorization" parent="TextAppearance.AppCompat.Widget.Button">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
@@ -39,7 +33,12 @@
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_margin">8dp</item>
         <item name="android:background">?android:selectableItemBackground</item>
+    </style>
 
+    <style name="FreesoundSearchSongsButton" parent="Widget.AppCompat.Button">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginTop">40dp</item>
     </style>
 
 </resources>

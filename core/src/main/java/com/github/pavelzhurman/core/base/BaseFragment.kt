@@ -9,9 +9,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.viewbinding.ViewBinding
 
-abstract class BaseFragment<VB : ViewBinding, VM : ViewModel> : Fragment() {
+abstract class BaseFragment<VB : ViewBinding> : Fragment() {
 
-    private lateinit var viewModel: VM
     protected lateinit var binding: VB
 
 
@@ -20,10 +19,7 @@ abstract class BaseFragment<VB : ViewBinding, VM : ViewModel> : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        viewModel = ViewModelProvider(this).get(viewModelClass)
         binding = getViewBinding()
-        initObservers(viewModel)
-
         return binding.root
     }
 
@@ -33,10 +29,8 @@ abstract class BaseFragment<VB : ViewBinding, VM : ViewModel> : Fragment() {
         initViews()
     }
 
-    abstract fun initObservers(viewModel: VM)
     abstract fun initViews()
     abstract fun getViewBinding(): VB
 
-    abstract val viewModelClass: Class<VM>
 }
 

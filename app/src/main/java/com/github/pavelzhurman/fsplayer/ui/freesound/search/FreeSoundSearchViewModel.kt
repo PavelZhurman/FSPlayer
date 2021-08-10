@@ -9,24 +9,32 @@ import com.github.pavelzhurman.freesound_api.datasource.network.entities.Freesou
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.disposables.Disposable
 import io.reactivex.rxjava3.schedulers.Schedulers
+import javax.inject.Inject
 
-class FreeSoundSearchViewModel : ViewModel() {
+class FreeSoundSearchViewModel
+@Inject constructor(
+    private val freesoundRepositoryImpl: FreesoundRepositoryImpl
+) :
+    ViewModel() {
 
     private val mutableFreesoundSongItemListLiveData = MutableLiveData<List<FreesoundSongItem>>()
     val freesoundSongItemListLiveData: LiveData<List<FreesoundSongItem>> =
         mutableFreesoundSongItemListLiveData
+
     private var disposable: Disposable? = null
 
     fun fetchFreesoundSearchData(query: String) {
         val freesoundSongItemList = mutableListOf<FreesoundSongItem>()
-        disposable = FreesoundRepositoryImpl().getFreesoundSearchData(query)
+        disposable = freesoundRepositoryImpl.getFreesoundSearchData(query)
+
             .observeOn(Schedulers.io())
             .subscribe(
                 { freesoundSearchData ->
                     for (result in freesoundSearchData.results) {
-                        FreesoundRepositoryImpl().getSongInfo(result.id.toString())
+                        freesoundRepositoryImpl.getSongInfo(result.id.toString())
                             .observeOn(AndroidSchedulers.mainThread())
                             .subscribe { freesoundSongItem ->
+
                                 freesoundSongItemList.add(freesoundSongItem)
                                 mutableFreesoundSongItemListLiveData.value =
                                     freesoundSongItemList

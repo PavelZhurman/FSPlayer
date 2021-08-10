@@ -6,9 +6,7 @@ import com.github.pavelzhurman.fsplayer.R
 import com.github.pavelzhurman.fsplayer.databinding.FragmentFreeSoundAuthorizationBinding
 
 class FreeSoundAuthorizationFragment :
-    BaseFragment<FragmentFreeSoundAuthorizationBinding, FreeSoundAuthorizationViewModel>() {
-
-    override fun initObservers(viewModel: FreeSoundAuthorizationViewModel) {}
+    BaseFragment<FragmentFreeSoundAuthorizationBinding>() {
 
     override fun initViews() {
         with(binding) {
@@ -20,9 +18,6 @@ class FreeSoundAuthorizationFragment :
         Navigation.findNavController(requireView())
             .navigate(R.id.action_freeSoundAuthorizationFragment_to_freeSoundSearchFragment)
     }
-
-    override val viewModelClass: Class<FreeSoundAuthorizationViewModel> =
-        FreeSoundAuthorizationViewModel::class.java
 
     override fun getViewBinding() = FragmentFreeSoundAuthorizationBinding.inflate(layoutInflater)
 }

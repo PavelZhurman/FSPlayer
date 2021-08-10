@@ -9,9 +9,8 @@ import androidx.navigation.Navigation
 import com.github.pavelzhurman.core.base.BaseFragment
 import com.github.pavelzhurman.fsplayer.R
 import com.github.pavelzhurman.fsplayer.databinding.FragmentMainBinding
-import com.github.pavelzhurman.fsplayer.ui.player.PlayerActivity
 
-class MainFragment : BaseFragment<FragmentMainBinding, MainViewModel>() {
+class MainFragment : BaseFragment<FragmentMainBinding>() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -27,9 +26,6 @@ class MainFragment : BaseFragment<FragmentMainBinding, MainViewModel>() {
             R.id.app_bar_search -> openSearchFragment()
         }
         return super.onOptionsItemSelected(item)
-    }
-
-    override fun initObservers(viewModel: MainViewModel) {
     }
 
     override fun initViews() {
@@ -54,6 +50,5 @@ class MainFragment : BaseFragment<FragmentMainBinding, MainViewModel>() {
             .navigate(R.id.action_mainFragment_to_myPlaylistsFragment)
     }
 
-    override val viewModelClass: Class<MainViewModel> = MainViewModel::class.java
     override fun getViewBinding() = FragmentMainBinding.inflate(layoutInflater)
 }
