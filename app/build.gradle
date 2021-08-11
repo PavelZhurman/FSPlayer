@@ -1,6 +1,7 @@
 plugins {
     id 'com.android.application'
     id 'kotlin-android'
+    id 'kotlin-kapt'
 }
 
 android {
@@ -48,7 +49,7 @@ android {
     }
 
     buildFeatures {
-        viewBinding = true
+        viewBinding true
     }
 
 }
@@ -82,4 +83,10 @@ dependencies {
     //RxJava3
     implementation rxjava3.rxandroid
     implementation rxjava3.rxjava
+
+    //Dagger
+    implementation dagger.dagger
+    kapt dagger.compiler
+
+    implementation retrofit.retrofit
 }

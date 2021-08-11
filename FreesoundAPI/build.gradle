@@ -1,6 +1,7 @@
 plugins {
     id 'com.android.library'
     id 'kotlin-android'
+    id 'kotlin-kapt'
 }
 
 android {
@@ -40,10 +41,16 @@ dependencies {
     androidTestImplementation tests.androidx_junit
     androidTestImplementation tests.espresso
 
+    //Retrofit
     implementation retrofit.retrofit
     implementation retrofit.converter_gson
     implementation retrofit.adapter_rxjava
 
+    //RxJava3
     implementation rxjava3.rxandroid
     implementation rxjava3.rxjava
+
+    //Dagger
+    implementation dagger.dagger
+    kapt dagger.compiler
 }
