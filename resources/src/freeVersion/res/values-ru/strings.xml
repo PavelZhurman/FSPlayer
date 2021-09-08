@@ -4,11 +4,19 @@
 
     <string name="favourite_songs">Избранные песни</string>
     <string name="my_playlists">Плейлисты</string>
-
+    <string name="no_sounds_found">Звуки не найдены</string>
+    <string name="shuffle_mode_on">Режим воспроизведения в случайном порядке включён</string>
+    <string name="shuffle_mode_off">Режим воспроизведения в случайном порядке выключен</string>
+    <string name="repeat_mode_one">Режим повтора одной композиции</string>
+    <string name="repeat_mode_all">Режим повтора плейлиста</string>
+    <string name="no_favourite_songs_added">Избранных песен не добавлено</string>
+    <string name="sounds_not_found">Звуки не найдены</string>
+    <string name="update">Обновить</string>
 
 
     //contentDescriptions
     <string name="thumbnail_image">миниатюра изображения</string>
+    <string name="poster_image">изображение песни</string>
     <string name="repeat_song">повторить песню</string>
     <string name="shuffle_playlist">играть вразнобой</string>
     <string name="change_volume">изменить громкость</string>
@@ -24,6 +32,12 @@
     <string name="search_by">Искать по</string>
     <string name="filter_by">Фильтровать по</string>
     <string name="search">Поиск</string>
-
+    <string name="authorization">Авторизация</string>
+    <string name="set_favourite">Установка песни в список любимых</string>
+    <string name="enter_playlist_name">Введите название плейлиста</string>
+    <string name="enter_playlist_name_please">Пожалуйста, введите название плейлиста</string>
+    <string name="not_implemented_yet">Ещё не реализовано</string>
+    <string name="player_canceled">Плейер отменён</string>
+    <string name="player_error">Ошибка плейера</string>
 
 </resources>

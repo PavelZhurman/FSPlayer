@@ -14,27 +14,29 @@
             style="@style/ImageViewPosterForRecyclerViewMainFragmentItem"
             android:background="@color/ic_launcher_background"
             android:contentDescription="@string/thumbnail_image"
+            android:scaleType="centerCrop"
             android:src="@drawable/ic_launcher_foreground"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
+        <ImageView
+            android:id="@+id/image_view_current_playlist"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:src="@drawable/ic_baseline_check_24"
+            android:visibility="invisible"
+            app:layout_constraintBottom_toBottomOf="@+id/image_view_thumbnail"
+            app:layout_constraintEnd_toEndOf="@+id/image_view_thumbnail" />
+
         <TextView
             android:id="@+id/text_view_song_name"
             style="@style/Text.RecyclerViewItemSongName"
-            app:layout_constraintBottom_toTopOf="@+id/text_view_artist"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/image_view_thumbnail"
-            tools:text="Song name" />
-
-        <TextView
-            android:id="@+id/text_view_artist"
-            style="@style/Text"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            tools:text="Artist" />
+            app:layout_constraintTop_toBottomOf="@+id/image_view_thumbnail"
+            tools:text="Playlist name" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

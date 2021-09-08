@@ -4,6 +4,7 @@
 
     //contentDescriptions
     <string name="thumbnail_image">thumbnail image</string>
+    <string name="poster_image">poster image</string>
     <string name="shuffle_playlist">shuffle playlist</string>
     <string name="repeat_song">repeat song</string>
     <string name="change_volume">change volume</string>
@@ -13,6 +14,7 @@
     <string name="add_new_playlist">add new playlist</string>
     <string name="open">Open</string>
     <string name="close">Close</string>
+    <string name="set_favourite">set favourite</string>
 
     <string name="hello_world">Hello free world!</string>
     <string name="favourite_songs">Favourite songs</string>
@@ -28,6 +30,20 @@
     <string name="search">Search</string>
     <string name="player" translatable="false">player</string>
     <string name="authorization">Authorization</string>
+    <string name="shuffle_mode_on">Shuffle mode on</string>
+    <string name="shuffle_mode_off">Shuffle mode off</string>
+    <string name="repeat_mode_one">Repeat mode one</string>
+    <string name="repeat_mode_all">Repeat mode all</string>
+    <string name="no_sounds_found">No sounds found</string>
+    <string name="enter_playlist_name">Enter playlist name</string>
+    <string name="enter_playlist_name_please">Enter playlist name, please</string>
+    <string name="not_implemented_yet">Not implemented yet</string>
+    <string name="player_canceled">Player canceled</string>
+    <string name="player_error">Player error</string>
+    <string name="no_favourite_songs_added">No favourite songs added</string>
+    <string name="sounds_not_found">Sounds not find</string>
+    <string name="update">Update</string>
 
-
+    <string name="channel_name_resource" translatable="false">ChannelNameResourceId</string>
+    <string name="zero_time" translatable="false">0:00</string>
 </resources>

@@ -7,31 +7,54 @@
 
     <TextView
         android:id="@+id/text_view_favourite_songs"
-        style="@style/Text.Header"
+        style="@style/TextHeader"
         android:text="@string/favourite_songs"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/text_view_no_favourite_songs_added"
+        style="@style/Text.NotFoundBig"
+        android:text="@string/no_favourite_songs_added"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toTopOf="@+id/text_view_my_playlists"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/text_view_favourite_songs" />
+
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recycler_view_favourite_songs"
         style="@style/RecyclerViewMainFragmentHorizontal"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/text_view_favourite_songs"
-        tools:listitem="@layout/item_recycler_view_main_fragment" />
+        tools:listitem="@layout/item_favourite_song_main_fragment" />
 
     <TextView
         android:id="@+id/text_view_my_playlists"
-        style="@style/Text.Header"
+        style="@style/Text.MyPlaylists"
         android:text="@string/my_playlists"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <TextView
+        android:id="@+id/text_view_no_sounds_found"
+        style="@style/Text.NotFoundBig"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/no_sounds_found"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/recycler_view_favourite_songs" />
+        app:layout_constraintTop_toBottomOf="@+id/text_view_my_playlists" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recycler_view_my_playlists"
         style="@style/RecyclerViewMainFragmentHorizontal"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/text_view_my_playlists"
-        tools:listitem="@layout/item_recycler_view_main_fragment" />
+        tools:listitem="@layout/item_playlist_main_fragment" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

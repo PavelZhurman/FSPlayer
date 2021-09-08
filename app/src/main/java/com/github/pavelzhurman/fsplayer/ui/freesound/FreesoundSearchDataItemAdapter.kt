@@ -1,4 +1,4 @@
-package com.github.pavelzhurman.fsplayer.ui.freesound.search
+package com.github.pavelzhurman.fsplayer.ui.freesound
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -16,7 +16,10 @@ class FreesoundSearchDataItemAdapter :
             notifyDataSetChanged()
         }
 
-    class FreesoundSearchDataItemViewHolder(
+    lateinit var onPlayButtonClickListener: (freesoundSongItem: FreesoundSongItem) -> Unit
+    lateinit var onDownloadClickListener: (freesoundSongItem: FreesoundSongItem) -> Unit
+
+    inner class FreesoundSearchDataItemViewHolder(
         private val itemFreesoundSearchSongsBinding: ItemFreesoundSearchSongsBinding
     ) : RecyclerView.ViewHolder(itemFreesoundSearchSongsBinding.root) {
         fun bind(item: FreesoundSongItem) {
@@ -33,7 +36,8 @@ class FreesoundSearchDataItemAdapter :
                     item.images.waveform_m,
                     imageViewPoster
                 )
-
+                imageButtonPlay.setOnClickListener { onPlayButtonClickListener.invoke(item) }
+                imageButtonDownload.setOnClickListener { onDownloadClickListener.invoke(item) }
             }
         }
     }
@@ -43,7 +47,7 @@ class FreesoundSearchDataItemAdapter :
         viewType: Int
     ): FreesoundSearchDataItemViewHolder =
         FreesoundSearchDataItemViewHolder(
-            itemFreesoundSearchSongsBinding = ItemFreesoundSearchSongsBinding.inflate(
+            ItemFreesoundSearchSongsBinding.inflate(
                 LayoutInflater.from(parent.context),
                 parent,
                 false

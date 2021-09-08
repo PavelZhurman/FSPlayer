@@ -1,4 +1,4 @@
-package com.github.pavelzhurman.fsplayer.ui.freesound.search
+package com.github.pavelzhurman.fsplayer.ui.freesound
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -27,18 +27,23 @@ class FreeSoundSearchViewModel
         val freesoundSongItemList = mutableListOf<FreesoundSongItem>()
         disposable = freesoundRepositoryImpl.getFreesoundSearchData(query)
 
-            .observeOn(Schedulers.io())
+            .subscribeOn(Schedulers.io())
             .subscribe(
                 { freesoundSearchData ->
                     for (result in freesoundSearchData.results) {
                         freesoundRepositoryImpl.getSongInfo(result.id.toString())
+                            .subscribeOn(Schedulers.io())
                             .observeOn(AndroidSchedulers.mainThread())
-                            .subscribe { freesoundSongItem ->
+                            .subscribe(
+                                { freesoundSongItem ->
 
-                                freesoundSongItemList.add(freesoundSongItem)
-                                mutableFreesoundSongItemListLiveData.value =
-                                    freesoundSongItemList
-                            }
+                                    freesoundSongItemList.add(freesoundSongItem)
+                                    mutableFreesoundSongItemListLiveData.value =
+                                        freesoundSongItemList
+                                },
+                                { error ->
+                                    Logger().logcatD("FREESOUND_API", error.message.toString())
+                                })
                     }
                 },
                 { error -> Logger().logcatD("FREESOUND_API", error.message.toString()) }

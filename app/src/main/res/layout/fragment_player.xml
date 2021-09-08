@@ -12,13 +12,13 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <ImageButton
-        android:id="@+id/image_button_volume"
-        style="@style/PlayerImageButton.Margin30"
-        android:contentDescription="@string/change_volume"
-        android:src="@drawable/ic_baseline_volume_down_24"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/view_pager" />
+<!--    <ImageButton-->
+<!--        android:id="@+id/image_button_volume"-->
+<!--        style="@style/PlayerImageButton.Margin30"-->
+<!--        android:contentDescription="@string/change_volume"-->
+<!--        android:src="@drawable/ic_baseline_volume_down_24"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        app:layout_constraintTop_toBottomOf="@+id/view_pager" />-->
 
     <ImageButton
         android:id="@+id/image_button_shuffle"
@@ -37,55 +37,55 @@
         app:layout_constraintTop_toBottomOf="@+id/view_pager" />
 
     <TextView
-        android:id="@+id/text_view_time_played"
+        android:id="@+id/text_view_current_position"
         style="@style/Text.PlayerSongTime"
         android:textColor="@color/player_time_text_color"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/image_button_volume"
+        app:layout_constraintBottom_toTopOf="@+id/seek_bar"
         tools:text="00:10" />
 
     <TextView
-        android:id="@+id/text_view_song_time"
+        android:id="@+id/text_view_duration"
         style="@style/Text.PlayerSongTime"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/image_button_volume"
+        app:layout_constraintTop_toTopOf="@+id/text_view_current_position"
         tools:text="04:00" />
 
     <androidx.appcompat.widget.AppCompatSeekBar
-        android:id="@+id/progress_bar_song"
+        android:id="@+id/seek_bar"
         style="@style/SeekBar.Player"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/text_view_time_played" />
+        app:layout_constraintTop_toBottomOf="@+id/image_button_repeat" />
 
     <ImageButton
         android:id="@+id/image_button_previous"
         style="@style/PlayerImageButton"
         android:contentDescription="@string/previous_song"
         android:src="@drawable/ic_baseline_skip_previous_24"
-        app:layout_constraintBottom_toBottomOf="@+id/image_button_play_pause"
-        app:layout_constraintEnd_toStartOf="@+id/image_button_play_pause"
+        app:layout_constraintBottom_toBottomOf="@+id/image_button_play"
+        app:layout_constraintEnd_toStartOf="@+id/image_button_play"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/image_button_play_pause" />
+        app:layout_constraintTop_toTopOf="@+id/image_button_play" />
 
     <ImageButton
-        android:id="@+id/image_button_play_pause"
+        android:id="@+id/image_button_play"
         style="@style/PlayerImageButton"
         android:contentDescription="@string/play_or_pause_song"
         android:src="@drawable/ic_baseline_pause_24"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/image_button_play_next"
+        app:layout_constraintEnd_toStartOf="@+id/image_button_next"
         app:layout_constraintStart_toEndOf="@+id/image_button_previous"
-        app:layout_constraintTop_toBottomOf="@+id/progress_bar_song" />
+        app:layout_constraintTop_toBottomOf="@+id/seek_bar" />
 
     <ImageButton
-        android:id="@+id/image_button_play_next"
+        android:id="@+id/image_button_next"
         style="@style/PlayerImageButton"
         android:contentDescription="@string/next_song"
         android:src="@drawable/ic_baseline_skip_next_24"
-        app:layout_constraintBottom_toBottomOf="@+id/image_button_play_pause"
+        app:layout_constraintBottom_toBottomOf="@+id/image_button_play"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/image_button_play_pause"
-        app:layout_constraintTop_toTopOf="@+id/image_button_play_pause" />
+        app:layout_constraintStart_toEndOf="@+id/image_button_play"
+        app:layout_constraintTop_toTopOf="@+id/image_button_play" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

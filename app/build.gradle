@@ -60,6 +60,8 @@ dependencies {
     implementation project(":ui")
     implementation project(":ImageLoader")
     implementation project(":FreesoundAPI")
+    implementation project(":MusicDatabase")
+    implementation project(":ExoPlayer")
 
     implementation _kotlin.kotlin_stdlib
     implementation androidx.core
@@ -73,6 +75,8 @@ dependencies {
     implementation androidx.legacy
     implementation androidx.lifecycle.livedata
     implementation androidx.lifecycle.viewmodel
+    implementation androidx.lifecycle.service
+
 
     // Navigation
     implementation navigation.fragment

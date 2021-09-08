@@ -6,28 +6,50 @@
         <item name="android:layout_height">wrap_content</item>
     </style>
 
-    <style name="Text.Header">
+    <style name="TextHeader" parent="Text">
         <item name="android:layout_margin">16dp</item>
         <item name="android:textSize">24sp</item>
         <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="Text.MyPlaylists">
+        <item name="android:layout_marginTop">16dp</item>
+        <item name="android:layout_marginStart">16dp</item>
+        <item name="android:layout_marginEnd">16dp</item>
+        <item name="android:layout_marginBottom">258dp</item>
+        <item name="android:textSize">24sp</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+
+    <style name="Text.NotFoundBig">
+        <item name="android:textSize">24sp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textColor">@color/grey</item>
     </style>
 
     <style name="Text.PlayerSongTime" parent="Widget.AppCompat.TextView">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_marginStart">30dp</item>
-        <item name="android:layout_marginTop">60dp</item>
+        <item name="android:layout_marginBottom">10dp</item>
         <item name="android:layout_marginEnd">30dp</item>
         <item name="android:textColor">@color/player_time_text_color</item>
     </style>
 
     <style name="Text.FreesoundSearchMarginStart">
+        <item name="android:layout_width">0dp</item>
         <item name="android:layout_marginStart">8dp</item>
     </style>
 
     <style name="Text.RecyclerViewItemSongName">
         <item name="android:textSize">16sp</item>
         <item name="android:textStyle">bold</item>
-
     </style>
+
+    <style name="Text.RecyclerViewItemPlaylistName">
+        <item name="android:textSize">14sp</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
 </resources>

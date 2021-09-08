@@ -19,7 +19,7 @@
             app:destination="@id/searchFragment" />
         <action
             android:id="@+id/action_mainFragment_to_freeSoundAuthorizationFragment"
-            app:destination="@id/freeSoundAuthorizationFragment" />
+            app:destination="@id/freeSoundSearchFragment" />
     </fragment>
     <fragment
         android:id="@+id/favouriteSongsFragment"
@@ -57,23 +57,9 @@
             app:destination="@id/mainFragment" />
     </fragment>
     <fragment
-        android:id="@+id/freeSoundAuthorizationFragment"
-        android:name="com.github.pavelzhurman.fsplayer.ui.freesound.FreeSoundAuthorizationFragment"
-        android:label="FreeSoundAuthorizationFragment">
-        <action
-            android:id="@+id/action_freeSoundAuthorizationFragment_to_mainFragment"
-            app:destination="@id/mainFragment" />
-        <action
-            android:id="@+id/action_freeSoundAuthorizationFragment_to_freeSoundSearchFragment"
-            app:destination="@id/freeSoundSearchFragment" />
-    </fragment>
-    <fragment
         android:id="@+id/freeSoundSearchFragment"
-        android:name="com.github.pavelzhurman.fsplayer.ui.freesound.search.FreeSoundSearchFragment"
+        android:name="com.github.pavelzhurman.fsplayer.ui.freesound.FreeSoundSearchFragment"
         android:label="FreeSoundSearchFragment">
-        <action
-            android:id="@+id/action_freeSoundSearchFragment_to_freeSoundAuthorizationFragment"
-            app:destination="@id/freeSoundAuthorizationFragment" />
         <action
             android:id="@+id/action_freeSoundSearchFragment_to_mainFragment"
             app:destination="@id/mainFragment" />

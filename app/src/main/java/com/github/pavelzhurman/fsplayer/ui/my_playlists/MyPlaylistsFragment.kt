@@ -11,6 +11,12 @@ class MyPlaylistsFragment : BaseFragment<FragmentMyPlaylistsBinding>() {
     override fun initViews() {
         with(binding) {
             recyclerView = recyclerViewMyPlaylists
+            fabAddPlaylist.setOnClickListener {
+                AddPlaylistDialogFragment().show(
+                    childFragmentManager,
+                    "add_playlist_dialog_fragment"
+                )
+            }
         }
     }
 

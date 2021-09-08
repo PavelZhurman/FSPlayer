@@ -10,7 +10,8 @@
     <color name="grey">#C4C4C4</color>
 
     <color name="background_main">#091227</color>
-    <color name="small_icons_color">#8996B8</color>
+    <color name="small_icons_color">#7C8EBC</color>
+    <color name="small_icons_color_enabled">#2A407A</color>
     <color name="main_accent_color">#EAF0FF</color>
     <color name="player_time_text_color">#B3A5C0FF</color>
     <color name="red">#FF0000</color>

@@ -10,7 +10,7 @@
             android:icon="@drawable/ic_baseline_home_24"
             android:title="@string/main_fragment" />
         <item
-            android:id="@+id/freeSoundAuthorizationFragment"
+            android:id="@+id/freeSoundSearchFragment"
             android:title="@string/freesound_org" />
 
         <item
