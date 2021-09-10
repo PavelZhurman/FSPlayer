@@ -5,7 +5,7 @@ data class FreesoundSongItem(
     val name: String,
     val description: String,
     val tags: List<String>,
-    val fileSize: Int,
+    val filesize: Int,
     val duration: Double,
     val username: String,
     val download: String,

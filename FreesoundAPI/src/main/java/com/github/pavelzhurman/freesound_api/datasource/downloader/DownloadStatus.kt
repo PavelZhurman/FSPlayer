@@ -1,4 +1,4 @@
-package com.github.pavelzhurman.musicdatabase.downloader
+package com.github.pavelzhurman.freesound_api.datasource.downloader
 
 sealed class DownloadStatus {
     object Unknown : DownloadStatus()

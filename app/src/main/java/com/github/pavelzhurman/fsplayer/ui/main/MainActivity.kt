@@ -156,7 +156,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
     }
 
     private fun collectAudioFromExternalStorage() {
-        musicDatabaseRepositoryImpl?.collectAudioAndAddToMainPlaylist()
+        viewModel.collectAudioAndAddToMainPlaylist()
 //        musicDatabaseRepositoryImpl?.initFavouritePlaylist()
     }
 

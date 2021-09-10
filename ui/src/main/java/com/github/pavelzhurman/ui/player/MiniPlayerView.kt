@@ -25,6 +25,8 @@ class MiniPlayerView(context: Context, attrs: AttributeSet) : ConstraintLayout(c
     override fun onFinishInflate() {
         super.onFinishInflate()
         binding = ViewMiniPlayerBinding.bind(this)
+        binding?.textViewSongName?.isSelected = true
+        binding?.textViewArtist?.isSelected = true
     }
 
     fun changeDrawableToPause() {

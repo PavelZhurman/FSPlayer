@@ -203,13 +203,16 @@ class PlayerFragment : BaseFragment<FragmentPlayerBinding>() {
                     when (intent?.action) {
                         SEND_CURRENT_POSITION_ACTION -> {
                             val currentPosition = intent.getLongExtra(CURRENT_POSITION_TAG, 0)
-                            binding.seekBar.progress = convertFromMillisToPercents(currentPosition)
-                            binding.textViewCurrentPosition.text =
-                                convertFromMillisToMinutesAndSeconds(currentPosition)
-                            binding.textViewDuration.text =
-                                audioPlayerService?.getCurrentMediaItemDuration()?.let {
-                                    convertFromMillisToMinutesAndSeconds(it)
-                                }
+                            with(binding) {
+                                seekBar.progress = convertFromMillisToPercents(currentPosition)
+                                textViewCurrentPosition.text =
+                                    convertFromMillisToMinutesAndSeconds(currentPosition)
+                                textViewDuration.text =
+                                    audioPlayerService?.getCurrentMediaItemDuration()?.let {
+                                        convertFromMillisToMinutesAndSeconds(it)
+                                    }
+                            }
+
                         }
                     }
                 }
@@ -301,13 +304,16 @@ class PlayerFragment : BaseFragment<FragmentPlayerBinding>() {
         })
         audioPlayerService?.currentIndexLiveData?.observe(viewLifecycleOwner, { index ->
             if (listOfSongs.isNotEmpty()) {
-                binding.viewPager.setCurrentItem(index, true)
-                binding.textViewDuration.text =
-                    convertFromMillisToMinutesAndSeconds(listOfSongs[index].duration.toLong())
-                binding.textViewCurrentPosition.text =
-                    audioPlayerService?.getCurrentPosition()?.let {
-                        convertFromMillisToMinutesAndSeconds(it)
-                    }
+                with(binding) {
+                    viewPager.setCurrentItem(index, true)
+                    textViewDuration.text =
+                        convertFromMillisToMinutesAndSeconds(listOfSongs[index].duration.toLong())
+                    textViewCurrentPosition.text =
+                        audioPlayerService?.getCurrentPosition()?.let {
+                            convertFromMillisToMinutesAndSeconds(it)
+                        }
+                }
+
             }
         })
 

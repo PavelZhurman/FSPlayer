@@ -16,26 +16,34 @@
 
     <TextView
         android:id="@+id/text_view_artist"
-        android:layout_width="wrap_content"
+        android:layout_width="@dimen/tv_artist_width"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/tv_artist_margin_start"
+        android:singleLine="true"
+        android:ellipsize="marquee"
+        android:marqueeRepeatLimit="marquee_forever"
         android:textColor="@color/artist_text"
         android:textSize="@dimen/tv_artist_text_size"
         app:layout_constraintBottom_toTopOf="@+id/text_view_song_name"
+        app:layout_constraintEnd_toStartOf="@+id/image_button_previous"
         app:layout_constraintStart_toEndOf="@+id/image_album"
         tools:text="Chaff &amp; Dust" />
 
     <TextView
         android:id="@+id/text_view_song_name"
-        android:layout_width="wrap_content"
+        android:layout_width="@dimen/tv_song_name_width"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/tv_song_name_margin_start"
         android:layout_marginBottom="@dimen/tv_song_name_margin_bottom"
+        android:singleLine="true"
+        android:ellipsize="marquee"
+        android:marqueeRepeatLimit="marquee_forever"
         android:textColor="@color/song_name_text"
         android:textSize="@dimen/tv_song_name_text_size"
         app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/image_button_previous"
         app:layout_constraintStart_toEndOf="@+id/image_album"
-        tools:text="Hyonna" />
+        tools:text="Hyonna"/>
 
     <ImageButton
         android:id="@+id/image_button_next"

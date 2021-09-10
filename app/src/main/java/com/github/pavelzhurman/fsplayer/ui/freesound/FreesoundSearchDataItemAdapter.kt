@@ -18,6 +18,7 @@ class FreesoundSearchDataItemAdapter :
 
     lateinit var onPlayButtonClickListener: (freesoundSongItem: FreesoundSongItem) -> Unit
     lateinit var onDownloadClickListener: (freesoundSongItem: FreesoundSongItem) -> Unit
+    lateinit var onItemClickListener: (freesoundSongItem: FreesoundSongItem) -> Unit
 
     inner class FreesoundSearchDataItemViewHolder(
         private val itemFreesoundSearchSongsBinding: ItemFreesoundSearchSongsBinding
@@ -29,7 +30,6 @@ class FreesoundSearchDataItemAdapter :
                 textViewName.text = item.name
                 textViewDescription.text = item.description
                 textViewNumberOfDownloads.text = item.num_downloads.toString()
-                textViewTags.text = tags
                 textViewUsername.text = item.username
                 ImageLoader().loadPoster(
                     itemFreesoundSearchSongsBinding.root.context,
@@ -38,6 +38,7 @@ class FreesoundSearchDataItemAdapter :
                 )
                 imageButtonPlay.setOnClickListener { onPlayButtonClickListener.invoke(item) }
                 imageButtonDownload.setOnClickListener { onDownloadClickListener.invoke(item) }
+                root.setOnClickListener { onItemClickListener.invoke(item) }
             }
         }
     }

@@ -13,6 +13,13 @@
     <string name="sounds_not_found">Звуки не найдены</string>
     <string name="update">Обновить</string>
 
+    <string name="description">Описание: \n %1s</string>
+    <string name="tags">Тэги \n %1s</string>
+    <string name="duration">Длительность: %1s</string>
+    <string name="username">Пользователь: %1s</string>
+    <string name="file_size">Размер файла: %1d KBs</string>
+    <string name="num_downloads">Количество скачиваний: %1d</string>
+
 
     //contentDescriptions
     <string name="thumbnail_image">миниатюра изображения</string>
@@ -22,6 +29,8 @@
     <string name="change_volume">изменить громкость</string>
     <string name="previous_song">предыдущая песня</string>
     <string name="play_or_pause_song">воспроизвести или приостановить песню</string>
+    <string name="play_song">воспроизвести песню</string>
+    <string name="download_song">download song</string>
     <string name="next_song">следующая песня</string>
     <string name="add_new_playlist">добавить новый плейлист</string>
     <string name="language">Язык</string>
@@ -39,5 +48,6 @@
     <string name="not_implemented_yet">Ещё не реализовано</string>
     <string name="player_canceled">Плейер отменён</string>
     <string name="player_error">Ошибка плейера</string>
+    <string name="you_cannot_add_unloaded_songs_to_favourite">Вы не пожете добавить не загруженные песни в избранное</string>
 
 </resources>

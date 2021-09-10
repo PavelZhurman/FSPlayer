@@ -63,5 +63,19 @@
         <action
             android:id="@+id/action_freeSoundSearchFragment_to_mainFragment"
             app:destination="@id/mainFragment" />
+        <action
+            android:id="@+id/action_freeSoundSearchFragment_to_freesoundItemFragment"
+            app:destination="@id/freesoundItemFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/freesoundItemFragment"
+        android:name="com.github.pavelzhurman.fsplayer.ui.freesound.freesoundItem.FreesoundItemFragment"
+        android:label="FreesoundItemFragment" >
+        <action
+            android:id="@+id/action_freesoundItemFragment_to_freeSoundSearchFragment"
+            app:destination="@id/freeSoundSearchFragment" />
+        <action
+            android:id="@+id/action_freesoundItemFragment_to_mainFragment"
+            app:destination="@id/mainFragment" />
     </fragment>
 </navigation>

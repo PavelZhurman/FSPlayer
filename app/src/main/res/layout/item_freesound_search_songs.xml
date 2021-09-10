@@ -31,18 +31,9 @@
             style="@style/Text.FreesoundSearchMarginStart"
             app:layout_constraintEnd_toStartOf="@+id/image_button_play"
             app:layout_constraintStart_toEndOf="@+id/image_view_poster"
+            android:ellipsize="end"
             app:layout_constraintTop_toBottomOf="@+id/text_view_name"
             tools:text="Description description" />
-
-        <TextView
-            android:id="@+id/text_view_tags"
-            style="@style/Text.FreesoundSearchMarginStart"
-            app:layout_constraintEnd_toEndOf="@+id/text_view_description"
-            app:layout_constraintStart_toEndOf="@+id/image_view_poster"
-            app:layout_constraintTop_toBottomOf="@+id/text_view_description"
-            app:layout_constraintBottom_toBottomOf="parent"
-            tools:text="tags,tags,tags,tags,tags" />
-
 
         <TextView
             android:id="@+id/text_view_username"

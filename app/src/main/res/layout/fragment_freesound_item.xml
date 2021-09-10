@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:id="@+id/text_view_song_name"
+        style="@style/TextHeader"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="Name" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recycler_view_images"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/text_view_song_name"
+        tools:listitem="@layout/item_freesound_song_item" />
+
+    <ScrollView
+        android:id="@+id/scrollView"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toTopOf="@+id/image_button_play"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/recycler_view_images">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/text_view_description"
+                style="@style/Text.FreesoundItem"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:text="Description" />
+
+            <TextView
+                android:id="@+id/text_view_tags"
+                style="@style/Text.FreesoundItem"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/text_view_description"
+                tools:text="[tags,tags,tags]" />
+
+            <TextView
+                android:id="@+id/text_view_file_size"
+                style="@style/Text.FreesoundItem"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/text_view_tags"
+                tools:text="456kbs" />
+
+            <TextView
+                android:id="@+id/text_view_duration"
+                style="@style/Text.FreesoundItem"
+                app:layout_constraintBottom_toBottomOf="@+id/text_view_file_size"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/text_view_file_size"
+                tools:text="00.98" />
+
+            <TextView
+                android:id="@+id/text_view_num_downloads"
+                style="@style/Text.FreesoundItem"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/text_view_author_name"
+                tools:text="023" />
+
+            <TextView
+                android:id="@+id/text_view_author_name"
+                style="@style/Text.FreesoundItem"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/text_view_file_size"
+                tools:text="Nickname" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </ScrollView>
+
+
+    <ImageButton
+        android:id="@+id/image_button_play"
+        style="@style/PlayerImageButton"
+        android:contentDescription="@string/play_song"
+        android:src="@drawable/ic_baseline_play_arrow_24"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/image_button_download"
+        app:layout_constraintStart_toStartOf="parent"
+        app:tint="@color/small_icons_color" />
+
+    <ImageButton
+        android:id="@+id/image_button_download"
+        style="@style/PlayerImageButton"
+        android:contentDescription="@string/download_song"
+        android:src="@drawable/ic_download"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/image_button_play" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

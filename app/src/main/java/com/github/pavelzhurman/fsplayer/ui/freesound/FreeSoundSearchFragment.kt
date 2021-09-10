@@ -6,22 +6,23 @@ import android.content.Intent
 import android.content.ServiceConnection
 import android.os.IBinder
 import android.util.Log
-import android.widget.Toast
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.Navigation
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.github.pavelzhurman.core.Logger
 import com.github.pavelzhurman.core.base.BaseFragment
 import com.github.pavelzhurman.exoplayer.AudioPlayerService
 import com.github.pavelzhurman.freesound_api.datasource.network.entities.FreesoundSongItem
 import com.github.pavelzhurman.fsplayer.databinding.FragmentFreeSoundSearchBinding
 import com.github.pavelzhurman.fsplayer.App
 import com.github.pavelzhurman.fsplayer.di.main.MainComponent
-import com.github.pavelzhurman.musicdatabase.downloader.DownloadManagerForFreesoundSongItems
-import com.github.pavelzhurman.musicdatabase.downloader.DownloadStatus
+import com.github.pavelzhurman.freesound_api.datasource.downloader.DownloadManagerForFreesoundSongItems
+import com.github.pavelzhurman.freesound_api.datasource.downloader.DownloadStatus
+import com.github.pavelzhurman.fsplayer.R
 import com.github.pavelzhurman.musicdatabase.roomdatabase.song.SongItem
 import com.google.android.material.snackbar.Snackbar
 import javax.inject.Inject
+
+const val NOT_DOWNLOADED_SONG_ID = 0L
 
 class FreeSoundSearchFragment :
     BaseFragment<FragmentFreeSoundSearchBinding>() {
@@ -29,13 +30,9 @@ class FreeSoundSearchFragment :
     @Inject
     lateinit var freesoundViewModelFactory: FreesoundSearchViewModelFactory<FreeSoundSearchViewModel>
 
-    private var downloadManager: DownloadManagerForFreesoundSongItems? = null
-
     lateinit var mainComponent: MainComponent
 
     private var audioPlayerService: AudioPlayerService? = null
-
-    private val downloadStatusMutableLiveData: MutableLiveData<DownloadStatus> = MutableLiveData()
 
     private val connection = object : ServiceConnection {
         override fun onServiceConnected(name: ComponentName?, service: IBinder?) {
@@ -65,13 +62,13 @@ class FreeSoundSearchFragment :
             )
         }
 
-        downloadStatusMutableLiveData.observe(this, { status: DownloadStatus ->
+        viewModel.downloadStatusLiveData.observe(this, { status: DownloadStatus ->
             when (status) {
                 is DownloadStatus.Downloaded -> {
                     Log.d("DownloadStatusCheckTAG", "Downloaded $status")
                     Snackbar.make(binding.root, "Downloaded", Snackbar.LENGTH_LONG)
                         .show()
-                    
+
                 }
                 is DownloadStatus.Error -> {
                     Log.d("DownloadStatusCheckTAG", "Error ${status.reason}")
@@ -102,14 +99,13 @@ class FreeSoundSearchFragment :
         mainComponent.inject(this)
         initObservers()
 
-        downloadManager = DownloadManagerForFreesoundSongItems(requireContext())
         bindToAudioService()
         with(binding) {
             recyclerView.apply {
                 adapter = freesoundSearchAdapter.apply {
                     onPlayButtonClickListener = { freesoundSongItem ->
                         val songItem = SongItem(
-                            songId = 0,
+                            songId = NOT_DOWNLOADED_SONG_ID,
                             uri = freesoundSongItem.previews.preview_hq_mp3,
                             name = freesoundSongItem.name,
                             title = freesoundSongItem.description,
@@ -121,15 +117,10 @@ class FreeSoundSearchFragment :
                         audioPlayerService?.setSource(songItem)
                     }
                     onDownloadClickListener = { item ->
-                        val downloadId = downloadManager?.downloadFreesoundSongItem(
-                            item.name,
-                            item.previews.preview_hq_mp3,
-                            item.name
-                        )
-                        if (downloadId != null) {
-                            downloadStatusMutableLiveData.value =
-                                downloadManager?.getDownloadStatus(downloadId)
-                        }
+                        viewModel.downloadSong(item)
+                    }
+                    onItemClickListener = { item ->
+                        openFreesoundItemFragment(item)
                     }
                 }
                 layoutManager = LinearLayoutManager(context)
@@ -137,6 +128,12 @@ class FreeSoundSearchFragment :
 
         }
         initButtonSearch()
+    }
+
+    private fun openFreesoundItemFragment(item: FreesoundSongItem) {
+        viewModel.freesoundSongItemMutableLiveData.value = item
+        Navigation.findNavController(requireView())
+            .navigate(R.id.action_freeSoundSearchFragment_to_freesoundItemFragment)
     }
 
     private fun convertDurationFromDoubleSecToIntMillis(doubleSec: Double): Int {
@@ -152,6 +149,7 @@ class FreeSoundSearchFragment :
         }
     }
 
+
     private fun bindToAudioService() {
         if (audioPlayerService == null) {
             activity?.bindService(
@@ -159,6 +157,18 @@ class FreeSoundSearchFragment :
                 connection,
                 Context.BIND_AUTO_CREATE
             )
+        }
+    }
+
+    override fun onStop() {
+        super.onStop()
+        unbindAudioService()
+    }
+
+    private fun unbindAudioService() {
+        if (audioPlayerService != null) {
+            context?.unbindService(connection)
+            audioPlayerService = null
         }
     }
 

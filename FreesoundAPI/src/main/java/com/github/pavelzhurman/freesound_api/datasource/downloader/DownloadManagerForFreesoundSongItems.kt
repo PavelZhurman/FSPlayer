@@ -1,13 +1,14 @@
-package com.github.pavelzhurman.musicdatabase.downloader
+package com.github.pavelzhurman.freesound_api.datasource.downloader
 
 import android.app.DownloadManager
 import android.content.Context
 import android.net.Uri
 import android.os.Environment
 import android.util.Log
+import javax.inject.Inject
 
 
-class DownloadManagerForFreesoundSongItems(private val context: Context) {
+class DownloadManagerForFreesoundSongItems @Inject constructor(private val context: Context) {
 
     fun downloadFreesoundSongItem(fileName: String, url: String, notificationTitle: String): Long? {
 
@@ -45,6 +46,10 @@ class DownloadManagerForFreesoundSongItems(private val context: Context) {
                 val bytesTotal =
                     cursor.getInt(cursor.getColumnIndex(DownloadManager.COLUMN_TOTAL_SIZE_BYTES))
                 val progress = bytesDownloaded * 100f / bytesTotal
+                Log.v("DownloadStatusCheckTAG", "progress $progress")
+                Log.v("DownloadStatusCheckTAG", "bytesDownloaded $bytesDownloaded")
+                Log.v("DownloadStatusCheckTAG", "bytesTotal $bytesTotal")
+
 
                 cursor.close()
 

@@ -44,6 +44,10 @@ class MainViewModel(application: Application) :
             }
     }
 
+    fun collectAudioAndAddToMainPlaylist() {
+        musicDatabaseRepositoryImpl.collectAudioAndAddToMainPlaylist()
+    }
+
     override fun onCleared() {
         super.onCleared()
         disposable?.dispose()

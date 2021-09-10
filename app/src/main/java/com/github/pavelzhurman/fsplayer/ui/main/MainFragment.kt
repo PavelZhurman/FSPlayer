@@ -58,7 +58,10 @@ class MainFragment : BaseFragment<FragmentMainBinding>() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.app_bar_search -> openSearchFragment()
-            R.id.app_bar_update -> viewModel.getListOfPlaylists()
+            R.id.app_bar_update -> {
+                viewModel.collectAudioAndAddToMainPlaylist()
+                viewModel.getListOfPlaylists()
+            }
         }
         return super.onOptionsItemSelected(item)
     }
@@ -104,6 +107,18 @@ class MainFragment : BaseFragment<FragmentMainBinding>() {
         super.onResume()
         viewModel.getFavouriteSongs()
         viewModel.getListOfPlaylists()
+    }
+
+    override fun onStop() {
+        super.onStop()
+        unbindAudioService()
+    }
+
+    private fun unbindAudioService() {
+        if (audioPlayerService != null) {
+            context?.unbindService(connection)
+            audioPlayerService = null
+        }
     }
 
     override fun initViews() {

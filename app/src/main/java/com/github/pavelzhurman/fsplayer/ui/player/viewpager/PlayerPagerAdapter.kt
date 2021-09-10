@@ -6,9 +6,11 @@ import androidx.appcompat.content.res.AppCompatResources
 import androidx.recyclerview.widget.RecyclerView
 import com.github.pavelzhurman.fsplayer.R
 import com.github.pavelzhurman.fsplayer.databinding.ItemPagerPlayerBinding
+import com.github.pavelzhurman.fsplayer.ui.freesound.NOT_DOWNLOADED_SONG_ID
 import com.github.pavelzhurman.image_loader.ImageLoader
 import com.github.pavelzhurman.musicdatabase.MusicDatabaseRepositoryImpl2
 import com.github.pavelzhurman.musicdatabase.roomdatabase.song.SongItem
+import com.google.android.material.snackbar.Snackbar
 
 class PlayerPagerAdapter(private val listOfSongs: List<SongItem>) :
     RecyclerView.Adapter<PlayerPagerAdapter.PlayerPagerViewHolder>() {
@@ -31,7 +33,11 @@ class PlayerPagerAdapter(private val listOfSongs: List<SongItem>) :
         fun bind(songItem: SongItem) {
             with(itemPagerPlayerBinding) {
                 textViewArtist.text = songItem.artist
+                textViewArtist.isSelected = true
+
                 textViewSong.text = songItem.title
+                textViewSong.isSelected = true
+
                 imageLoader.loadPoster(root.context, songItem.albumUri, imageViewPoster)
                 if (songItem.isFavourite) {
                     imageLoader.loadDrawable(
@@ -48,25 +54,30 @@ class PlayerPagerAdapter(private val listOfSongs: List<SongItem>) :
                 }
 
                 imageButtonFavourite.setOnClickListener {
-                    songItem.isFavourite = !songItem.isFavourite
+                    if (songItem.songId != NOT_DOWNLOADED_SONG_ID) {
+                        songItem.isFavourite = !songItem.isFavourite
 
-                    if (songItem.isFavourite) {
-                        imageLoader.loadDrawable(
-                            imageButtonFavourite,
-                            drawableFavourite,
-                            imageButtonFavourite
-                        )
-                        musicRepository.addFavouriteSong(songItem.songId)
+                        if (songItem.isFavourite) {
+                            imageLoader.loadDrawable(
+                                imageButtonFavourite,
+                                drawableFavourite,
+                                imageButtonFavourite
+                            )
+                            musicRepository.addFavouriteSong(songItem.songId)
+                        } else {
+                            imageLoader.loadDrawable(
+                                imageButtonFavourite,
+                                drawableNotFavourite,
+                                imageButtonFavourite
+                            )
+                            musicRepository.deleteFavouriteSong(songItem.songId)
+
+                        }
+                        musicRepository.updateSong(songItem)
                     } else {
-                        imageLoader.loadDrawable(
-                            imageButtonFavourite,
-                            drawableNotFavourite,
-                            imageButtonFavourite
-                        )
-                        musicRepository.deleteFavouriteSong(songItem.songId)
-
+                        Snackbar.make(root, R.string.you_cannot_add_unloaded_songs_to_favourite, Snackbar.LENGTH_LONG).show()
                     }
-                    musicRepository.updateSong(songItem)
+
                 }
             }
         }
