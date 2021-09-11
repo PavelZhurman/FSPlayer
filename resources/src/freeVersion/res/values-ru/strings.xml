@@ -12,6 +12,7 @@
     <string name="no_favourite_songs_added">Избранных песен не добавлено</string>
     <string name="sounds_not_found">Звуки не найдены</string>
     <string name="update">Обновить</string>
+    <string name="enter_artist_name_or_song_title">Введите имя артиста или название песни</string>
 
     <string name="description">Описание: \n %1s</string>
     <string name="tags">Тэги \n %1s</string>

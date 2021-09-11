@@ -10,8 +10,9 @@ import com.github.pavelzhurman.musicdatabase.roomdatabase.song.SongItem
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.disposables.Disposable
 import io.reactivex.rxjava3.schedulers.Schedulers
+import javax.inject.Singleton
 
-
+@Singleton
 class MainViewModel(application: Application) :
     AndroidViewModel(application) {
 
@@ -20,9 +21,9 @@ class MainViewModel(application: Application) :
     private val musicDatabaseRepositoryImpl: MusicDatabaseRepositoryImpl2 =
         MusicDatabaseRepositoryImpl2(application.applicationContext)
 
-    private val mutablePlaylistItemListLiveData = MutableLiveData<List<PlaylistItem>>()
-    val playlistItemListLiveData: LiveData<List<PlaylistItem>>
-        get() = mutablePlaylistItemListLiveData
+    private val mutableListOfPlaylistsLiveData = MutableLiveData<List<PlaylistItem>>()
+    val listOfPlaylistsLiveData: LiveData<List<PlaylistItem>>
+        get() = mutableListOfPlaylistsLiveData
 
     private val mutableFavouriteSongsLiveData = MutableLiveData<List<SongItem>>()
     val favouriteSongsLiveData: LiveData<List<SongItem>>
@@ -33,7 +34,7 @@ class MainViewModel(application: Application) :
             musicDatabaseRepositoryImpl.getListOfAllPlaylists().subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe { listOfPlaylists ->
-                    mutablePlaylistItemListLiveData.value = listOfPlaylists
+                    mutableListOfPlaylistsLiveData.value = listOfPlaylists
                 }
     }
 

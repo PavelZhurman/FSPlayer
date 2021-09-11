@@ -149,7 +149,6 @@ class FreeSoundSearchFragment :
         }
     }
 
-
     private fun bindToAudioService() {
         if (audioPlayerService == null) {
             activity?.bindService(

@@ -67,7 +67,7 @@ class MainFragment : BaseFragment<FragmentMainBinding>() {
     }
 
     private fun initObservers() {
-        viewModel.playlistItemListLiveData.observe(viewLifecycleOwner, { listOfPlaylists ->
+        viewModel.listOfPlaylistsLiveData.observe(viewLifecycleOwner, { listOfPlaylists ->
             if (listOfPlaylists.isEmpty()){
                 binding.textViewNoSoundsFound.visibility = VISIBLE
             } else {

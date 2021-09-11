@@ -9,6 +9,10 @@
         style="@style/EditTextSearchSongsInPlayer"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:hint="@string/enter_artist_name_or_song_title"
+        android:importantForAutofill="no"
+        android:inputType="text"
+        android:textColorHint="@color/artist_text"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -16,6 +20,7 @@
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recycler_view_search"
         style="@style/RecyclerViewVerticalList"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

@@ -17,7 +17,7 @@ import javax.inject.Singleton
 @Singleton
 class FreeSoundSearchViewModel
 @Inject constructor(
-    private val freesoundRepositoryImpl: FreesoundRepositoryImpl,
+    private val freesoundRepositoryImpl: FreesoundRepositoryImpl
 ) :
     ViewModel() {
 

@@ -14,14 +14,13 @@ class FavouriteSongsAdapter(private var list: List<SongItem>) :
 
     inner class FavouriteSongsViewHolder(private val itemFavouriteSongMainFragmentBinding: ItemFavouriteSongMainFragmentBinding) :
         RecyclerView.ViewHolder(itemFavouriteSongMainFragmentBinding.root) {
+
         fun bind(songItem: SongItem) {
             with(itemFavouriteSongMainFragmentBinding) {
                 textViewArtist.text = songItem.artist
                 textViewSongName.text = songItem.title
                 ImageLoader().loadPoster(this.root.context, songItem.albumUri, imageViewThumbnail)
-                imageViewThumbnail.setOnClickListener {
-                    onFavouriteSongItemClickListener.invoke(songItem)
-                }
+                imageViewThumbnail.setOnClickListener { onFavouriteSongItemClickListener.invoke(songItem) }
             }
         }
     }
