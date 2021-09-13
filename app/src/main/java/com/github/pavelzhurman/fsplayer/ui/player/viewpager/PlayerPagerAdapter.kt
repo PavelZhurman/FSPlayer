@@ -8,7 +8,7 @@ import com.github.pavelzhurman.fsplayer.R
 import com.github.pavelzhurman.fsplayer.databinding.ItemPagerPlayerBinding
 import com.github.pavelzhurman.fsplayer.ui.freesound.NOT_DOWNLOADED_SONG_ID
 import com.github.pavelzhurman.image_loader.ImageLoader
-import com.github.pavelzhurman.musicdatabase.MusicDatabaseRepositoryImpl2
+import com.github.pavelzhurman.musicdatabase.MusicDatabaseRepository
 import com.github.pavelzhurman.musicdatabase.roomdatabase.song.SongItem
 import com.google.android.material.snackbar.Snackbar
 
@@ -28,7 +28,7 @@ class PlayerPagerAdapter(private val listOfSongs: List<SongItem>) :
             R.drawable.ic_baseline_favorite_24
         )
         private val musicRepository =
-            MusicDatabaseRepositoryImpl2(itemPagerPlayerBinding.root.context)
+            MusicDatabaseRepository(itemPagerPlayerBinding.root.context)
 
         fun bind(songItem: SongItem) {
             with(itemPagerPlayerBinding) {

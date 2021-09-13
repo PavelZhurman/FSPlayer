@@ -11,7 +11,7 @@ import io.reactivex.rxjava3.core.Single
 interface PlaylistDao {
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
-    fun addPlaylist(playlistItem: PlaylistItem): Long
+    fun addPlaylist(playlistItem: PlaylistItem)
 
     @Update
     fun updatePlaylist(playlistItem: PlaylistItem)
@@ -28,4 +28,9 @@ interface PlaylistDao {
     @Query("UPDATE playlists SET currentPlaylist = 0 WHERE currentPlaylist=1")
     fun setFalseForCurrentPlaylist()
 
+    @Query("SELECT EXISTS(SELECT * FROM playlists WHERE playlistId = :id) ")
+    fun isExists(id: Long): Boolean
+
+    @Query("DELETE FROM playlists WHERE playlistId = :playlistId")
+    fun deletePlaylist(playlistId: Long)
 }

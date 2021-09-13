@@ -38,16 +38,11 @@ import com.github.pavelzhurman.fsplayer.di.main.MainComponent
 import com.github.pavelzhurman.fsplayer.di.main.MainComponentProvider
 import com.github.pavelzhurman.fsplayer.ui.player.PlayerActivity
 import com.github.pavelzhurman.image_loader.ImageLoader
-import com.github.pavelzhurman.musicdatabase.MusicDatabaseRepositoryImpl2
 import com.google.android.material.snackbar.Snackbar
 
 private const val MY_READ_EXTERNAL_STORAGE_PERMISSION_CODE = 1001
 
 class MainActivity : BaseActivity<ActivityMainBinding>() {
-
-    private val musicDatabaseRepositoryImpl: MusicDatabaseRepositoryImpl2? by lazy {
-        MusicDatabaseRepositoryImpl2(applicationContext)
-    }
 
     lateinit var mainComponent: MainComponent
 
@@ -186,10 +181,12 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
                             textViewSongName.text = title
 
                             miniPlayerBinding?.imageAlbum?.let { imageView ->
-                                ImageLoader().loadPoster(
-                                    this@MainActivity, uriImage,
-                                    imageView
-                                )
+                                if (context != null) {
+                                    ImageLoader().loadPoster(
+                                        context, uriImage,
+                                        imageView
+                                    )
+                                }
                             }
                         }
                     }

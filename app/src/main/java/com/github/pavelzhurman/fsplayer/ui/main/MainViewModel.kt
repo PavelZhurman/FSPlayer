@@ -4,7 +4,7 @@ import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.github.pavelzhurman.musicdatabase.MusicDatabaseRepositoryImpl2
+import com.github.pavelzhurman.musicdatabase.MusicDatabaseRepository
 import com.github.pavelzhurman.musicdatabase.roomdatabase.playlist.PlaylistItem
 import com.github.pavelzhurman.musicdatabase.roomdatabase.song.SongItem
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
@@ -18,8 +18,8 @@ class MainViewModel(application: Application) :
 
     private var disposable: Disposable? = null
 
-    private val musicDatabaseRepositoryImpl: MusicDatabaseRepositoryImpl2 =
-        MusicDatabaseRepositoryImpl2(application.applicationContext)
+    private val musicDatabaseRepositoryImpl: MusicDatabaseRepository =
+        MusicDatabaseRepository(application.applicationContext)
 
     private val mutableListOfPlaylistsLiveData = MutableLiveData<List<PlaylistItem>>()
     val listOfPlaylistsLiveData: LiveData<List<PlaylistItem>>

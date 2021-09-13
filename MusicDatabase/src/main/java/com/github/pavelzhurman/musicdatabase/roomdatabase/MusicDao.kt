@@ -22,4 +22,7 @@ interface MusicDao {
 
     @Query("DELETE FROM PlaylistSongCrossRef WHERE playlistId = :playlistId AND songId = :songId")
     fun deleteFromPlaylist(playlistId: Long, songId: Long)
+
+    @Query("DELETE FROM PlaylistSongCrossRef WHERE playlistId = :playlistId")
+    fun deleteAllSongsFromPlaylist(playlistId: Long)
 }

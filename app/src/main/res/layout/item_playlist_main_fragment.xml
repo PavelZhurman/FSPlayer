@@ -22,15 +22,15 @@
 
         <ImageView
             android:id="@+id/image_view_current_playlist"
-            android:layout_width="48dp"
-            android:layout_height="48dp"
+            style="@style/ImageViewCurrentPlaylistCheck"
+            android:contentDescription="@string/current_playlist_check"
             android:src="@drawable/ic_baseline_check_24"
             android:visibility="invisible"
             app:layout_constraintBottom_toBottomOf="@+id/image_view_thumbnail"
             app:layout_constraintEnd_toEndOf="@+id/image_view_thumbnail" />
 
         <TextView
-            android:id="@+id/text_view_song_name"
+            android:id="@+id/text_view_playlist_name"
             style="@style/Text.RecyclerViewItemSongName"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"

@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
     app:startDestination="@id/mainFragment">
 
@@ -47,6 +48,15 @@
         <action
             android:id="@+id/action_playlistEditorFragment_to_mainFragment"
             app:destination="@id/mainFragment" />
+        <action
+            android:id="@+id/action_playlistEditorFragment_to_myPlaylistsFragment"
+            app:destination="@id/myPlaylistsFragment" />
+        <action
+            android:id="@+id/action_playlistEditorFragment_to_addSongsToPlaylistFragment"
+            app:destination="@id/addSongsToPlaylistFragment" />
+        <action
+            android:id="@+id/action_playlistEditorFragment_to_deletePlaylistDialogFragment"
+            app:destination="@id/deletePlaylistDialogFragment" />
     </fragment>
     <fragment
         android:id="@+id/searchFragment"
@@ -70,7 +80,7 @@
     <fragment
         android:id="@+id/freesoundItemFragment"
         android:name="com.github.pavelzhurman.fsplayer.ui.freesound.freesoundItem.FreesoundItemFragment"
-        android:label="FreesoundItemFragment" >
+        android:label="FreesoundItemFragment">
         <action
             android:id="@+id/action_freesoundItemFragment_to_freeSoundSearchFragment"
             app:destination="@id/freeSoundSearchFragment" />
@@ -78,4 +88,25 @@
             android:id="@+id/action_freesoundItemFragment_to_mainFragment"
             app:destination="@id/mainFragment" />
     </fragment>
+    <fragment
+        android:id="@+id/addSongsToPlaylistFragment"
+        android:name="com.github.pavelzhurman.fsplayer.ui.my_playlists.playlist_editor.add_songs_to_playlist_fragment.AddSongsToPlaylistFragment"
+        android:label="AddSongsToPlaylistFragment">
+        <action
+            android:id="@+id/action_addSongsToPlaylistFragment_to_playlistEditorFragment"
+            app:destination="@id/playlistEditorFragment" />
+    </fragment>
+    <dialog
+        android:id="@+id/deletePlaylistDialogFragment"
+        android:name="com.github.pavelzhurman.fsplayer.ui.my_playlists.playlist_editor.DeletePlaylistDialogFragment"
+        android:label="DeletePlaylistDialogFragment"
+        tools:layout="@layout/dialog_fragment_delete_playlist">
+
+        <action
+            android:id="@+id/action_deletePlaylistDialogFragment_to_playlistEditorFragment"
+            app:destination="@id/playlistEditorFragment" />
+        <action
+            android:id="@+id/action_deletePlaylistDialogFragment_to_myPlaylistsFragment"
+            app:destination="@id/myPlaylistsFragment" />
+    </dialog>
 </navigation>

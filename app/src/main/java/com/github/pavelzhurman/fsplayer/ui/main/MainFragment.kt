@@ -26,7 +26,7 @@ class MainFragment : BaseFragment<FragmentMainBinding>() {
 
     private var audioPlayerService: AudioPlayerService? = null
 
-    private var playlistsAdapter: MyPlaylistsAdapter? = null
+    private var playlistsMainFragmentAdapter: MyPlaylistsMainFragmentAdapter? = null
 
     private val connection = object : ServiceConnection {
         override fun onServiceConnected(name: ComponentName?, service: IBinder?) {
@@ -68,31 +68,33 @@ class MainFragment : BaseFragment<FragmentMainBinding>() {
 
     private fun initObservers() {
         viewModel.listOfPlaylistsLiveData.observe(viewLifecycleOwner, { listOfPlaylists ->
-            if (listOfPlaylists.isEmpty()){
+            if (listOfPlaylists.isEmpty()) {
                 binding.textViewNoSoundsFound.visibility = VISIBLE
             } else {
                 binding.textViewNoSoundsFound.visibility = INVISIBLE
             }
             binding.recyclerViewMyPlaylists.apply {
-                playlistsAdapter = MyPlaylistsAdapter(listOfPlaylists).apply {
+                playlistsMainFragmentAdapter = MyPlaylistsMainFragmentAdapter(listOfPlaylists).apply {
                     onPlaylistItemClickListener = { playlistItem ->
                         audioPlayerService?.setSource(playlistItem.playlistId, null)
                     }
                 }
-                adapter = playlistsAdapter
+                adapter = playlistsMainFragmentAdapter
             }
         })
 
         viewModel.favouriteSongsLiveData.observe(viewLifecycleOwner, { favouriteSongsList ->
             binding.recyclerViewFavouriteSongs.apply {
                 adapter = FavouriteSongsAdapter(favouriteSongsList).apply {
+
                     onFavouriteSongItemClickListener = { songItem ->
                         audioPlayerService?.setSource(FAVOURITE_PLAYLIST_ID, songItem)
-                        playlistsAdapter?.selectedItemPosition =
+                        playlistsMainFragmentAdapter?.selectedItemPosition =
                             FAVOURITE_PLAYLIST_INDEX_IN_ADAPTER
                         binding.recyclerViewMyPlaylists.adapter?.notifyDataSetChanged()
                     }
                 }
+
                 if (favouriteSongsList.isNotEmpty()) {
                     binding.textViewNoFavouriteSongsAdded.visibility = INVISIBLE
                 } else {

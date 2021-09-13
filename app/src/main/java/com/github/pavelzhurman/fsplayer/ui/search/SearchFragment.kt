@@ -6,12 +6,8 @@ import android.content.Intent
 import android.content.ServiceConnection
 import android.os.IBinder
 import android.text.Editable
-import android.widget.LinearLayout
 import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.activityViewModels
-import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.github.pavelzhurman.core.base.BaseFragment
 import com.github.pavelzhurman.exoplayer.AudioPlayerService
 import com.github.pavelzhurman.fsplayer.databinding.FragmentSearchBinding
@@ -46,7 +42,6 @@ class SearchFragment : BaseFragment<FragmentSearchBinding>() {
                     searchFragmentAdapter?.filter?.filter(text)
                 }
             }
-
         }
         initObservers()
     }
@@ -63,25 +58,7 @@ class SearchFragment : BaseFragment<FragmentSearchBinding>() {
                     }
                     adapter = searchFragmentAdapter
                 }
-                /*listOfSongs = resultList
-                localIndex = audioPlayerService?.getCurrentWindowIndex() ?: 0
-                initViewPager(listOfSongs, localIndex)*/
             }
-
-        })
-        audioPlayerService?.currentIndexLiveData?.observe(viewLifecycleOwner, { index ->
-            /*if (listOfSongs.isNotEmpty()) {
-                with(binding) {
-                    viewPager.setCurrentItem(index, true)
-                    textViewDuration.text =
-                        convertFromMillisToMinutesAndSeconds(listOfSongs[index].duration.toLong())
-                    textViewCurrentPosition.text =
-                        audioPlayerService?.getCurrentPosition()?.let {
-                            convertFromMillisToMinutesAndSeconds(it)
-                        }
-                }
-
-            }*/
         })
     }
 

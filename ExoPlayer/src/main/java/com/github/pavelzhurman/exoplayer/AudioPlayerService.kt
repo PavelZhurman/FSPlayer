@@ -35,7 +35,7 @@ import androidx.core.graphics.drawable.DrawableCompat
 import androidx.core.net.toUri
 import com.github.pavelzhurman.exoplayer.di.ExoPlayerComponent
 import com.github.pavelzhurman.exoplayer.di.ExoPlayerComponentProvider
-import com.github.pavelzhurman.musicdatabase.MusicDatabaseRepositoryImpl2
+import com.github.pavelzhurman.musicdatabase.MusicDatabaseRepository
 import com.google.android.exoplayer2.Player.REPEAT_MODE_ALL
 import com.google.android.exoplayer2.Player.REPEAT_MODE_ONE
 import com.google.android.exoplayer2.ext.mediasession.MediaSessionConnector
@@ -70,8 +70,8 @@ class AudioPlayerService : LifecycleService() {
 
     private var disposable: Disposable? = null
 
-    private val musicDatabaseRepositoryImpl2: MusicDatabaseRepositoryImpl2 by lazy {
-        MusicDatabaseRepositoryImpl2(applicationContext)
+    private val musicDatabaseRepositoryImpl2: MusicDatabaseRepository by lazy {
+        MusicDatabaseRepository(applicationContext)
     }
 
     lateinit var exoPlayerComponent: ExoPlayerComponent

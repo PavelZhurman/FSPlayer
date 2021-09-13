@@ -6,11 +6,11 @@ import android.view.View.VISIBLE
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.github.pavelzhurman.fsplayer.databinding.ItemPlaylistMainFragmentBinding
-import com.github.pavelzhurman.musicdatabase.MusicDatabaseRepositoryImpl2
+import com.github.pavelzhurman.musicdatabase.MusicDatabaseRepository
 import com.github.pavelzhurman.musicdatabase.roomdatabase.playlist.PlaylistItem
 
-class MyPlaylistsAdapter(private val listOfPlaylists: List<PlaylistItem>) :
-    RecyclerView.Adapter<MyPlaylistsAdapter.MyPlaylistsItemAdapterViewHolder>() {
+class MyPlaylistsMainFragmentAdapter(private val listOfPlaylists: List<PlaylistItem>) :
+    RecyclerView.Adapter<MyPlaylistsMainFragmentAdapter.MyPlaylistsItemAdapterViewHolder>() {
 
     lateinit var onPlaylistItemClickListener: (playlistItem: PlaylistItem) -> Unit
     var selectedItemPosition: Int = 0
@@ -19,24 +19,28 @@ class MyPlaylistsAdapter(private val listOfPlaylists: List<PlaylistItem>) :
         RecyclerView.ViewHolder(itemPlaylistMainFragmentBinding.root) {
 
         private val musicRepository =
-            MusicDatabaseRepositoryImpl2(itemPlaylistMainFragmentBinding.root.context)
+            MusicDatabaseRepository(itemPlaylistMainFragmentBinding.root.context)
+
 
         fun bind(playlistItem: PlaylistItem) {
+            musicRepository.getCurrentPlaylist()?.doOnSuccess { playlist ->
+                selectedItemPosition = playlist.playlistId.toInt()
+            }
             with(itemPlaylistMainFragmentBinding) {
-                textViewSongName.text = playlistItem.name
+                textViewPlaylistName.text = playlistItem.name
 
                 root.setOnClickListener {
                     selectedItemPosition = bindingAdapterPosition
                     onPlaylistItemClickListener.invoke(playlistItem)
 
-                        playlistItem.currentPlaylist = true
-                        imageViewCurrentPlaylist.visibility = VISIBLE
+                    playlistItem.currentPlaylist = true
+                    imageViewCurrentPlaylist.visibility = VISIBLE
 
                     musicRepository.updateCurrentPlaylistState(playlistItem)
                     notifyDataSetChanged()
                 }
 
-                if (selectedItemPosition == bindingAdapterPosition){
+                if (selectedItemPosition == bindingAdapterPosition) {
                     imageViewCurrentPlaylist.visibility = VISIBLE
                 } else imageViewCurrentPlaylist.visibility = INVISIBLE
             }

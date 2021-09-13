@@ -13,6 +13,17 @@
     <string name="sounds_not_found">Звуки не найдены</string>
     <string name="update">Обновить</string>
     <string name="enter_artist_name_or_song_title">Введите имя артиста или название песни</string>
+    <string name="cancel">Отмена</string>
+    <string name="add_songs_to_playlist">Добавьте песни в плейлист</string>
+    <string name="edit_songs_in_playlist">редактирование песен в плейлисте</string>
+    <string name="apply">Применить</string>
+    <string name="delete_playlist">Удалить плейлист</string>
+    <string name="are_you_sure_you_want_to_delete_playlist">Вы уверены, что хотите удалить плейлист?</string>
+    <string name="delete">Удалить</string>
+    <string name="you_cannot_edit_main_playlist">Вы не можете редактировать Main Playlist</string>
+
+
+
 
     <string name="description">Описание: \n %1s</string>
     <string name="tags">Тэги \n %1s</string>
@@ -50,5 +61,8 @@
     <string name="player_canceled">Плейер отменён</string>
     <string name="player_error">Ошибка плейера</string>
     <string name="you_cannot_add_unloaded_songs_to_favourite">Вы не пожете добавить не загруженные песни в избранное</string>
+    <string name="current_playlist_check">Текущий плейлист</string>
+    <string name="add_song">Добавить песню</string>
+
 
 </resources>

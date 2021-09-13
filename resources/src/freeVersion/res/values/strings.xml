@@ -17,6 +17,8 @@
     <string name="open">Open</string>
     <string name="close">Close</string>
     <string name="set_favourite">set favourite</string>
+    <string name="current_playlist_check">current playlist check</string>
+    <string name="add_song">add song</string>
 
     <string name="hello_world">Hello free world!</string>
     <string name="favourite_songs">Favourite songs</string>
@@ -47,6 +49,14 @@
     <string name="update">Update</string>
     <string name="you_cannot_add_unloaded_songs_to_favourite">You cannot add unloaded songs to favourite</string>
     <string name="enter_artist_name_or_song_title">Enter artist name or song title</string>
+    <string name="cancel">Cancel</string>
+    <string name="add_songs_to_playlist">Add songs to playlist</string>
+    <string name="edit_songs_in_playlist">Edit songs in playlist</string>
+    <string name="apply">Apply</string>
+    <string name="delete_playlist">Delete playlist</string>
+    <string name="are_you_sure_you_want_to_delete_playlist">Are you sure you want to delete the playlist?</string>
+    <string name="delete">Delete</string>
+    <string name="you_cannot_edit_main_playlist">You cannot edit Main Playlist</string>
 
 
     <string name="description">Description: \n %1s</string>

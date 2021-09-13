@@ -17,17 +17,51 @@ import javax.inject.Singleton
 const val MAIN_PLAYLIST_ID = 0L
 const val FAVOURITE_PLAYLIST_ID = 1L
 
+const val MAIN_PLAYLIST_NAME = "MainPlaylist"
+const val FAVOURITE_PLAYLIST_NAME = "FavouritePlaylist"
+
 @Singleton
-class MusicDatabaseRepositoryImpl2(private val context: Context) {
+class MusicDatabaseRepository(private val context: Context) {
 
 
     private val musicDatabase: MusicDatabase = MusicDatabase.init(context)
 
 
-    fun addListenedSong(listened: Listened) {
+    @Transaction
+    fun clearAndAddNewSongsToPlaylist(playlistId: Long, list: List<SongItem>) {
         Completable.complete().subscribeOn(Schedulers.io()).subscribe {
-            musicDatabase.getListenedDAO().insert(listened)
+            with(musicDatabase.getMusicDAO()) {
+                deleteAllSongsFromPlaylist(playlistId)
+                list.forEach { songItem -> addSongToPlaylist(playlistId, songItem.songId) }
+            }
+
         }
+    }
+
+    @Transaction
+    fun addPlaylist(playlistItem: PlaylistItem) {
+        Completable.complete().subscribeOn(Schedulers.io()).subscribe {
+            var tempId = playlistItem.playlistId
+            while (musicDatabase.getPlaylistItemDAO().isExists(tempId)) {
+                tempId++
+            }
+            musicDatabase.getPlaylistItemDAO().addPlaylist(
+                PlaylistItem(
+                    tempId,
+                    playlistItem.name,
+                    playlistItem.currentPlaylist
+                )
+            )
+        }
+
+    }
+
+    fun getCurrentPlaylist(): Single<PlaylistItem>? {
+        return Single.create<PlaylistItem> {
+            it.onSuccess(musicDatabase.getPlaylistItemDAO().getCurrentPlaylist())
+        }.subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+
     }
 
     fun updateSong(songItem: SongItem) {
@@ -61,7 +95,7 @@ class MusicDatabaseRepositoryImpl2(private val context: Context) {
             )
 
             if (playlistItem == null) {
-                playlistItem = PlaylistItem(FAVOURITE_PLAYLIST_ID, "FavouritePlaylist", false)
+                playlistItem = PlaylistItem(FAVOURITE_PLAYLIST_ID, FAVOURITE_PLAYLIST_NAME, false)
                 musicDatabase.getPlaylistItemDAO().addPlaylist(playlistItem)
             }
         }
@@ -70,7 +104,7 @@ class MusicDatabaseRepositoryImpl2(private val context: Context) {
     @Transaction
     fun addFavouriteSong(songId: Long) {
         Completable.complete().subscribeOn(Schedulers.io()).subscribe {
-            if (musicDatabase.getPlaylistItemDAO().getPlaylistById(FAVOURITE_PLAYLIST_ID) == null){
+            if (!musicDatabase.getPlaylistItemDAO().isExists(FAVOURITE_PLAYLIST_ID)) {
                 initFavouritePlaylist()
             }
             musicDatabase.getMusicDAO().addSongToPlaylist(FAVOURITE_PLAYLIST_ID, songId)
@@ -100,7 +134,8 @@ class MusicDatabaseRepositoryImpl2(private val context: Context) {
         var playlistItem: PlaylistItem? = musicDatabase.getPlaylistItemDAO().getPlaylistById(0)
 
         if (playlistItem == null) {
-            playlistItem = PlaylistItem(MAIN_PLAYLIST_ID, "MainPlaylist", currentPlaylist = true)
+            playlistItem =
+                PlaylistItem(MAIN_PLAYLIST_ID, MAIN_PLAYLIST_NAME, currentPlaylist = true)
         }
 
         val playlistSongCrossRef = PlaylistSongCrossRef(playlistItem.playlistId, songItem.songId)
@@ -115,6 +150,7 @@ class MusicDatabaseRepositoryImpl2(private val context: Context) {
     fun getListOfAllPlaylists(): Single<List<PlaylistItem>> =
         musicDatabase.getPlaylistItemDAO().getAllPlaylists()
 
+    @Transaction
     fun getSongsFromPlaylistByPlaylistId(id: Long): Single<List<SongItem>> {
         return Single.create<List<SongItem>> {
             val list = mutableListOf<SongItem>()
@@ -140,10 +176,20 @@ class MusicDatabaseRepositoryImpl2(private val context: Context) {
 
     }
 
-    fun getSongById(id: Long): Single<SongItem> {
-        return Single.create<SongItem> {
-            musicDatabase.getSongItemDAO().getSongById(id)
-        }.subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
+    fun deleteFromPlaylist(playlistId: Long, songId: Long) {
+        Completable.complete().subscribeOn(Schedulers.io()).subscribe {
+            musicDatabase.getMusicDAO().deleteFromPlaylist(playlistId, songId)
+        }
+    }
+
+    @Transaction
+    fun deletePlaylist(playlistId: Long) {
+        Completable.complete().subscribeOn(Schedulers.io()).subscribe {
+            with(musicDatabase) {
+                getMusicDAO().deleteAllSongsFromPlaylist(playlistId)
+                getPlaylistItemDAO().deletePlaylist(playlistId)
+            }
+        }
     }
 
 }

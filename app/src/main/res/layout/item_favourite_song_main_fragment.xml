@@ -23,6 +23,9 @@
         <TextView
             android:id="@+id/text_view_song_name"
             style="@style/Text.RecyclerViewItemSongName"
+            android:ellipsize="marquee"
+            android:marqueeRepeatLimit="marquee_forever"
+            android:singleLine="true"
             app:layout_constraintBottom_toTopOf="@+id/text_view_artist"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -32,6 +35,9 @@
         <TextView
             android:id="@+id/text_view_artist"
             style="@style/Text"
+            android:ellipsize="marquee"
+            android:marqueeRepeatLimit="marquee_forever"
+            android:singleLine="true"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
