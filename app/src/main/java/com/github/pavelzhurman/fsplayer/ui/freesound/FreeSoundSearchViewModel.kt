@@ -1,9 +1,16 @@
 package com.github.pavelzhurman.fsplayer.ui.freesound
 
+import android.app.DownloadManager
+import android.content.BroadcastReceiver
+import android.content.Context
+import android.content.Intent
+import android.content.IntentFilter
+import android.net.Uri
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.github.pavelzhurman.core.Logger
+import com.github.pavelzhurman.core.ProjectConstants
 import com.github.pavelzhurman.freesound_api.datasource.FreesoundRepositoryImpl
 import com.github.pavelzhurman.freesound_api.datasource.downloader.DownloadManagerForFreesoundSongItems
 import com.github.pavelzhurman.freesound_api.datasource.downloader.DownloadStatus
@@ -17,7 +24,7 @@ import javax.inject.Singleton
 @Singleton
 class FreeSoundSearchViewModel
 @Inject constructor(
-    private val freesoundRepositoryImpl: FreesoundRepositoryImpl
+    private val freesoundRepositoryImpl: FreesoundRepositoryImpl,
 ) :
     ViewModel() {
 
@@ -31,6 +38,10 @@ class FreeSoundSearchViewModel
     private val downloadStatusMutableLiveData: MutableLiveData<DownloadStatus> = MutableLiveData()
     val downloadStatusLiveData: LiveData<DownloadStatus>
         get() = downloadStatusMutableLiveData
+
+    private val downloadedProgressMutableLiveData = MutableLiveData<Float?>()
+    val downloadedProgressLiveData: MutableLiveData<Float?>
+        get() = downloadedProgressMutableLiveData
 
     val freesoundSongItemMutableLiveData = MutableLiveData<FreesoundSongItem>()
 
@@ -63,12 +74,9 @@ class FreeSoundSearchViewModel
     }
 
     fun downloadSong(freesoundSongItem: FreesoundSongItem) {
-        val downloadId = freesoundRepositoryImpl.downloadFreesoundSongItem(freesoundSongItem)
-        downloadStatusMutableLiveData.value = downloadId?.let { getDownloadStatus(it) }
+        freesoundRepositoryImpl.downloadFreesoundSongItem(freesoundSongItem)
     }
 
-    private fun getDownloadStatus(downloadId: Long) =
-        freesoundRepositoryImpl.getDownloadStatus(downloadId)
 
     override fun onCleared() {
         super.onCleared()

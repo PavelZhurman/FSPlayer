@@ -3,10 +3,10 @@ package com.github.pavelzhurman.fsplayer.ui.my_playlists
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.Navigation
 import androidx.recyclerview.widget.GridLayoutManager
+import com.github.pavelzhurman.core.ProjectConstants.MAIN_PLAYLIST_ID
 import com.github.pavelzhurman.core.base.BaseFragment
 import com.github.pavelzhurman.fsplayer.R
 import com.github.pavelzhurman.fsplayer.databinding.FragmentMyPlaylistsBinding
-import com.github.pavelzhurman.musicdatabase.MAIN_PLAYLIST_ID
 import com.google.android.material.snackbar.Snackbar
 
 class MyPlaylistsFragment : BaseFragment<FragmentMyPlaylistsBinding>() {
@@ -42,6 +42,11 @@ class MyPlaylistsFragment : BaseFragment<FragmentMyPlaylistsBinding>() {
             .navigate(R.id.playlistEditorFragment)
     }
 
+    private fun navigateToAddPlaylistDialogFragment() {
+        Navigation.findNavController(requireView())
+            .navigate(R.id.action_myPlaylistsFragment_to_addPlaylistDialogFragment)
+    }
+
     override fun onStart() {
         super.onStart()
         viewModel.getListOfPlaylists()
@@ -59,12 +64,7 @@ class MyPlaylistsFragment : BaseFragment<FragmentMyPlaylistsBinding>() {
             recyclerViewMyPlaylists.layoutManager =
                 GridLayoutManager(context, 2, GridLayoutManager.VERTICAL, false)
 
-            fabAddPlaylist.setOnClickListener {
-                AddPlaylistDialogFragment().show(
-                    childFragmentManager,
-                    null
-                )
-            }
+            fabAddPlaylist.setOnClickListener { navigateToAddPlaylistDialogFragment() }
         }
     }
 

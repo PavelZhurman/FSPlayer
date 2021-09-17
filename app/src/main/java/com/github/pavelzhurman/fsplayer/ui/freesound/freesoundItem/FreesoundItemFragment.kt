@@ -6,6 +6,9 @@ import android.content.Intent
 import android.content.ServiceConnection
 import android.os.IBinder
 import androidx.lifecycle.ViewModelProvider
+import com.github.pavelzhurman.core.ProjectConstants.NOT_DOWNLOADED_SONG_ID
+import com.github.pavelzhurman.core.TimeConverters.convertDurationFromDoubleSecToIntMillis
+import com.github.pavelzhurman.core.TimeConverters.convertFromMillisToMinutesAndSeconds
 import com.github.pavelzhurman.core.base.BaseFragment
 import com.github.pavelzhurman.exoplayer.AudioPlayerService
 import com.github.pavelzhurman.fsplayer.App
@@ -14,7 +17,6 @@ import com.github.pavelzhurman.fsplayer.databinding.FragmentFreesoundItemBinding
 import com.github.pavelzhurman.fsplayer.di.main.MainComponent
 import com.github.pavelzhurman.fsplayer.ui.freesound.FreeSoundSearchViewModel
 import com.github.pavelzhurman.fsplayer.ui.freesound.FreesoundSearchViewModelFactory
-import com.github.pavelzhurman.fsplayer.ui.freesound.NOT_DOWNLOADED_SONG_ID
 import com.github.pavelzhurman.musicdatabase.roomdatabase.song.SongItem
 import javax.inject.Inject
 
@@ -83,7 +85,6 @@ class FreesoundItemFragment : BaseFragment<FragmentFreesoundItemBinding>() {
                         artist = item.name,
                         duration = convertDurationFromDoubleSecToIntMillis(item.duration),
                         albumUri = item.images.waveform_m,
-                        isFavourite = false
                     )
                     audioPlayerService?.setSource(songItem)
                 }
@@ -119,25 +120,6 @@ class FreesoundItemFragment : BaseFragment<FragmentFreesoundItemBinding>() {
             context?.unbindService(connection)
             audioPlayerService = null
         }
-    }
-
-    private fun convertDurationFromDoubleSecToIntMillis(doubleSec: Double): Int {
-        return (doubleSec * 1000).toInt()
-    }
-
-    private fun convertFromMillisToMinutesAndSeconds(millis: Long): String {
-        return if (millis > 0L) {
-            val hours: Long = millis / 3600000L
-            val minutes: Long = (millis - (hours * 3600000L)) / 60000L
-            val seconds: Long = (millis - (minutes * 60000L)) / 1000L
-            if (hours <= 0L) {
-                if (seconds < 10L) "$minutes:0$seconds"
-                else "$minutes:$seconds"
-            } else {
-                if (minutes < 10) "$hours:0$minutes:$seconds"
-                else "$hours:$minutes:$seconds"
-            }
-        } else context?.getString(R.string.zero_time) ?: "0:00"
     }
 
     override fun getViewBinding(): FragmentFreesoundItemBinding =

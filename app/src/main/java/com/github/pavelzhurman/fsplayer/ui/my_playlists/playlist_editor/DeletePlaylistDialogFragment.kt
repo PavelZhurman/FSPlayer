@@ -28,25 +28,25 @@ class DeletePlaylistDialogFragment : DialogFragment() {
         dialog?.window?.requestFeature(Window.FEATURE_NO_TITLE)
 
         with(binding) {
-            buttonCancel.setOnClickListener {
-                Navigation.findNavController(
-                    requireActivity(),
-                    R.id.nav_host_main_fragment_container
-                )
-                    .navigate(R.id.action_deletePlaylistDialogFragment_to_playlistEditorFragment)
-            }
+            buttonCancel.setOnClickListener { navigateToPlaylistEditorFragment() }
             buttonDelete.setOnClickListener {
                 viewModel.playlistItemLiveData.value?.playlistId?.let { playlistId ->
                     viewModel.deletePlaylist(playlistId)
-                    Navigation.findNavController(
-                        requireActivity(),
-                        R.id.nav_host_main_fragment_container
-                    )
-                        .navigate(R.id.action_deletePlaylistDialogFragment_to_myPlaylistsFragment)
+                    navigateToMyPlaylistsFragment()
                 }
             }
         }
 
         return binding.root
+    }
+
+    private fun navigateToPlaylistEditorFragment() {
+        Navigation.findNavController(requireActivity(), R.id.nav_host_main_fragment_container)
+            .navigate(R.id.action_deletePlaylistDialogFragment_to_playlistEditorFragment)
+    }
+
+    private fun navigateToMyPlaylistsFragment() {
+        Navigation.findNavController(requireActivity(), R.id.nav_host_main_fragment_container)
+            .navigate(R.id.action_deletePlaylistDialogFragment_to_myPlaylistsFragment)
     }
 }

@@ -23,10 +23,8 @@ class FreesoundRepositoryImpl @Inject constructor(
 
     fun downloadFreesoundSongItem(freesoundSongItem: FreesoundSongItem) =
         downloadManager.downloadFreesoundSongItem(
-            fileName = freesoundSongItem.name,
+            fileName = freesoundSongItem.name.toString().trim(),
             url = freesoundSongItem.previews.preview_hq_mp3,
             notificationTitle = freesoundSongItem.name
         )
-
-    fun getDownloadStatus(downloadId: Long) = downloadManager.getDownloadStatus(downloadId)
 }

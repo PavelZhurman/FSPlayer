@@ -10,9 +10,6 @@
         android:name="com.github.pavelzhurman.fsplayer.ui.main.MainFragment"
         android:label="MainFragment">
         <action
-            android:id="@+id/action_mainFragment_to_favouriteSongsFragment"
-            app:destination="@id/favouriteSongsFragment" />
-        <action
             android:id="@+id/action_mainFragment_to_myPlaylistsFragment"
             app:destination="@id/myPlaylistsFragment" />
         <action
@@ -21,14 +18,9 @@
         <action
             android:id="@+id/action_mainFragment_to_freeSoundAuthorizationFragment"
             app:destination="@id/freeSoundSearchFragment" />
-    </fragment>
-    <fragment
-        android:id="@+id/favouriteSongsFragment"
-        android:name="com.github.pavelzhurman.fsplayer.ui.favourite_songs.FavouriteSongsFragment"
-        android:label="FavouriteSongsFragment">
         <action
-            android:id="@+id/action_favouriteSongsFragment_to_mainFragment"
-            app:destination="@id/mainFragment" />
+            android:id="@+id/action_mainFragment_to_updateSongsInDatabaseDialogFragment"
+            app:destination="@id/updateSongsInDatabaseDialogFragment" />
     </fragment>
     <fragment
         android:id="@+id/myPlaylistsFragment"
@@ -40,6 +32,9 @@
         <action
             android:id="@+id/action_myPlaylistsFragment_to_mainFragment"
             app:destination="@id/mainFragment" />
+        <action
+            android:id="@+id/action_myPlaylistsFragment_to_addPlaylistDialogFragment"
+            app:destination="@id/addPlaylistDialogFragment" />
     </fragment>
     <fragment
         android:id="@+id/playlistEditorFragment"
@@ -108,5 +103,21 @@
         <action
             android:id="@+id/action_deletePlaylistDialogFragment_to_myPlaylistsFragment"
             app:destination="@id/myPlaylistsFragment" />
+    </dialog>
+    <dialog
+        android:id="@+id/addPlaylistDialogFragment"
+        android:name="com.github.pavelzhurman.fsplayer.ui.my_playlists.AddPlaylistDialogFragment"
+        android:label="AddPlaylistDialogFragment">
+        <action
+            android:id="@+id/action_addPlaylistDialogFragment_to_myPlaylistsFragment"
+            app:destination="@id/myPlaylistsFragment" />
+    </dialog>
+    <dialog
+        android:id="@+id/updateSongsInDatabaseDialogFragment"
+        android:name="com.github.pavelzhurman.fsplayer.ui.main.UpdateSongsInDatabaseDialogFragment"
+        android:label="UpdateSongsInDatabaseDialogFragment" >
+        <action
+            android:id="@+id/action_updateSongsInDatabaseDialogFragment_to_mainFragment"
+            app:destination="@id/mainFragment" />
     </dialog>
 </navigation>

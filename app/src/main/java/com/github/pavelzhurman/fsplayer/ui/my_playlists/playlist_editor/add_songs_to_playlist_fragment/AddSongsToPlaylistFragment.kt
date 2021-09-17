@@ -6,11 +6,11 @@ import android.view.MenuInflater
 import android.view.MenuItem
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.Navigation
+import com.github.pavelzhurman.core.ProjectConstants.MAIN_PLAYLIST_ID
 import com.github.pavelzhurman.core.base.BaseFragment
 import com.github.pavelzhurman.fsplayer.R
 import com.github.pavelzhurman.fsplayer.databinding.FragmentAddSongsToPlaylistBinding
 import com.github.pavelzhurman.fsplayer.ui.my_playlists.MyPlaylistsViewModel
-import com.github.pavelzhurman.musicdatabase.MAIN_PLAYLIST_ID
 import com.github.pavelzhurman.musicdatabase.roomdatabase.song.SongItem
 
 class AddSongsToPlaylistFragment : BaseFragment<FragmentAddSongsToPlaylistBinding>() {
@@ -59,10 +59,10 @@ class AddSongsToPlaylistFragment : BaseFragment<FragmentAddSongsToPlaylistBindin
     }
 
     private fun applyAndBackToEditPlaylistsFragment() {
-        playlistId?.let {
+        playlistId?.let { playlistId_ ->
             listOfSongsFromCurrentPlaylist?.let { it1 ->
                 viewModel.clearAndAddNewSongsToPlaylist(
-                    it,
+                    playlistId_,
                     it1
                 )
             }

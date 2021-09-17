@@ -33,6 +33,7 @@ class AddSongsToPlaylistAdapter(
             with(itemAddSongsToPlaylistBinding) {
                 textViewArtist.text = songItem.artist
                 textViewTitle.text = songItem.title
+                ImageLoader().loadPoster(root.context, songItem.albumUri, imageViewPoster)
 
                 if (listOfSongsFromCurrentPlaylist.contains(songItem)) {
                     ImageLoader().loadDrawable(imageButtonAdd, drawableRemove, imageButtonAdd)
@@ -44,8 +45,6 @@ class AddSongsToPlaylistAdapter(
                     onAddClickListener.invoke(songItem, bindingAdapterPosition)
                 }
             }
-
-
         }
     }
 

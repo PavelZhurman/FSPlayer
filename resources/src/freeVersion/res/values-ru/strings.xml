@@ -21,7 +21,11 @@
     <string name="are_you_sure_you_want_to_delete_playlist">Вы уверены, что хотите удалить плейлист?</string>
     <string name="delete">Удалить</string>
     <string name="you_cannot_edit_main_playlist">Вы не можете редактировать Main Playlist</string>
-
+    <string name="add">Добавить</string>
+    <string name="are_you_sure_you_want_to_update_database">Вы уверены, что хотите обновить базу данных?</string>
+    <string name="this_will_scan_your_phone">Произойдёт сканирование телефона на наличие музыкальных файлов и удалит несуществующие песни из базы данных приложения. Это может занять некоторое время.</string>
+    <string name="update_songs_in_database">Обновить песни в базе данных</string>
+    <string name="downloaded">%1s скачан</string>
 
 
 
@@ -45,7 +49,6 @@
     <string name="download_song">download song</string>
     <string name="next_song">следующая песня</string>
     <string name="add_new_playlist">добавить новый плейлист</string>
-    <string name="language">Язык</string>
     <string name="open">Открыть</string>
     <string name="close">Закрыть</string>
     <string name="main_fragment">Главный фрагмент</string>
@@ -63,6 +66,6 @@
     <string name="you_cannot_add_unloaded_songs_to_favourite">Вы не пожете добавить не загруженные песни в избранное</string>
     <string name="current_playlist_check">Текущий плейлист</string>
     <string name="add_song">Добавить песню</string>
-
+    <string name="remove_song_from_playlist">Удалить песню из плейлиста</string>
 
 </resources>

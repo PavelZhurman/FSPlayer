@@ -12,5 +12,4 @@ data class SongItem(
     val artist: String,
     val duration: Int,
     val albumUri: String,
-    var isFavourite: Boolean
 )

@@ -7,11 +7,15 @@ import android.os.Build
 import android.provider.MediaStore
 import android.util.Log
 import com.github.pavelzhurman.musicdatabase.roomdatabase.song.SongItem
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
+import io.reactivex.rxjava3.core.Completable
+import io.reactivex.rxjava3.schedulers.Schedulers
 
 
 class CollectAudio() {
 
     fun collectAudio(context: Context): List<SongItem> {
+
         val list: MutableList<SongItem> = mutableListOf()
 
         val collection =
@@ -80,7 +84,6 @@ class CollectAudio() {
                         artist = artist,
                         duration = duration,
                         albumUri = albumUri.toString(),
-                        isFavourite = false
                     )
                 )
             }

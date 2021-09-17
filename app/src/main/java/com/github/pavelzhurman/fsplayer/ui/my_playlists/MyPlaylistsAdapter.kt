@@ -15,7 +15,6 @@ class MyPlaylistsAdapter(private val list: List<PlaylistItem>) :
     inner class MyPlaylistsViewHolder(private val itemPlaylistMainFragmentBinding: ItemPlaylistMainFragmentBinding) :
         RecyclerView.ViewHolder(itemPlaylistMainFragmentBinding.root) {
 
-
         fun bind(playlistItem: PlaylistItem) {
             with(itemPlaylistMainFragmentBinding) {
                 textViewPlaylistName.text = playlistItem.name

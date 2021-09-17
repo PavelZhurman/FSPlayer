@@ -9,7 +9,6 @@ import android.content.IntentFilter
 import android.content.ServiceConnection
 import android.content.pm.PackageManager
 import android.os.IBinder
-import android.util.Log
 import android.view.MenuItem
 import android.widget.SeekBar
 import androidx.appcompat.app.ActionBarDrawerToggle
@@ -21,17 +20,19 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
+import com.github.pavelzhurman.core.Logger
+import com.github.pavelzhurman.core.ProjectConstants.ALBUM_URI_TAG
+import com.github.pavelzhurman.core.ProjectConstants.ARTIST_TAG
+import com.github.pavelzhurman.core.ProjectConstants.CURRENT_POSITION_TAG
+import com.github.pavelzhurman.core.ProjectConstants.DURATION_TAG
+import com.github.pavelzhurman.core.ProjectConstants.SEND_CURRENT_POSITION_ACTION
+import com.github.pavelzhurman.core.ProjectConstants.SEND_DATA_TO_MINI_PLAYER_ACTION
+import com.github.pavelzhurman.core.ProjectConstants.TITLE_TAG
 import com.github.pavelzhurman.core.Stubs
+import com.github.pavelzhurman.core.TimeConverters.convertFromMillisToPercents
 import com.github.pavelzhurman.core.base.BaseActivity
-import com.github.pavelzhurman.exoplayer.ALBUM_URI_TAG
-import com.github.pavelzhurman.exoplayer.ARTIST_TAG
 import com.github.pavelzhurman.exoplayer.AudioPlayerService
-import com.github.pavelzhurman.exoplayer.CURRENT_POSITION_TAG
-import com.github.pavelzhurman.exoplayer.DURATION_TAG
 import com.github.pavelzhurman.exoplayer.PlayerStatus
-import com.github.pavelzhurman.exoplayer.SEND_CURRENT_POSITION_ACTION
-import com.github.pavelzhurman.exoplayer.SEND_DATA_TO_MINI_PLAYER_ACTION
-import com.github.pavelzhurman.exoplayer.TITLE_TAG
 import com.github.pavelzhurman.fsplayer.R
 import com.github.pavelzhurman.fsplayer.databinding.ActivityMainBinding
 import com.github.pavelzhurman.fsplayer.di.main.MainComponent
@@ -171,7 +172,9 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
                 when (intent?.action) {
                     SEND_DATA_TO_MINI_PLAYER_ACTION -> {
                         val artist = intent.getStringExtra(ARTIST_TAG)
+                            ?: getString(R.string.empty_string_dots)
                         val title = intent.getStringExtra(TITLE_TAG)
+                            ?: getString(R.string.empty_string_dots)
                         val uriImage = intent.getStringExtra(ALBUM_URI_TAG)
                             ?: Stubs.Images().FAKE_POSTER_NYAN_CAT
                         duration = intent.getIntExtra(DURATION_TAG, 0)
@@ -194,23 +197,13 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
                         val currentPosition =
                             intent.getLongExtra(CURRENT_POSITION_TAG, 0)
                         miniPlayerBinding?.seekBar?.progress =
-                            convertFromMillisToPercents(currentPosition)
+                            convertFromMillisToPercents(currentPosition, duration)
                     }
                 }
             }
         }
         registerReceiver(broadcastReceiverForData, filterForCurrentPosition)
         registerReceiver(broadcastReceiverForData, filterForData)
-    }
-
-    private fun convertFromMillisToPercents(currentPosition: Long): Int {
-        return if (currentPosition != 0L) {
-            if (duration != 0) {
-                val result: Double =
-                    (currentPosition.toDouble() / duration.toDouble()) * 100.0
-                result.toInt()
-            } else 0
-        } else 0
     }
 
     private fun initObservers() {
@@ -221,12 +214,12 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
                 is PlayerStatus.Paused -> miniPlayerView.changeDrawableToPlay()
                 is PlayerStatus.Cancelled -> Snackbar.make(
                     miniPlayerView,
-                    "Player canceled",
+                    getString(R.string.player_canceled),
                     Snackbar.LENGTH_SHORT
                 ).show()
                 is PlayerStatus.Error -> Snackbar.make(
                     miniPlayerView,
-                    "Player error",
+                    getString(R.string.player_error),
                     Snackbar.LENGTH_SHORT
                 ).show()
                 is PlayerStatus.Buffering -> {
@@ -326,7 +319,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
                 android.Manifest.permission.READ_EXTERNAL_STORAGE
             ) != PackageManager.PERMISSION_GRANTED
         ) {
-            Log.v("TAGTAGTAG", "PERMISSION denied")
+            Logger().logcatD("TAGTAGTAG", "PERMISSION denied")
             if (ActivityCompat.shouldShowRequestPermissionRationale(
                     this@MainActivity,
                     android.Manifest.permission.READ_EXTERNAL_STORAGE
@@ -346,7 +339,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
             }
 
         } else {
-            Log.v("TAGTAGTAG", "PERMISSION accessed")
+            Logger().logcatD("TAGTAGTAG", "PERMISSION accessed")
             collectAudioFromExternalStorage()
         }
     }

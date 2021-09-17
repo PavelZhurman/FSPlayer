@@ -7,23 +7,34 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <TextView
-            android:id="@+id/text_view_artist"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+        <ImageView
+            android:id="@+id/image_view_poster"
+            style="@style/ImageViewPosterForFreesoundSearchSongItem"
+            android:background="@color/grey"
+            android:contentDescription="@string/poster_image"
+            android:scaleType="centerCrop"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
+            android:id="@+id/text_view_artist"
+            style="@style/TextMyPlaylistSongItem.Artist"
+            app:layout_constraintEnd_toStartOf="@+id/image_button_remove"
+            app:layout_constraintStart_toEndOf="@+id/image_view_poster"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
             android:id="@+id/text_view_title"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            style="@style/TextMyPlaylistSongItem.Title"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
+            app:layout_constraintEnd_toStartOf="@+id/image_button_remove"
+            app:layout_constraintStart_toEndOf="@+id/image_view_poster" />
 
         <ImageButton
             android:id="@+id/image_button_remove"
             style="@style/FreesoundSearchSongsItemImageButton"
+            android:contentDescription="@string/add_songs_to_playlist"
             android:src="@drawable/ic_baseline_remove_24"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"

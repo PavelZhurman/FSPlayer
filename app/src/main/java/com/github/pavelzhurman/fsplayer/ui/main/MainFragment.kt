@@ -12,13 +12,17 @@ import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View.INVISIBLE
 import android.view.View.VISIBLE
-import androidx.lifecycle.ViewModelProvider
+import androidx.fragment.app.activityViewModels
 import androidx.navigation.Navigation
+import com.github.pavelzhurman.core.Logger
+import com.github.pavelzhurman.core.ProjectConstants.FAVOURITE_PLAYLIST_ID
 import com.github.pavelzhurman.core.base.BaseFragment
 import com.github.pavelzhurman.exoplayer.AudioPlayerService
 import com.github.pavelzhurman.fsplayer.R
 import com.github.pavelzhurman.fsplayer.databinding.FragmentMainBinding
-import com.github.pavelzhurman.musicdatabase.FAVOURITE_PLAYLIST_ID
+import com.github.pavelzhurman.musicdatabase.roomdatabase.playlist.PlaylistItem
+import com.github.pavelzhurman.musicdatabase.roomdatabase.song.SongItem
+import com.google.android.material.snackbar.Snackbar
 
 const val FAVOURITE_PLAYLIST_INDEX_IN_ADAPTER = 1
 
@@ -27,6 +31,8 @@ class MainFragment : BaseFragment<FragmentMainBinding>() {
     private var audioPlayerService: AudioPlayerService? = null
 
     private var playlistsMainFragmentAdapter: MyPlaylistsMainFragmentAdapter? = null
+
+    private var currentPlaylist: PlaylistItem? = null
 
     private val connection = object : ServiceConnection {
         override fun onServiceConnected(name: ComponentName?, service: IBinder?) {
@@ -40,10 +46,7 @@ class MainFragment : BaseFragment<FragmentMainBinding>() {
 
     }
 
-    val viewModel: MainViewModel by lazy {
-        ViewModelProvider(this)
-            .get(MainViewModel::class.java)
-    }
+    val viewModel: MainViewModel by activityViewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -62,53 +65,101 @@ class MainFragment : BaseFragment<FragmentMainBinding>() {
                 viewModel.collectAudioAndAddToMainPlaylist()
                 viewModel.getListOfPlaylists()
             }
+
         }
         return super.onOptionsItemSelected(item)
     }
 
-    private fun initObservers() {
-        viewModel.listOfPlaylistsLiveData.observe(viewLifecycleOwner, { listOfPlaylists ->
-            if (listOfPlaylists.isEmpty()) {
-                binding.textViewNoSoundsFound.visibility = VISIBLE
-            } else {
-                binding.textViewNoSoundsFound.visibility = INVISIBLE
-            }
-            binding.recyclerViewMyPlaylists.apply {
-                playlistsMainFragmentAdapter = MyPlaylistsMainFragmentAdapter(listOfPlaylists).apply {
+    private fun visibilityOfTextViewNoSounds(currentPlaylist: PlaylistItem?) {
+        binding.textViewNoSoundsFound.visibility = if (currentPlaylist == null) {
+            VISIBLE
+        } else {
+            INVISIBLE
+        }
+    }
+
+    private fun visibilityOfTextViewNoSounds(listOfPlaylists: List<PlaylistItem>) {
+        binding.textViewNoSoundsFound.visibility = if (listOfPlaylists.isNullOrEmpty()) {
+            VISIBLE
+        } else {
+            INVISIBLE
+        }
+    }
+
+    private fun initRecyclerViewMyPlaylists(
+        listOfPlaylists: List<PlaylistItem>,
+        currentPlaylist: PlaylistItem
+    ) {
+        binding.recyclerViewMyPlaylists.apply {
+            playlistsMainFragmentAdapter =
+                MyPlaylistsMainFragmentAdapter(
+                    listOfPlaylists,
+                    currentPlaylist
+                ).apply {
                     onPlaylistItemClickListener = { playlistItem ->
+                        if (audioPlayerService == null) {
+                            bindToAudioService()
+                        }
                         audioPlayerService?.setSource(playlistItem.playlistId, null)
+                        viewModel.setCurrentPlaylist(playlistItem)
                     }
                 }
-                adapter = playlistsMainFragmentAdapter
+            adapter = playlistsMainFragmentAdapter
+        }
+    }
+
+    private fun initRecyclerViewFavouriteSongs(favouriteSongsList: List<SongItem>) {
+        binding.recyclerViewFavouriteSongs.apply {
+            adapter = FavouriteSongsAdapter(favouriteSongsList).apply {
+
+                onFavouriteSongItemClickListener = { songItem ->
+                    audioPlayerService?.setSource(FAVOURITE_PLAYLIST_ID, songItem)
+
+                    playlistsMainFragmentAdapter?.selectedItemPosition?.let {
+                        binding.recyclerViewMyPlaylists.adapter?.notifyItemChanged(it)
+                    }
+                    binding.recyclerViewMyPlaylists.adapter?.notifyItemChanged(
+                        FAVOURITE_PLAYLIST_INDEX_IN_ADAPTER
+                    )
+                    playlistsMainFragmentAdapter?.selectedItemPosition =
+                        FAVOURITE_PLAYLIST_INDEX_IN_ADAPTER
+                }
             }
+
+            if (favouriteSongsList.isNotEmpty()) {
+                binding.textViewNoFavouriteSongsAdded.visibility = INVISIBLE
+            } else {
+                binding.textViewNoFavouriteSongsAdded.visibility = VISIBLE
+            }
+
+        }
+    }
+
+    private fun initObservers() {
+        viewModel.currentPlaylistLiveData.observe(this, { currentPlaylistItem ->
+            currentPlaylist = currentPlaylistItem
+            viewModel.listOfPlaylistsLiveData.observe(viewLifecycleOwner, { listOfPlaylists ->
+
+                visibilityOfTextViewNoSounds(listOfPlaylists)
+                initRecyclerViewMyPlaylists(listOfPlaylists, currentPlaylistItem)
+
+            })
         })
 
         viewModel.favouriteSongsLiveData.observe(viewLifecycleOwner, { favouriteSongsList ->
-            binding.recyclerViewFavouriteSongs.apply {
-                adapter = FavouriteSongsAdapter(favouriteSongsList).apply {
-
-                    onFavouriteSongItemClickListener = { songItem ->
-                        audioPlayerService?.setSource(FAVOURITE_PLAYLIST_ID, songItem)
-                        playlistsMainFragmentAdapter?.selectedItemPosition =
-                            FAVOURITE_PLAYLIST_INDEX_IN_ADAPTER
-                        binding.recyclerViewMyPlaylists.adapter?.notifyDataSetChanged()
-                    }
-                }
-
-                if (favouriteSongsList.isNotEmpty()) {
-                    binding.textViewNoFavouriteSongsAdded.visibility = INVISIBLE
-                } else {
-                    binding.textViewNoFavouriteSongsAdded.visibility = VISIBLE
-                }
-
-            }
+            initRecyclerViewFavouriteSongs(favouriteSongsList)
         })
     }
 
+
     override fun onResume() {
         super.onResume()
+        visibilityOfTextViewNoSounds(currentPlaylist)
+
+        bindToAudioService()
         viewModel.getFavouriteSongs()
         viewModel.getListOfPlaylists()
+        viewModel.getCurrentPlaylist()
     }
 
     override fun onStop() {
@@ -126,21 +177,16 @@ class MainFragment : BaseFragment<FragmentMainBinding>() {
     override fun initViews() {
         initObservers()
         with(binding) {
-            textViewFavouriteSongs.setOnClickListener { openFavouriteSongsFragment() }
             textViewMyPlaylists.setOnClickListener { openMyPlaylistFragment() }
         }
         viewModel.getFavouriteSongs()
         viewModel.getListOfPlaylists()
+        viewModel.getCurrentPlaylist()
     }
 
     private fun openSearchFragment() {
         Navigation.findNavController(requireView())
             .navigate(R.id.action_mainFragment_to_searchFragment)
-    }
-
-    private fun openFavouriteSongsFragment() {
-        Navigation.findNavController(requireView())
-            .navigate(R.id.action_mainFragment_to_favouriteSongsFragment)
     }
 
     private fun openMyPlaylistFragment() {

@@ -8,17 +8,22 @@ import android.content.IntentFilter
 import android.content.ServiceConnection
 import android.os.Bundle
 import android.os.IBinder
+import android.view.View.INVISIBLE
+import android.view.View.VISIBLE
 import android.widget.SeekBar
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.core.content.ContextCompat
+import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.MutableLiveData
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
+import com.github.pavelzhurman.core.ProjectConstants.CURRENT_POSITION_TAG
+import com.github.pavelzhurman.core.ProjectConstants.SEND_CURRENT_POSITION_ACTION
+import com.github.pavelzhurman.core.TimeConverters.convertFromMillisToMinutesAndSeconds
+import com.github.pavelzhurman.core.TimeConverters.convertFromMillisToPercents
 import com.github.pavelzhurman.core.base.BaseFragment
 import com.github.pavelzhurman.exoplayer.AudioPlayerService
-import com.github.pavelzhurman.exoplayer.CURRENT_POSITION_TAG
 import com.github.pavelzhurman.exoplayer.PlayerStatus
-import com.github.pavelzhurman.exoplayer.SEND_CURRENT_POSITION_ACTION
 import com.github.pavelzhurman.fsplayer.App
 import com.github.pavelzhurman.fsplayer.R
 import com.github.pavelzhurman.fsplayer.databinding.FragmentPlayerBinding
@@ -36,6 +41,7 @@ class PlayerFragment : BaseFragment<FragmentPlayerBinding>() {
     private var audioPlayerService: AudioPlayerService? = null
     private var broadcastReceiverForData: BroadcastReceiver? = null
     private val playerStatusMutableLiveData = MutableLiveData<PlayerStatus>()
+    private val viewModel: PlayerViewModel by activityViewModels()
 
     private var localIndex = 0
 
@@ -60,6 +66,7 @@ class PlayerFragment : BaseFragment<FragmentPlayerBinding>() {
     }
 
     private var listOfSongs: List<SongItem> = emptyList()
+    private var listOfFavouriteSongs: MutableList<SongItem> = mutableListOf()
 
     lateinit var mainComponent: MainComponent
 
@@ -114,6 +121,7 @@ class PlayerFragment : BaseFragment<FragmentPlayerBinding>() {
 
             }
         }
+        visibilityOfTextViewNoFound(listOfSongs)
     }
 
     private fun initButtonRepeatSOCL() {
@@ -204,7 +212,9 @@ class PlayerFragment : BaseFragment<FragmentPlayerBinding>() {
                         SEND_CURRENT_POSITION_ACTION -> {
                             val currentPosition = intent.getLongExtra(CURRENT_POSITION_TAG, 0)
                             with(binding) {
-                                seekBar.progress = convertFromMillisToPercents(currentPosition)
+                                val duration = audioPlayerService?.getCurrentMediaItemDuration() ?: 0
+
+                                seekBar.progress = convertFromMillisToPercents(currentPosition, duration.toInt())
                                 textViewCurrentPosition.text =
                                     convertFromMillisToMinutesAndSeconds(currentPosition)
                                 textViewDuration.text =
@@ -222,32 +232,7 @@ class PlayerFragment : BaseFragment<FragmentPlayerBinding>() {
         activity?.registerReceiver(broadcastReceiverForData, filterForCurrentPosition)
     }
 
-    private fun convertFromMillisToMinutesAndSeconds(millis: Long): String {
-        return if (millis > 0L) {
-            val hours: Long = millis / 3600000L
-            val minutes: Long = (millis - (hours * 3600000L)) / 60000L
-            val seconds: Long = (millis - (minutes * 60000L)) / 1000L
-            if (hours <= 0L) {
-                if (seconds < 10L) "$minutes:0$seconds"
-                else "$minutes:$seconds"
-            } else {
-                if (minutes < 10) "$hours:0$minutes:$seconds"
-                else "$hours:$minutes:$seconds"
-            }
-        } else context?.getString(R.string.zero_time) ?: "0:00"
-    }
 
-    private fun convertFromMillisToPercents(currentPosition: Long): Int {
-        return if (currentPosition != 0L) {
-            val duration = audioPlayerService?.getCurrentMediaItemDuration() ?: 0
-            if (duration != 0L) {
-                val result: Double =
-                    (currentPosition.toDouble() / duration.toDouble()) * 100.0
-
-                result.toInt()
-            } else 0
-        } else 0
-    }
 
     private fun bindToAudioService() {
         if (audioPlayerService == null) {
@@ -270,6 +255,7 @@ class PlayerFragment : BaseFragment<FragmentPlayerBinding>() {
     override fun onStart() {
         super.onStart()
         bindToAudioService()
+        viewModel.getListOfFavouriteSongs()
     }
 
     override fun onStop() {
@@ -289,16 +275,27 @@ class PlayerFragment : BaseFragment<FragmentPlayerBinding>() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(true)
+        initApp()
+    }
+
+    private fun initApp() {
         mainComponent = App().provideMainComponent()
         mainComponent.inject(this)
     }
 
     private fun initObservers() {
         audioPlayerService?.listOfSongsLiveData?.observe(viewLifecycleOwner, { resultList ->
+            visibilityOfTextViewNoFound(resultList)
             if (resultList.isNotEmpty()) {
                 listOfSongs = resultList
                 localIndex = audioPlayerService?.getCurrentWindowIndex() ?: 0
-                initViewPager(listOfSongs, localIndex)
+
+                viewModel.listOfFavouriteSongsLiveData.observe(this, { list ->
+                    listOfFavouriteSongs = list
+
+                    initViewPager(listOfSongs, listOfFavouriteSongs, localIndex)
+
+                })
             }
 
         })
@@ -331,17 +328,20 @@ class PlayerFragment : BaseFragment<FragmentPlayerBinding>() {
                     getString(R.string.player_error),
                     Snackbar.LENGTH_SHORT
                 ).show()
-                is PlayerStatus.Buffering -> {
-//                    TODO
-                }
                 else -> {
                 }
             }
 
         })
+
+
     }
 
-    private fun initViewPager(listOfSongs: List<SongItem>, index: Int) {
+    private fun initViewPager(
+        listOfSongs: List<SongItem>,
+        listOfFavouriteSongs: MutableList<SongItem>,
+        index: Int
+    ) {
         with(binding.viewPager) {
 
             // Set offscreen page limit to at least 1, so adjacent pages are always laid out
@@ -360,7 +360,16 @@ class PlayerFragment : BaseFragment<FragmentPlayerBinding>() {
                 clipToPadding = false
 
             }
-            this.adapter = PlayerPagerAdapter(listOfSongs)
+            this.adapter = PlayerPagerAdapter(listOfSongs, listOfFavouriteSongs).apply {
+                onDeleteFavouriteSongClickListener = { songItem ->
+                    viewModel.removeSongFromFavouritePlaylist(songItem)
+                    listOfFavouriteSongs.remove(songItem)
+                }
+                onAddFavouriteSongClickListener = { songItem ->
+                    listOfFavouriteSongs.add(songItem)
+                    viewModel.addSongToFavouritePlaylist(songItem)
+                }
+            }
             this.setCurrentItem(index, false)
             this.setPageTransformer(zoomOutPageTransformer)
 
@@ -370,6 +379,15 @@ class PlayerFragment : BaseFragment<FragmentPlayerBinding>() {
                     audioPlayerService?.setCurrentWindowIndex(position)
                 }
             })
+        }
+    }
+
+    private fun visibilityOfTextViewNoFound(listOfSongs: List<SongItem>) {
+        if (listOfSongs.isNullOrEmpty()) {
+            binding.textViewNoSoundsFound.visibility = VISIBLE
+        } else {
+            binding.textViewNoSoundsFound.visibility = INVISIBLE
+
         }
     }
 

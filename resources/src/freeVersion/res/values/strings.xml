@@ -19,12 +19,12 @@
     <string name="set_favourite">set favourite</string>
     <string name="current_playlist_check">current playlist check</string>
     <string name="add_song">add song</string>
+    <string name="remove_song_from_playlist">remove song from playlist</string>
 
     <string name="hello_world">Hello free world!</string>
     <string name="favourite_songs">Favourite songs</string>
     <string name="my_playlists">My playlists</string>
     <string name="freesound_org" translatable="false">Freesound.org</string>
-    <string name="language">Language</string>
     <string name="main_fragment">Main fragment</string>
     <string name="login" translatable="false">Login</string>
     <string name="password" translatable="false">Password</string>
@@ -57,7 +57,13 @@
     <string name="are_you_sure_you_want_to_delete_playlist">Are you sure you want to delete the playlist?</string>
     <string name="delete">Delete</string>
     <string name="you_cannot_edit_main_playlist">You cannot edit Main Playlist</string>
-
+    <string name="add">Add</string>
+    <string name="are_you_sure_you_want_to_update_database">Are you sure you want to update database?</string>
+    <string name="this_will_scan_your_phone">
+        This will scan your phone for music files and remove nonexistent songs from the app\'s database. This may take some time.
+    </string>
+    <string name="update_songs_in_database">Update songs in database</string>
+    <string name="downloaded">%1s downloaded</string>
 
     <string name="description">Description: \n %1s</string>
     <string name="tags">Tags: \n %1s</string>

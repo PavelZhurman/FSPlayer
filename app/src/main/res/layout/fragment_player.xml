@@ -12,13 +12,15 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-<!--    <ImageButton-->
-<!--        android:id="@+id/image_button_volume"-->
-<!--        style="@style/PlayerImageButton.Margin30"-->
-<!--        android:contentDescription="@string/change_volume"-->
-<!--        android:src="@drawable/ic_baseline_volume_down_24"-->
-<!--        app:layout_constraintStart_toStartOf="parent"-->
-<!--        app:layout_constraintTop_toBottomOf="@+id/view_pager" />-->
+    <TextView
+        android:id="@+id/text_view_no_sounds_found"
+        style="@style/Text.NotFoundBig"
+        android:text="@string/no_sounds_found"
+        app:layout_constraintBottom_toBottomOf="@+id/view_pager"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/view_pager" />
+
 
     <ImageButton
         android:id="@+id/image_button_shuffle"
@@ -40,8 +42,8 @@
         android:id="@+id/text_view_current_position"
         style="@style/Text.PlayerSongTime"
         android:textColor="@color/player_time_text_color"
-        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintBottom_toTopOf="@+id/seek_bar"
+        app:layout_constraintStart_toStartOf="parent"
         tools:text="00:10" />
 
     <TextView

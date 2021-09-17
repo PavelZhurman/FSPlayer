@@ -9,12 +9,13 @@ import android.view.ViewGroup
 import android.view.Window
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.activityViewModels
+import androidx.navigation.Navigation
+import com.github.pavelzhurman.core.ProjectConstants.ADD_PLAYLIST_ID
 import com.github.pavelzhurman.fsplayer.R
 import com.github.pavelzhurman.fsplayer.databinding.DialogFragmentAddPlaylistBinding
 import com.github.pavelzhurman.musicdatabase.roomdatabase.playlist.PlaylistItem
 import com.google.android.material.snackbar.Snackbar
 
-const val ADD_PLAYLIST_ID = 2L
 
 class AddPlaylistDialogFragment :
     DialogFragment() {
@@ -33,15 +34,14 @@ class AddPlaylistDialogFragment :
 
         with(binding) {
             textViewTitle.text = getString(R.string.enter_playlist_name)
-            buttonCancel.setOnClickListener { dismiss() }
+            buttonCancel.setOnClickListener { navigateToMyPlaylistsDialogFragment() }
             buttonAddNewPlaylist.setOnClickListener {
                 if (editTextPlaylistName.text.isNullOrEmpty()) {
                     Snackbar.make(
                         root,
                         getString(R.string.enter_playlist_name_please),
                         Snackbar.LENGTH_SHORT
-                    )
-                        .show()
+                    ).show()
                 } else {
                     viewModel.addPlaylist(
                         PlaylistItem(
@@ -50,10 +50,17 @@ class AddPlaylistDialogFragment :
                             currentPlaylist = false
                         )
                     )
-                    dismiss()
+                    viewModel.getListOfPlaylists()
+                    navigateToMyPlaylistsDialogFragment()
                 }
             }
         }
         return binding.root
     }
+
+    private fun navigateToMyPlaylistsDialogFragment() {
+        Navigation.findNavController(requireActivity(), R.id.nav_host_main_fragment_container)
+            .navigate(R.id.action_addPlaylistDialogFragment_to_myPlaylistsFragment)
+    }
+
 }

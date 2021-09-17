@@ -6,38 +6,36 @@ import android.view.View.VISIBLE
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.github.pavelzhurman.fsplayer.databinding.ItemPlaylistMainFragmentBinding
-import com.github.pavelzhurman.musicdatabase.MusicDatabaseRepository
 import com.github.pavelzhurman.musicdatabase.roomdatabase.playlist.PlaylistItem
 
-class MyPlaylistsMainFragmentAdapter(private val listOfPlaylists: List<PlaylistItem>) :
+class MyPlaylistsMainFragmentAdapter(
+    private val listOfPlaylists: List<PlaylistItem>,
+    private val currentPlaylistId: PlaylistItem
+) :
     RecyclerView.Adapter<MyPlaylistsMainFragmentAdapter.MyPlaylistsItemAdapterViewHolder>() {
 
     lateinit var onPlaylistItemClickListener: (playlistItem: PlaylistItem) -> Unit
-    var selectedItemPosition: Int = 0
+    var selectedItemPosition: Int = listOfPlaylists.indexOf(currentPlaylistId)
 
     inner class MyPlaylistsItemAdapterViewHolder(private val itemPlaylistMainFragmentBinding: ItemPlaylistMainFragmentBinding) :
         RecyclerView.ViewHolder(itemPlaylistMainFragmentBinding.root) {
 
-        private val musicRepository =
-            MusicDatabaseRepository(itemPlaylistMainFragmentBinding.root.context)
-
-
         fun bind(playlistItem: PlaylistItem) {
-            musicRepository.getCurrentPlaylist()?.doOnSuccess { playlist ->
-                selectedItemPosition = playlist.playlistId.toInt()
-            }
+
             with(itemPlaylistMainFragmentBinding) {
                 textViewPlaylistName.text = playlistItem.name
 
                 root.setOnClickListener {
+                    notifyItemChanged(selectedItemPosition)
                     selectedItemPosition = bindingAdapterPosition
+                    notifyItemChanged(selectedItemPosition)
+
                     onPlaylistItemClickListener.invoke(playlistItem)
 
                     playlistItem.currentPlaylist = true
                     imageViewCurrentPlaylist.visibility = VISIBLE
 
-                    musicRepository.updateCurrentPlaylistState(playlistItem)
-                    notifyDataSetChanged()
+//                    notifyDataSetChanged()
                 }
 
                 if (selectedItemPosition == bindingAdapterPosition) {

@@ -6,7 +6,7 @@ import androidx.room.PrimaryKey
 @Entity(tableName = "listened")
 data class Listened(
     @field:PrimaryKey
-    val postId: String,
+    val postId: Long,
     val startPosition: Long,
     val total: Long
 )

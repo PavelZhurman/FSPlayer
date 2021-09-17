@@ -25,4 +25,12 @@
         <item name="android:layout_height">200dp</item>
     </style>
 
+    <style name="CardViewUpdateSongDatabase">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">200dp</item>
+        <item name="android:layout_gravity">center</item>
+        <item name="android:background">@drawable/dialog_rounded</item>
+        <item name="android:backgroundTint">@color/background_main</item>
+    </style>
+
 </resources>

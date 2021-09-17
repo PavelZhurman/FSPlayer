@@ -25,6 +25,7 @@
     <style name="Text.NotFoundBig">
         <item name="android:textSize">24sp</item>
         <item name="android:textStyle">bold</item>
+        <item name="android:visibility">invisible</item>
         <item name="android:textColor">@color/grey</item>
     </style>
 
@@ -58,6 +59,23 @@
 
     <style name="Text.FreesoundItem">
         <item name="android:layout_margin">16dp</item>
+    </style>
+
+    <style name="TextMyPlaylistSongItem">
+        <item name="android:layout_margin">16dp</item>
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:ellipsize">marquee</item>
+        <item name="android:marqueeRepeatLimit">marquee_forever</item>
+        <item name="android:singleLine">true</item>
+    </style>
+
+    <style name="TextMyPlaylistSongItem.Artist">
+        <item name="android:textColor">@color/artist_text</item>
+    </style>
+
+    <style name="TextMyPlaylistSongItem.Title">
+        <item name="android:textColor">@color/song_name_text</item>
     </style>
 
 </resources>

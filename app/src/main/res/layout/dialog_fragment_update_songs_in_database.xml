@@ -1,33 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    style="@style/CardViewDialogFragmentPlaylist"
-    android:layout_gravity="center"
-    android:background="@drawable/dialog_rounded"
-    android:backgroundTint="@color/background_main"
-    app:cardCornerRadius="20dp">
+    style="@style/CardViewUpdateSongDatabase">
 
-    <androidx.constraintlayout.widget.ConstraintLayout style="@style/CardViewDialogFragmentPlaylist">
+    <androidx.constraintlayout.widget.ConstraintLayout style="@style/CardViewUpdateSongDatabase">
 
         <TextView
             android:id="@+id/text_view_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/enter_playlist_name"
+            style="@style/TextHeader"
+            android:text="@string/are_you_sure_you_want_to_update_database"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <EditText
-            android:id="@+id/edit_text_playlist_name"
-            android:layout_width="match_parent"
+        <TextView
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:layout_constraintBottom_toTopOf="@+id/button_add_new_playlist"
+            android:text="@string/this_will_scan_your_phone"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/text_view_title"
-            tools:hint="playlist name" />
+            app:layout_constraintTop_toBottomOf="@+id/text_view_title" />
 
         <Button
             android:id="@+id/button_cancel"
@@ -38,13 +32,12 @@
             app:layout_constraintStart_toStartOf="parent" />
 
         <Button
-            android:id="@+id/button_add_new_playlist"
+            android:id="@+id/button_update"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/add"
+            android:text="@string/update"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent" />
-
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.cardview.widget.CardView>

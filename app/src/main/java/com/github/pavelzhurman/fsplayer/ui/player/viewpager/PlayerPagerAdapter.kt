@@ -4,21 +4,26 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.recyclerview.widget.RecyclerView
+import com.github.pavelzhurman.core.ProjectConstants.NOT_DOWNLOADED_SONG_ID
 import com.github.pavelzhurman.fsplayer.R
 import com.github.pavelzhurman.fsplayer.databinding.ItemPagerPlayerBinding
-import com.github.pavelzhurman.fsplayer.ui.freesound.NOT_DOWNLOADED_SONG_ID
 import com.github.pavelzhurman.image_loader.ImageLoader
-import com.github.pavelzhurman.musicdatabase.MusicDatabaseRepository
 import com.github.pavelzhurman.musicdatabase.roomdatabase.song.SongItem
 import com.google.android.material.snackbar.Snackbar
 
-class PlayerPagerAdapter(private val listOfSongs: List<SongItem>) :
+class PlayerPagerAdapter(
+    private val listOfSongs: List<SongItem>,
+    private val listOfFavouriteSongs: MutableList<SongItem>
+) :
     RecyclerView.Adapter<PlayerPagerAdapter.PlayerPagerViewHolder>() {
 
     private val imageLoader = ImageLoader()
+    lateinit var onAddFavouriteSongClickListener: (songItem: SongItem) -> Unit
+    lateinit var onDeleteFavouriteSongClickListener: (songItem: SongItem) -> Unit
 
     inner class PlayerPagerViewHolder(private val itemPagerPlayerBinding: ItemPagerPlayerBinding) :
         RecyclerView.ViewHolder(itemPagerPlayerBinding.root) {
+
         private val drawableNotFavourite = AppCompatResources.getDrawable(
             itemPagerPlayerBinding.root.context,
             R.drawable.ic_baseline_favorite_border_24
@@ -27,8 +32,6 @@ class PlayerPagerAdapter(private val listOfSongs: List<SongItem>) :
             itemPagerPlayerBinding.root.context,
             R.drawable.ic_baseline_favorite_24
         )
-        private val musicRepository =
-            MusicDatabaseRepository(itemPagerPlayerBinding.root.context)
 
         fun bind(songItem: SongItem) {
             with(itemPagerPlayerBinding) {
@@ -39,7 +42,7 @@ class PlayerPagerAdapter(private val listOfSongs: List<SongItem>) :
                 textViewSong.isSelected = true
 
                 imageLoader.loadPoster(root.context, songItem.albumUri, imageViewPoster)
-                if (songItem.isFavourite) {
+                if (listOfFavouriteSongs.contains(songItem)) {
                     imageLoader.loadDrawable(
                         imageButtonFavourite,
                         drawableFavourite,
@@ -55,27 +58,33 @@ class PlayerPagerAdapter(private val listOfSongs: List<SongItem>) :
 
                 imageButtonFavourite.setOnClickListener {
                     if (songItem.songId != NOT_DOWNLOADED_SONG_ID) {
-                        songItem.isFavourite = !songItem.isFavourite
 
-                        if (songItem.isFavourite) {
-                            imageLoader.loadDrawable(
-                                imageButtonFavourite,
-                                drawableFavourite,
-                                imageButtonFavourite
-                            )
-                            musicRepository.addFavouriteSong(songItem.songId)
-                        } else {
+                        if (listOfFavouriteSongs.contains(songItem)) {
                             imageLoader.loadDrawable(
                                 imageButtonFavourite,
                                 drawableNotFavourite,
                                 imageButtonFavourite
                             )
-                            musicRepository.deleteFavouriteSong(songItem.songId)
-
+                            onDeleteFavouriteSongClickListener.invoke(songItem)
+                            listOfFavouriteSongs.remove(songItem)
+                            notifyItemChanged(bindingAdapterPosition)
+                        } else {
+                            imageLoader.loadDrawable(
+                                imageButtonFavourite,
+                                drawableFavourite,
+                                imageButtonFavourite
+                            )
+                            onAddFavouriteSongClickListener.invoke(songItem)
+                            listOfFavouriteSongs.add(songItem)
+                            notifyItemChanged(bindingAdapterPosition)
                         }
-                        musicRepository.updateSong(songItem)
+
                     } else {
-                        Snackbar.make(root, R.string.you_cannot_add_unloaded_songs_to_favourite, Snackbar.LENGTH_LONG).show()
+                        Snackbar.make(
+                            root,
+                            R.string.you_cannot_add_unloaded_songs_to_favourite,
+                            Snackbar.LENGTH_LONG
+                        ).show()
                     }
 
                 }

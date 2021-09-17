@@ -24,7 +24,6 @@ import com.google.android.exoplayer2.audio.AudioAttributes
 import com.google.android.exoplayer2.source.ProgressiveMediaSource
 import com.google.android.exoplayer2.ui.PlayerNotificationManager
 import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory
-import java.util.*
 import android.provider.MediaStore
 import android.support.v4.media.MediaDescriptionCompat
 import android.support.v4.media.MediaMetadataCompat
@@ -33,9 +32,18 @@ import androidx.annotation.DrawableRes
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.drawable.DrawableCompat
 import androidx.core.net.toUri
+import com.github.pavelzhurman.core.ProjectConstants.ALBUM_URI_TAG
+import com.github.pavelzhurman.core.ProjectConstants.ARTIST_TAG
+import com.github.pavelzhurman.core.ProjectConstants.CURRENT_POSITION_TAG
+import com.github.pavelzhurman.core.ProjectConstants.DURATION_TAG
+import com.github.pavelzhurman.core.ProjectConstants.SEND_CURRENT_POSITION_ACTION
+import com.github.pavelzhurman.core.ProjectConstants.SEND_DATA_TO_MINI_PLAYER_ACTION
+import com.github.pavelzhurman.core.ProjectConstants.TITLE_TAG
+import com.github.pavelzhurman.core.ProjectConstants.URI_TAG
 import com.github.pavelzhurman.exoplayer.di.ExoPlayerComponent
 import com.github.pavelzhurman.exoplayer.di.ExoPlayerComponentProvider
 import com.github.pavelzhurman.musicdatabase.MusicDatabaseRepository
+import com.github.pavelzhurman.musicdatabase.roomdatabase.listened.Listened
 import com.google.android.exoplayer2.Player.REPEAT_MODE_ALL
 import com.google.android.exoplayer2.Player.REPEAT_MODE_ONE
 import com.google.android.exoplayer2.ext.mediasession.MediaSessionConnector
@@ -45,7 +53,6 @@ import com.google.android.exoplayer2.util.NotificationUtil.IMPORTANCE_LOW
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.core.Observable
 import io.reactivex.rxjava3.disposables.Disposable
-import io.reactivex.rxjava3.schedulers.Schedulers
 import java.io.FileNotFoundException
 import java.util.concurrent.TimeUnit
 import com.google.android.exoplayer2.source.TrackGroupArray
@@ -56,14 +63,7 @@ private const val PLAYBACK_CHANNEL_ID = "playback_channel"
 private const val PLAYBACK_NOTIFICATION_ID = 11
 private const val MEDIA_SESSION_TAG = "sed_audio"
 
-const val SEND_DATA_TO_MINI_PLAYER_ACTION = "com.github.pavelzhurman.PlayerBroadcastReceiverData"
-const val SEND_CURRENT_POSITION_ACTION = "com.github.pavelzhurman.PlayerBroadcastReceiverPosition"
 
-const val CURRENT_POSITION_TAG = "com.github.pavelzhurman.current_position"
-const val ARTIST_TAG = "com.github.pavelzhurman.artist"
-const val TITLE_TAG = "com.github.pavelzhurman.title"
-const val ALBUM_URI_TAG = "com.github.pavelzhurman.albumUri"
-const val DURATION_TAG = "com.github.pavelzhurman.duration"
 
 
 class AudioPlayerService : LifecycleService() {
@@ -160,82 +160,90 @@ class AudioPlayerService : LifecycleService() {
         }
     }
 
-    override fun onCreate() {
-        super.onCreate()
+    private fun initApp() {
         exoPlayerComponent =
             (applicationContext as ExoPlayerComponentProvider).provideExoPlayerComponent()
         exoPlayerComponent.inject(this)
+    }
 
-        musicDatabaseRepositoryImpl2.getAllSongsFromMainPlaylist().subscribeOn(Schedulers.io())
-            .subscribe { list ->
-                localListOfSongs = list
-                listOfSongsMutableLiveData.value = list
+    override fun onCreate() {
+        super.onCreate()
+        initApp()
 
+        musicDatabaseRepositoryImpl2.getCurrentPlaylist().subscribe { playlist ->
+            musicDatabaseRepositoryImpl2.getSongsFromPlaylistByPlaylistId(playlist.playlistId)
+                .subscribe { list ->
+                    localListOfSongs = list
+                    listOfSongsMutableLiveData.value = list
 
-                player.setMediaSource(createMediaSource())
+                    player.setMediaSource(createMediaSource())
 
-                player.addListener(PlayerEventListener())
+                    playerNotificationManager = PlayerNotificationManager
+                        .Builder(applicationContext, PLAYBACK_NOTIFICATION_ID, PLAYBACK_CHANNEL_ID)
+                        .setChannelNameResourceId(R.string.channel_name_resource)
+                        .setChannelImportance(IMPORTANCE_LOW)
+                        .setNotificationListener(notificationListener)
+                        .setMediaDescriptionAdapter(createMediaDescriptionAdapter())
+                        .build().apply {
 
-                playerNotificationManager = PlayerNotificationManager
-                    .Builder(applicationContext, PLAYBACK_NOTIFICATION_ID, PLAYBACK_CHANNEL_ID)
-                    .setChannelNameResourceId(R.string.channel_name_resource)
-                    .setChannelImportance(IMPORTANCE_LOW)
-                    .setNotificationListener(notificationListener)
-                    .setMediaDescriptionAdapter(createMediaDescriptionAdapter())
-                    .build().apply {
+                            // Add stop action.
+                            setUseStopAction(true)
 
-                        // Add stop action.
-                        setUseStopAction(true)
+                            setPlayer(player)
+                        }
 
-                        setPlayer(player)
+                    // Show lock screen controls and let apps like Google assistant manager playback.
+                    mediaSession = MediaSessionCompat(applicationContext, MEDIA_SESSION_TAG).apply {
+                        isActive = true
                     }
-
-                // Show lock screen controls and let apps like Google assistant manager playback.
-                mediaSession = MediaSessionCompat(applicationContext, MEDIA_SESSION_TAG).apply {
-                    isActive = true
-                }
-                mediaSession?.sessionToken?.let { playerNotificationManager?.setMediaSessionToken(it) }
-                if (mediaSession != null) {
-                    mediaSessionConnector = MediaSessionConnector(mediaSession!!).apply {
-                        setQueueNavigator(object : TimelineQueueNavigator(mediaSession) {
-                            override fun getMediaDescription(
-                                player: Player,
-                                windowIndex: Int
-                            ): MediaDescriptionCompat {
-                                val bitmap =
-                                    getBitmapFromUri(localListOfSongs[player.currentWindowIndex].albumUri)
-                                        ?: getBitmapFromVectorDrawable(
-                                            applicationContext,
-                                            R.drawable.exo_ic_play_circle_filled
+                    mediaSession?.sessionToken?.let {
+                        playerNotificationManager?.setMediaSessionToken(
+                            it
+                        )
+                    }
+                    if (mediaSession != null) {
+                        mediaSessionConnector = MediaSessionConnector(mediaSession!!).apply {
+                            setQueueNavigator(object : TimelineQueueNavigator(mediaSession) {
+                                override fun getMediaDescription(
+                                    player: Player,
+                                    windowIndex: Int
+                                ): MediaDescriptionCompat {
+                                    val bitmap =
+                                        getBitmapFromUri(localListOfSongs[player.currentWindowIndex].albumUri)
+                                            ?: getBitmapFromVectorDrawable(
+                                                applicationContext,
+                                                R.drawable.exo_ic_play_circle_filled
+                                            )
+                                    val extras = Bundle().apply {
+                                        putParcelable(
+                                            MediaMetadataCompat.METADATA_KEY_ALBUM_ART,
+                                            bitmap
                                         )
-                                val extras = Bundle().apply {
-                                    putParcelable(
-                                        MediaMetadataCompat.METADATA_KEY_ALBUM_ART,
-                                        bitmap
-                                    )
-                                    putParcelable(
-                                        MediaMetadataCompat.METADATA_KEY_DISPLAY_ICON,
-                                        bitmap
-                                    )
+                                        putParcelable(
+                                            MediaMetadataCompat.METADATA_KEY_DISPLAY_ICON,
+                                            bitmap
+                                        )
+                                    }
+
+                                    val title =
+                                        localListOfSongs[player.currentWindowIndex].title ?: "..."
+                                    val artist =
+                                        localListOfSongs[player.currentWindowIndex].artist ?: "..."
+
+                                    return MediaDescriptionCompat.Builder()
+                                        .setIconBitmap(bitmap)
+                                        .setTitle(artist)
+                                        .setDescription(title)
+                                        .setExtras(extras)
+                                        .build()
                                 }
-
-                                val title =
-                                    localListOfSongs[player.currentWindowIndex].title ?: "..."
-                                val artist =
-                                    localListOfSongs[player.currentWindowIndex].artist ?: "..."
-
-                                return MediaDescriptionCompat.Builder()
-                                    .setIconBitmap(bitmap)
-                                    .setTitle(artist)
-                                    .setDescription(title)
-                                    .setExtras(extras)
-                                    .build()
-                            }
-                        })
-                        setPlayer(player)
+                            })
+                            setPlayer(player)
+                        }
                     }
                 }
-            }
+        }
+        player.addListener(PlayerEventListener())
         player.prepare()
         player.repeatMode = REPEAT_MODE_ALL
     }
@@ -359,12 +367,14 @@ class AudioPlayerService : LifecycleService() {
         val concatenatingMediaSource = ConcatenatingMediaSource()
         if (localListOfSongs.isNotEmpty()) {
             for (song in localListOfSongs) {
-                val mediaItem = MediaItem.fromUri(song?.uri)
-                val mediaSource =
-                    ProgressiveMediaSource.Factory(dataSourceFactory)
-                        .createMediaSource(mediaItem)
-                concatenatingMediaSource.addMediaSource(mediaSource)
-            }
+                if (song != null){
+                    val mediaItem = MediaItem.fromUri(song?.uri)
+                    val mediaSource =
+                        ProgressiveMediaSource.Factory(dataSourceFactory)
+                            .createMediaSource(mediaItem)
+                    concatenatingMediaSource.addMediaSource(mediaSource)
+                }
+                            }
         }
         return concatenatingMediaSource
     }
@@ -399,8 +409,24 @@ class AudioPlayerService : LifecycleService() {
     }
 
     private fun sendDataBroadcastForMiniPlayer() {
-        if (localListOfSongs.isNotEmpty()) {
+        if (localListOfSongs.isNullOrEmpty()) {
             val intentForBroadcast = Intent(SEND_DATA_TO_MINI_PLAYER_ACTION).apply {
+                putExtra(
+                    ARTIST_TAG,
+                    getString(R.string.empty_string_dots)
+                )
+                putExtra(
+                    TITLE_TAG,
+                    getString(R.string.empty_string_dots)
+                )
+            }
+            sendBroadcast(intentForBroadcast)
+        } else {
+            val intentForBroadcast = Intent(SEND_DATA_TO_MINI_PLAYER_ACTION).apply {
+                putExtra(
+                    URI_TAG,
+                    localListOfSongs[player.currentWindowIndex].uri
+                )
                 putExtra(
                     ARTIST_TAG,
                     localListOfSongs[player.currentWindowIndex].artist
@@ -420,7 +446,6 @@ class AudioPlayerService : LifecycleService() {
             }
             sendBroadcast(intentForBroadcast)
         }
-
     }
 
     private inner class PlayerEventListener : Player.Listener {
@@ -428,6 +453,10 @@ class AudioPlayerService : LifecycleService() {
 
         override fun onPlayerStateChanged(playWhenReady: Boolean, playbackState: Int) {
             super.onPlayWhenReadyChanged(playWhenReady, playbackState)
+
+            if (playbackState == Player.STATE_IDLE) {
+                sendDataBroadcastForMiniPlayer()
+            }
 
             if (playbackState == Player.STATE_READY) {
                 sendDataBroadcastForMiniPlayer()
@@ -533,6 +562,14 @@ class AudioPlayerService : LifecycleService() {
     }
 
     override fun onDestroy() {
+
+        val songItem: SongItem? = currentIndexLiveData.value?.let { index ->
+            listOfSongsMutableLiveData.value?.get(index)
+        }
+        songItem?.songId?.let { Listened(it, player.currentPosition, player.duration) }
+            ?.let { listened ->
+                musicDatabaseRepositoryImpl2.insertListened(listened)
+            }
 
         mediaSession?.release()
         mediaSessionConnector?.setPlayer(null)

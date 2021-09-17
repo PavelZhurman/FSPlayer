@@ -4,6 +4,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.github.pavelzhurman.fsplayer.databinding.ItemPlaylistEditorBinding
+import com.github.pavelzhurman.image_loader.ImageLoader
 import com.github.pavelzhurman.musicdatabase.roomdatabase.song.SongItem
 
 class PlaylistEditorAdapter(private val listOfAllSongs: MutableList<SongItem>) :
@@ -13,14 +14,16 @@ class PlaylistEditorAdapter(private val listOfAllSongs: MutableList<SongItem>) :
 
     inner class PlaylistEditorViewHolder(private val itemPlaylistEditorBinding: ItemPlaylistEditorBinding) :
         RecyclerView.ViewHolder(itemPlaylistEditorBinding.root) {
-        fun bind(songItem: SongItem, position: Int) {
+        fun bind(songItem: SongItem) {
             with(itemPlaylistEditorBinding) {
                 textViewArtist.text = songItem.artist
                 textViewTitle.text = songItem.title
+                ImageLoader().loadPoster(root.context, songItem.albumUri, imageViewPoster)
+
                 imageButtonRemove.setOnClickListener {
+                    listOfAllSongs.removeAt(bindingAdapterPosition)
+                    notifyItemRemoved(bindingAdapterPosition)
                     onRemoveClickListener.invoke(songItem)
-                    listOfAllSongs.removeAt(position)
-                    notifyItemRemoved(position)
                 }
             }
         }
@@ -36,7 +39,7 @@ class PlaylistEditorAdapter(private val listOfAllSongs: MutableList<SongItem>) :
         )
 
     override fun onBindViewHolder(holder: PlaylistEditorViewHolder, position: Int) {
-        holder.bind(listOfAllSongs[position], position)
+        holder.bind(listOfAllSongs[position])
     }
 
     override fun getItemCount(): Int = listOfAllSongs.size
