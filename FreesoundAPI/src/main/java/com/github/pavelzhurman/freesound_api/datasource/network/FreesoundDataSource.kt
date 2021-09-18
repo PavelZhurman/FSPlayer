@@ -11,4 +11,9 @@ class FreesoundDataSource @Inject constructor(private val freesoundAPI: Freesoun
 
     fun getSongInfo(id: String, fields: String): Single<FreesoundSongItem> =
         freesoundAPI.getSongInfo(id, fields)
+
+    fun getFreesoundSearchData(
+        query: String, page: Int
+    ): Single<FreesoundSearchData> =
+        freesoundAPI.getFreesoundSearchData(query, page)
 }

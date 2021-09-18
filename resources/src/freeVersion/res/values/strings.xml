@@ -64,6 +64,8 @@
     </string>
     <string name="update_songs_in_database">Update songs in database</string>
     <string name="downloaded">%1s downloaded</string>
+    <string name="sounds_found_zero">Sounds find: 0</string>
+    <string name="sounds_found_with_value">Sounds find: %1d</string>
 
     <string name="description">Description: \n %1s</string>
     <string name="tags">Tags: \n %1s</string>

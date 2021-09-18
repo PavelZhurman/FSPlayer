@@ -10,11 +10,12 @@ import com.github.pavelzhurman.image_loader.ImageLoader
 class FreesoundSearchDataItemAdapter :
     RecyclerView.Adapter<FreesoundSearchDataItemAdapter.FreesoundSearchDataItemViewHolder>() {
 
-    var values = emptyList<FreesoundSongItem>()
+    var values = mutableListOf<FreesoundSongItem>()
         set(value) {
             field = value
             notifyDataSetChanged()
         }
+
 
     lateinit var onPlayButtonClickListener: (freesoundSongItem: FreesoundSongItem) -> Unit
     lateinit var onDownloadClickListener: (freesoundSongItem: FreesoundSongItem) -> Unit

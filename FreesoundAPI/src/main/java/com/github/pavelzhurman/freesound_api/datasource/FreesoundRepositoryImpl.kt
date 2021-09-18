@@ -18,10 +18,13 @@ class FreesoundRepositoryImpl @Inject constructor(
     override fun getFreesoundSearchData(query: String): Single<FreesoundSearchData> =
         freesoundDataSource.getFreesoundSearchData(query)
 
+    override fun getFreesoundSearchData(query: String, page: Int): Single<FreesoundSearchData> =
+        freesoundDataSource.getFreesoundSearchData(query, page)
+
     override fun getSongInfo(id: String): Single<FreesoundSongItem> =
         freesoundDataSource.getSongInfo(id, fields)
 
-    fun downloadFreesoundSongItem(freesoundSongItem: FreesoundSongItem) =
+    override fun downloadFreesoundSongItem(freesoundSongItem: FreesoundSongItem) =
         downloadManager.downloadFreesoundSongItem(
             fileName = freesoundSongItem.name.toString().trim(),
             url = freesoundSongItem.previews.preview_hq_mp3,

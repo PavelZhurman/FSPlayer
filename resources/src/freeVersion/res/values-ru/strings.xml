@@ -26,6 +26,9 @@
     <string name="this_will_scan_your_phone">Произойдёт сканирование телефона на наличие музыкальных файлов и удалит несуществующие песни из базы данных приложения. Это может занять некоторое время.</string>
     <string name="update_songs_in_database">Обновить песни в базе данных</string>
     <string name="downloaded">%1s скачан</string>
+    <string name="sounds_found_zero">Звуковый файлов найдено: 0</string>
+    <string name="sounds_found_with_value">Звуковый файлов найдено: %1d</string>
+
 
 
 

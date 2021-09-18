@@ -49,7 +49,7 @@ class FreesoundItemFragment : BaseFragment<FragmentFreesoundItemBinding>() {
         mainComponent.inject(this)
         bindToAudioService()
 
-        viewModel.freesoundSongItemMutableLiveData.observe(this, { item ->
+        viewModel.freesoundSongItemLiveData.observe(this, { item ->
             with(binding) {
                 textViewSongName.text = item.name
                 textViewDescription.text = getString(R.string.description, item.description)

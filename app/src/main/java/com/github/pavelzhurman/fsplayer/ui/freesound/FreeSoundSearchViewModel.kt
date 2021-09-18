@@ -1,19 +1,12 @@
 package com.github.pavelzhurman.fsplayer.ui.freesound
 
-import android.app.DownloadManager
-import android.content.BroadcastReceiver
-import android.content.Context
-import android.content.Intent
-import android.content.IntentFilter
-import android.net.Uri
+
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.github.pavelzhurman.core.Logger
-import com.github.pavelzhurman.core.ProjectConstants
 import com.github.pavelzhurman.freesound_api.datasource.FreesoundRepositoryImpl
 import com.github.pavelzhurman.freesound_api.datasource.downloader.DownloadManagerForFreesoundSongItems
-import com.github.pavelzhurman.freesound_api.datasource.downloader.DownloadStatus
 import com.github.pavelzhurman.freesound_api.datasource.network.entities.FreesoundSongItem
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.disposables.Disposable
@@ -35,17 +28,68 @@ class FreeSoundSearchViewModel
     val freesoundSongItemListLiveData: LiveData<List<FreesoundSongItem>> =
         mutableFreesoundSongItemListLiveData
 
-    private val downloadStatusMutableLiveData: MutableLiveData<DownloadStatus> = MutableLiveData()
-    val downloadStatusLiveData: LiveData<DownloadStatus>
-        get() = downloadStatusMutableLiveData
+    private val mutableFreesoundSongItemNextPagesListLiveData =
+        MutableLiveData<FreesoundSongItem>()
+    val freesoundSongItemListNextPagesLiveData: LiveData<FreesoundSongItem> =
+        mutableFreesoundSongItemNextPagesListLiveData
 
-    private val downloadedProgressMutableLiveData = MutableLiveData<Float?>()
-    val downloadedProgressLiveData: MutableLiveData<Float?>
-        get() = downloadedProgressMutableLiveData
+    private val freesoundSongItemMutableLiveData = MutableLiveData<FreesoundSongItem>()
+    val freesoundSongItemLiveData: LiveData<FreesoundSongItem>
+        get() = freesoundSongItemMutableLiveData
 
-    val freesoundSongItemMutableLiveData = MutableLiveData<FreesoundSongItem>()
+    private val countMutableLiveData = MutableLiveData<Int>()
+    val countLiveData: LiveData<Int>
+        get() = countMutableLiveData
+
+    private val nextMutableLiveData = MutableLiveData<Int?>()
+    val nextLiveData: LiveData<Int?>
+        get() = nextMutableLiveData
+
 
     private var disposable: Disposable? = null
+
+    fun setFreesoundSongItem(freesoundSongItem: FreesoundSongItem) {
+        freesoundSongItemMutableLiveData.value = freesoundSongItem
+    }
+
+    fun fetchFreesoundSearchData(query: String, page: Int) {
+        disposable = freesoundRepositoryImpl.getFreesoundSearchData(query, page)
+
+            .subscribeOn(Schedulers.io())
+            .subscribe(
+                { freesoundSearchData ->
+                    countMutableLiveData.postValue(freesoundSearchData.count)
+                    if (freesoundSearchData.next == null) {
+                        nextMutableLiveData.postValue(null)
+
+                    } else {
+                        val pageIndex =
+                            freesoundSearchData?.next?.split("page=")
+                        Logger().logcatD("SplitterCheckTag", page.toString())
+                        nextMutableLiveData.postValue(pageIndex?.get(1)?.toInt())
+                    }
+
+                    for (result in freesoundSearchData.results) {
+                        freesoundRepositoryImpl.getSongInfo(result.id.toString())
+                            .subscribeOn(Schedulers.io())
+                            .observeOn(AndroidSchedulers.mainThread())
+                            .subscribe(
+                                { freesoundSongItem ->
+
+                                    mutableFreesoundSongItemNextPagesListLiveData.value =
+                                        freesoundSongItem
+
+                                },
+                                { error ->
+                                    Logger().logcatD("FREESOUND_API", error.message.toString())
+                                })
+
+                    }
+
+                },
+                { error -> Logger().logcatD("FREESOUND_API", error.message.toString()) }
+            )
+    }
 
     fun fetchFreesoundSearchData(query: String) {
         val freesoundSongItemList = mutableListOf<FreesoundSongItem>()
@@ -54,6 +98,17 @@ class FreeSoundSearchViewModel
             .subscribeOn(Schedulers.io())
             .subscribe(
                 { freesoundSearchData ->
+                    countMutableLiveData.postValue(freesoundSearchData.count)
+                    if (freesoundSearchData.next == null) {
+                        nextMutableLiveData.postValue(null)
+
+                    } else {
+                        val pageIndex =
+                            freesoundSearchData?.next?.split("page=")
+                        Logger().logcatD("SplitterCheckTag", pageIndex.toString())
+                        nextMutableLiveData.postValue(pageIndex?.get(1)?.toInt())
+                    }
+
                     for (result in freesoundSearchData.results) {
                         freesoundRepositoryImpl.getSongInfo(result.id.toString())
                             .subscribeOn(Schedulers.io())

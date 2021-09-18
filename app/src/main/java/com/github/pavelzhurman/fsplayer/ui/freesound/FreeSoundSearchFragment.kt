@@ -8,10 +8,10 @@ import android.content.Intent
 import android.content.IntentFilter
 import android.content.ServiceConnection
 import android.os.IBinder
-import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.Navigation
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.github.pavelzhurman.core.Logger
 import com.github.pavelzhurman.core.ProjectConstants
 import com.github.pavelzhurman.core.ProjectConstants.NOT_DOWNLOADED_SONG_ID
@@ -22,7 +22,6 @@ import com.github.pavelzhurman.freesound_api.datasource.network.entities.Freesou
 import com.github.pavelzhurman.fsplayer.databinding.FragmentFreeSoundSearchBinding
 import com.github.pavelzhurman.fsplayer.App
 import com.github.pavelzhurman.fsplayer.di.main.MainComponent
-import com.github.pavelzhurman.freesound_api.datasource.downloader.DownloadStatus
 import com.github.pavelzhurman.fsplayer.R
 import com.github.pavelzhurman.musicdatabase.roomdatabase.song.SongItem
 import com.google.android.material.snackbar.Snackbar
@@ -38,6 +37,8 @@ class FreeSoundSearchFragment :
     lateinit var mainComponent: MainComponent
 
     private var audioPlayerService: AudioPlayerService? = null
+    private var nextPageNumber: Int? = null
+    private var query: String? = null
 
     private val connection = object : ServiceConnection {
         override fun onServiceConnected(name: ComponentName?, service: IBinder?) {
@@ -60,6 +61,20 @@ class FreeSoundSearchFragment :
         FreesoundSearchDataItemAdapter()
 
     private fun initObservers() {
+        viewModel.countLiveData.observe(this, { count ->
+            binding.textViewCount.text = getString(R.string.sounds_found_with_value, count)
+        })
+
+        viewModel.nextLiveData.observe(this, { next ->
+            if (next == null) {
+                Logger().logcatD("NextPageCheckTag", next.toString())
+                nextPageNumber = null
+            } else {
+                Logger().logcatD("NextPageCheckTag", next.toString())
+                nextPageNumber = next
+            }
+        })
+
         viewModel.apply {
             freesoundSongItemListLiveData.observe(
                 viewLifecycleOwner,
@@ -67,56 +82,47 @@ class FreeSoundSearchFragment :
             )
         }
 
-        viewModel.downloadedProgressLiveData.observe(this, { fileName ->
-            Snackbar.make(
-                binding.root,
-                fileName.toString(),
-                Snackbar.LENGTH_SHORT
-            ).show()
+        viewModel.freesoundSongItemListNextPagesLiveData.observe(this, { item ->
+            addValueToList(item)
         })
 
-        viewModel.downloadStatusLiveData.observe(this, { status: DownloadStatus ->
-            when (status) {
-                is DownloadStatus.Downloaded -> {
-                    Logger().logcatD("DownloadStatusCheckTAG", "Downloaded $status")
-                    Snackbar.make(binding.root, "Downloaded", Snackbar.LENGTH_LONG)
-                        .show()
-
-                }
-                is DownloadStatus.Error -> {
-                    Logger().logcatD("DownloadStatusCheckTAG", "Error ${status.reason}")
-                    Snackbar.make(binding.root, "Error ${status.reason}", Snackbar.LENGTH_LONG)
-                        .show()
-                }
-                is DownloadStatus.Unknown -> {
-                    Logger().logcatD("DownloadStatusCheckTAG", "Unknown $status")
-                    Snackbar.make(
-                        binding.root,
-                        "Download status unknown",
-                        Snackbar.LENGTH_SHORT
-                    ).show()
-                }
-                is DownloadStatus.Downloading -> {
-                    Logger().logcatD("DownloadStatusCheckTAG", "Downloading ${status.progress}")
-                }
-            }
-        })
     }
 
     private fun setValuesInAdapter(list: List<FreesoundSongItem>) {
-        freesoundSearchAdapter.values = list
+        if (list.isNullOrEmpty()) binding.textViewCount.text = getString(R.string.sounds_found_zero)
+        freesoundSearchAdapter.values = (list as MutableList<FreesoundSongItem>)
+    }
+
+    private fun addValueToList(songItem: FreesoundSongItem) {
+        freesoundSearchAdapter.values.add(songItem)
+        freesoundSearchAdapter.notifyDataSetChanged()
     }
 
     override fun initViews() {
         mainComponent = App().provideMainComponent()
         mainComponent.inject(this)
         initObservers()
-//        broadcastReceiver()
 
         bindToAudioService()
         with(binding) {
 
             recyclerView.apply {
+                addOnScrollListener(object : RecyclerView.OnScrollListener() {
+
+                    override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
+                        super.onScrollStateChanged(recyclerView, newState)
+                        if (!recyclerView.canScrollVertically(1)) {
+                            nextPageNumber?.let { page ->
+                                query?.let { query ->
+                                    viewModel.fetchFreesoundSearchData(
+                                        query, page
+                                    )
+                                }
+                            }
+                        }
+                    }
+
+                })
                 adapter = freesoundSearchAdapter.apply {
                     onPlayButtonClickListener = { freesoundSongItem ->
                         val songItem = SongItem(
@@ -198,37 +204,8 @@ class FreeSoundSearchFragment :
         initButtonSearch()
     }
 
-/*    private fun broadcastReceiver() {
-        val intentFilter = IntentFilter(DOWNLOAD_STATUS_ACTION)
-        val broadcastReceiver = object : BroadcastReceiver() {
-            override fun onReceive(context: Context?, intent: Intent?) {
-                when (intent?.action) {
-                    DOWNLOAD_STATUS_ACTION -> {
-                        val status = intent.getIntExtra(DOWNLOAD_STATUS_TAG, -11)
-                        val progress = intent.getFloatExtra(DOWNLOAD_STATUS_PROGRESS, 0f)
-                        val reason = intent.getStringExtra(DOWNLOAD_STATUS_REASON)
-                        Logger().logcatD(
-                            "BroadcastReceiverDownloadStatusCheckTag",
-                            "status $status"
-                        )
-                        Logger().logcatD(
-                            "BroadcastReceiverDownloadStatusCheckTag",
-                            "progress $progress"
-                        )
-                        Logger().logcatD(
-                            "BroadcastReceiverDownloadStatusCheckTag",
-                            "reason $reason"
-                        )
-                    }
-                }
-            }
-
-        }
-        context?.registerReceiver(broadcastReceiver, intentFilter)
-    }*/
-
     private fun openFreesoundItemFragment(item: FreesoundSongItem) {
-        viewModel.freesoundSongItemMutableLiveData.value = item
+        viewModel.setFreesoundSongItem(item)
         Navigation.findNavController(requireView())
             .navigate(R.id.action_freeSoundSearchFragment_to_freesoundItemFragment)
     }
@@ -236,8 +213,11 @@ class FreeSoundSearchFragment :
     private fun initButtonSearch() {
         with(binding) {
             buttonSearch.setOnClickListener {
-                val query: String = editTextSearchBy.text.toString()
-                viewModel.fetchFreesoundSearchData(query)
+                query = editTextSearchBy.text.toString()
+                if (query != null) {
+                    viewModel.fetchFreesoundSearchData(query!!)
+                    freesoundSearchAdapter.values.clear()
+                }
             }
         }
     }

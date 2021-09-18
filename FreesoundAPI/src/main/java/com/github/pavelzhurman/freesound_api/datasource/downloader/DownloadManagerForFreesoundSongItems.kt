@@ -32,7 +32,7 @@ class DownloadManagerForFreesoundSongItems @Inject constructor(private val conte
 
     }
 
-    fun getDownloadStatus(downloadId: Long): DownloadStatus {
+/*    fun getDownloadStatus(downloadId: Long): DownloadStatus {
         val downloadManager =
             context.getSystemService(Context.DOWNLOAD_SERVICE) as? DownloadManager
         downloadManager?.let {
@@ -89,6 +89,6 @@ class DownloadManagerForFreesoundSongItems @Inject constructor(private val conte
 
         }
         return DownloadStatus.Unknown
-    }
+    }*/
 
 }
