@@ -9,7 +9,6 @@ import com.github.pavelzhurman.core.ProjectConstants.MAIN_PLAYLIST_NAME
 import com.github.pavelzhurman.musicdatabase.contentprovider.CollectAudio
 import com.github.pavelzhurman.musicdatabase.roomdatabase.MusicDatabase
 import com.github.pavelzhurman.musicdatabase.roomdatabase.PlaylistSongCrossRef
-import com.github.pavelzhurman.musicdatabase.roomdatabase.listened.Listened
 import com.github.pavelzhurman.musicdatabase.roomdatabase.playlist.PlaylistItem
 import com.github.pavelzhurman.musicdatabase.roomdatabase.song.SongItem
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
@@ -84,12 +83,6 @@ class MusicDatabaseRepository(private val context: Context) {
         }
     }
 
-    fun insertListened(listened: Listened) {
-        Completable.complete().subscribeOn(Schedulers.io()).subscribe {
-            musicDatabase.getListenedDAO().insert(listened)
-        }
-    }
-
     fun getCurrentPlaylist(): Maybe<PlaylistItem> =
         musicDatabase.getPlaylistItemDAO().getCurrentPlaylist().subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
@@ -103,20 +96,6 @@ class MusicDatabaseRepository(private val context: Context) {
             }
 
         }
-    }
-
-    @Transaction
-    fun addSongToDatabaseAndMainPlaylist(songItem: SongItem) {
-        Completable.complete().subscribeOn(Schedulers.io()).subscribe {
-            musicDatabase.getSongItemDAO().addSong(songItem)
-            if (musicDatabase.getPlaylistItemDAO().isExists(MAIN_PLAYLIST_ID)) {
-                musicDatabase.getMusicDAO().addSongToPlaylist(MAIN_PLAYLIST_ID, songItem.songId)
-            } else {
-                initMainPlaylist()
-                musicDatabase.getMusicDAO().addSongToPlaylist(MAIN_PLAYLIST_ID, songItem.songId)
-            }
-        }
-
     }
 
     fun clearAllSongsFromDB(): Completable {
@@ -222,20 +201,6 @@ class MusicDatabaseRepository(private val context: Context) {
             it.onSuccess(list)
 
         }.subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
-    }
-
-
-    @Transaction
-    fun getAllSongsFromMainPlaylist(): Single<List<SongItem>> {
-        return Single.create<List<SongItem>> {
-            val list = mutableListOf<SongItem>()
-            musicDatabase.getMusicDAO().getSongIdsFromPlaylist(MAIN_PLAYLIST_ID).forEach { id ->
-                list.add(musicDatabase.getSongItemDAO().getSongById(id))
-            }
-            it.onSuccess(list)
-
-        }.subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
-
     }
 
     fun deleteFromPlaylist(playlistId: Long, songId: Long) {

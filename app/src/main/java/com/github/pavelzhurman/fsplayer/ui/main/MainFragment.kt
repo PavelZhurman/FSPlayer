@@ -14,7 +14,6 @@ import android.view.View.INVISIBLE
 import android.view.View.VISIBLE
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.Navigation
-import com.github.pavelzhurman.core.Logger
 import com.github.pavelzhurman.core.ProjectConstants.FAVOURITE_PLAYLIST_ID
 import com.github.pavelzhurman.core.base.BaseFragment
 import com.github.pavelzhurman.exoplayer.AudioPlayerService
@@ -22,7 +21,6 @@ import com.github.pavelzhurman.fsplayer.R
 import com.github.pavelzhurman.fsplayer.databinding.FragmentMainBinding
 import com.github.pavelzhurman.musicdatabase.roomdatabase.playlist.PlaylistItem
 import com.github.pavelzhurman.musicdatabase.roomdatabase.song.SongItem
-import com.google.android.material.snackbar.Snackbar
 
 const val FAVOURITE_PLAYLIST_INDEX_IN_ADAPTER = 1
 

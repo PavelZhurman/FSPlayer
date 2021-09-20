@@ -13,7 +13,6 @@ import androidx.navigation.Navigation
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.github.pavelzhurman.core.Logger
-import com.github.pavelzhurman.core.ProjectConstants
 import com.github.pavelzhurman.core.ProjectConstants.NOT_DOWNLOADED_SONG_ID
 import com.github.pavelzhurman.core.TimeConverters.convertDurationFromDoubleSecToIntMillis
 import com.github.pavelzhurman.core.base.BaseFragment
@@ -66,12 +65,12 @@ class FreeSoundSearchFragment :
         })
 
         viewModel.nextLiveData.observe(this, { next ->
-            if (next == null) {
+            nextPageNumber = if (next == null) {
                 Logger().logcatD("NextPageCheckTag", next.toString())
-                nextPageNumber = null
+                null
             } else {
                 Logger().logcatD("NextPageCheckTag", next.toString())
-                nextPageNumber = next
+                next
             }
         })
 
@@ -142,33 +141,7 @@ class FreeSoundSearchFragment :
                         val onComplete = object : BroadcastReceiver() {
                             override fun onReceive(context: Context?, intent: Intent?) {
                                 when (intent?.action) {
-                                    ProjectConstants.DOWNLOAD_STATUS_ACTION -> {
 
-                                        intent.extras.let { bundle ->
-
-                                            val status =
-                                                bundle?.getInt(ProjectConstants.DOWNLOAD_STATUS_TAG)
-                                            val reason =
-                                                bundle?.getString(ProjectConstants.DOWNLOAD_STATUS_REASON)
-                                            val progress =
-                                                bundle?.getFloat(ProjectConstants.DOWNLOAD_STATUS_PROGRESS)
-
-                                            Logger().logcatD(
-                                                "DownloadStatusTAGTAG",
-                                                "status $status"
-                                            )
-                                            Logger().logcatD(
-                                                "DownloadStatusTAGTAG",
-                                                "reason $reason"
-                                            )
-                                            Logger().logcatD(
-                                                "DownloadStatusTAGTAG",
-                                                "progress $progress"
-                                            )
-
-
-                                        }
-                                    }
                                     DownloadManager.ACTION_DOWNLOAD_COMPLETE -> {
                                         Logger().logcatD(
                                             "DownloadStatusTAGTAG",
@@ -184,14 +157,13 @@ class FreeSoundSearchFragment :
                                         }
                                     }
                                 }
-
                             }
-
                         }
                         context?.registerReceiver(
                             onComplete,
                             IntentFilter(DownloadManager.ACTION_DOWNLOAD_COMPLETE)
                         )
+
                     }
                     onItemClickListener = { item ->
                         openFreesoundItemFragment(item)

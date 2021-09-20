@@ -43,7 +43,6 @@ import com.github.pavelzhurman.core.ProjectConstants.URI_TAG
 import com.github.pavelzhurman.exoplayer.di.ExoPlayerComponent
 import com.github.pavelzhurman.exoplayer.di.ExoPlayerComponentProvider
 import com.github.pavelzhurman.musicdatabase.MusicDatabaseRepository
-import com.github.pavelzhurman.musicdatabase.roomdatabase.listened.Listened
 import com.google.android.exoplayer2.Player.REPEAT_MODE_ALL
 import com.google.android.exoplayer2.Player.REPEAT_MODE_ONE
 import com.google.android.exoplayer2.ext.mediasession.MediaSessionConnector
@@ -562,15 +561,6 @@ class AudioPlayerService : LifecycleService() {
     }
 
     override fun onDestroy() {
-
-        val songItem: SongItem? = currentIndexLiveData.value?.let { index ->
-            listOfSongsMutableLiveData.value?.get(index)
-        }
-        songItem?.songId?.let { Listened(it, player.currentPosition, player.duration) }
-            ?.let { listened ->
-                musicDatabaseRepositoryImpl2.insertListened(listened)
-            }
-
         mediaSession?.release()
         mediaSessionConnector?.setPlayer(null)
         playerNotificationManager?.setPlayer(null)

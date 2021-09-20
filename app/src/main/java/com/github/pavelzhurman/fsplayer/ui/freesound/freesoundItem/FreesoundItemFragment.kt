@@ -1,16 +1,21 @@
 package com.github.pavelzhurman.fsplayer.ui.freesound.freesoundItem
 
+import android.app.DownloadManager
+import android.content.BroadcastReceiver
 import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
+import android.content.IntentFilter
 import android.content.ServiceConnection
 import android.os.IBinder
 import androidx.lifecycle.ViewModelProvider
+import com.github.pavelzhurman.core.Logger
 import com.github.pavelzhurman.core.ProjectConstants.NOT_DOWNLOADED_SONG_ID
 import com.github.pavelzhurman.core.TimeConverters.convertDurationFromDoubleSecToIntMillis
 import com.github.pavelzhurman.core.TimeConverters.convertFromMillisToMinutesAndSeconds
 import com.github.pavelzhurman.core.base.BaseFragment
 import com.github.pavelzhurman.exoplayer.AudioPlayerService
+import com.github.pavelzhurman.freesound_api.datasource.network.entities.FreesoundSongItem
 import com.github.pavelzhurman.fsplayer.App
 import com.github.pavelzhurman.fsplayer.R
 import com.github.pavelzhurman.fsplayer.databinding.FragmentFreesoundItemBinding
@@ -18,6 +23,7 @@ import com.github.pavelzhurman.fsplayer.di.main.MainComponent
 import com.github.pavelzhurman.fsplayer.ui.freesound.FreeSoundSearchViewModel
 import com.github.pavelzhurman.fsplayer.ui.freesound.FreesoundSearchViewModelFactory
 import com.github.pavelzhurman.musicdatabase.roomdatabase.song.SongItem
+import com.google.android.material.snackbar.Snackbar
 import javax.inject.Inject
 
 class FreesoundItemFragment : BaseFragment<FragmentFreesoundItemBinding>() {
@@ -94,6 +100,32 @@ class FreesoundItemFragment : BaseFragment<FragmentFreesoundItemBinding>() {
                         url = item.previews.preview_hq_mp3,
                         notificationTitle = item.name
                     )
+                    val onComplete = object : BroadcastReceiver() {
+                        override fun onReceive(context: Context?, intent: Intent?) {
+                            when (intent?.action) {
+
+                                DownloadManager.ACTION_DOWNLOAD_COMPLETE -> {
+                                    Logger().logcatD(
+                                        "DownloadStatusTAGTAG",
+                                        "${item.name} downloaded"
+                                    )
+
+                                    activity?.getString(R.string.downloaded, item.name)?.let {
+                                        Snackbar.make(
+                                            binding.imageButtonDownload,
+                                            it,
+                                            Snackbar.LENGTH_SHORT
+                                        ).show()
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    context?.registerReceiver(
+                        onComplete,
+                        IntentFilter(DownloadManager.ACTION_DOWNLOAD_COMPLETE)
+                    )
+
                 }
             }
         })
