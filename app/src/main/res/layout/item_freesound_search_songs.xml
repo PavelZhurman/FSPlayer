@@ -2,8 +2,7 @@
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    style="@style/CardViewItemFreesoundSearchSongs"
-    android:backgroundTint="@color/background_item_freesound_search_songs">
+    style="@style/CardViewItemFreesoundSearchSongs">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -13,6 +12,7 @@
             android:id="@+id/image_view_poster"
             style="@style/ImageViewPosterForFreesoundSearchSongItem"
             android:background="@color/grey"
+            android:scaleType="centerCrop"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -20,6 +20,7 @@
         <TextView
             android:id="@+id/text_view_name"
             style="@style/Text.FreesoundSearchMarginStart"
+            app:layout_constraintEnd_toEndOf="@+id/text_view_description"
             app:layout_constraintStart_toEndOf="@+id/image_view_poster"
             app:layout_constraintTop_toTopOf="parent"
             tools:text="File name.wav" />
@@ -27,17 +28,11 @@
         <TextView
             android:id="@+id/text_view_description"
             style="@style/Text.FreesoundSearchMarginStart"
+            android:ellipsize="end"
+            app:layout_constraintEnd_toStartOf="@+id/image_button_play"
             app:layout_constraintStart_toEndOf="@+id/image_view_poster"
             app:layout_constraintTop_toBottomOf="@+id/text_view_name"
-            tools:text="Description description" />
-
-        <TextView
-            android:id="@+id/text_view_tags"
-            style="@style/Text.FreesoundSearchMarginStart"
-            app:layout_constraintStart_toEndOf="@+id/image_view_poster"
-            app:layout_constraintTop_toBottomOf="@+id/text_view_description"
-            tools:text="tags,tags,tags,tags,tags" />
-
+            tools:text="Description description description description description description description description description" />
 
         <TextView
             android:id="@+id/text_view_username"
@@ -68,7 +63,7 @@
             style="@style/Text"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            tools:text="number of downloads" />
+            tools:text="789" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

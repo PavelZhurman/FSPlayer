@@ -12,6 +12,12 @@ interface FreesoundAPI {
     @GET("apiv2/search/text/")
     fun getFreesoundSearchData(@Query("query") query: String): Single<FreesoundSearchData>
 
+    @GET("apiv2/search/text/")
+    fun getFreesoundSearchData(
+        @Query("query") query: String,
+        @Query("page") page: Int
+    ): Single<FreesoundSearchData>
+
     @GET("apiv2/sounds/{sound_id}/")
     fun getSongInfo(
         @Path("sound_id") id: String,

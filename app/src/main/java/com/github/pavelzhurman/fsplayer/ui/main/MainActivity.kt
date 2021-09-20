@@ -1,51 +1,285 @@
 package com.github.pavelzhurman.fsplayer.ui.main
 
 
+import android.content.BroadcastReceiver
+import android.content.ComponentName
+import android.content.Context
+import android.content.Intent
+import android.content.IntentFilter
+import android.content.ServiceConnection
+import android.content.pm.PackageManager
+import android.os.IBinder
 import android.view.MenuItem
+import android.widget.SeekBar
 import androidx.appcompat.app.ActionBarDrawerToggle
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
 import com.github.pavelzhurman.core.Logger
+import com.github.pavelzhurman.core.ProjectConstants.ALBUM_URI_TAG
+import com.github.pavelzhurman.core.ProjectConstants.ARTIST_TAG
+import com.github.pavelzhurman.core.ProjectConstants.CURRENT_POSITION_TAG
+import com.github.pavelzhurman.core.ProjectConstants.DURATION_TAG
+import com.github.pavelzhurman.core.ProjectConstants.SEND_CURRENT_POSITION_ACTION
+import com.github.pavelzhurman.core.ProjectConstants.SEND_DATA_TO_MINI_PLAYER_ACTION
+import com.github.pavelzhurman.core.ProjectConstants.TITLE_TAG
 import com.github.pavelzhurman.core.Stubs
+import com.github.pavelzhurman.core.TimeConverters.convertFromMillisToPercents
 import com.github.pavelzhurman.core.base.BaseActivity
-import com.github.pavelzhurman.freesound_api.datasource.FreesoundRepositoryImpl
+import com.github.pavelzhurman.exoplayer.AudioPlayerService
+import com.github.pavelzhurman.exoplayer.PlayerStatus
 import com.github.pavelzhurman.fsplayer.R
 import com.github.pavelzhurman.fsplayer.databinding.ActivityMainBinding
+import com.github.pavelzhurman.fsplayer.di.main.MainComponent
+import com.github.pavelzhurman.fsplayer.di.main.MainComponentProvider
 import com.github.pavelzhurman.fsplayer.ui.player.PlayerActivity
 import com.github.pavelzhurman.image_loader.ImageLoader
-import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
+import com.google.android.material.snackbar.Snackbar
 
+private const val MY_READ_EXTERNAL_STORAGE_PERMISSION_CODE = 1001
 
-class MainActivity : BaseActivity<ActivityMainBinding, MainViewModel>() {
+class MainActivity : BaseActivity<ActivityMainBinding>() {
 
+    lateinit var mainComponent: MainComponent
+
+    private val miniPlayerView by lazy { binding.appBar.contentMain.miniPlayerView }
+    private val miniPlayerBinding by lazy { binding.appBar.contentMain.miniPlayerView.getBinding() }
+
+    val viewModel: MainViewModel by lazy {
+        ViewModelProvider(this)
+            .get(MainViewModel::class.java)
+    }
     private var drawerLayout: DrawerLayout? = null
 
-    override fun initObservers(viewModel: MainViewModel) {}
+    private val playerStatusMutableLiveData = MutableLiveData<PlayerStatus>()
 
-    override fun initViews() {
-        initToolbar()
-        initDrawerLayout()
-        initNavigation()
-        initMiniPlayerView()
-    }
+    private var audioPlayerService: AudioPlayerService? = null
 
+    private var duration = 0
 
-    private fun initMiniPlayerView() {
-        val url = Stubs.Images().FAKE_POSTER_NYAN_CAT
+    private var broadcastReceiverForData: BroadcastReceiver? = null
 
-        val miniPlayerBinding = binding.appBar.contentMain.miniPlayerView.getBinding()
+    private val connection = object : ServiceConnection {
+        override fun onServiceConnected(name: ComponentName?, service: IBinder?) {
+            val binder = service as AudioPlayerService.LocalBinder
+            audioPlayerService = binder.service
 
-        miniPlayerBinding?.apply {
-            root.setOnClickListener { PlayerActivity.start(this@MainActivity) }
-            textViewArtist.text = Stubs.Texts().ARTIST_EMINEM
-            textViewSongName.text = Stubs.Texts().SONG_LOSE_YOURSELF
-            seekBar.progress = 100
-            ImageLoader().loadPoster(this@MainActivity, url, imageAlbum)
+            audioPlayerService?.playerStatusLiveData?.observe(
+                this@MainActivity,
+                { playerStatus ->
+                    playerStatusMutableLiveData.value = playerStatus
+                    if (playerStatus is PlayerStatus.Cancelled) {
+                        stopAudioService()
+                    }
+                })
+        }
+
+        override fun onServiceDisconnected(name: ComponentName?) {
+            audioPlayerService = null
         }
     }
 
+    private fun bindToAudioService() {
+        if (audioPlayerService == null) {
+            bindService(
+                Intent(this, AudioPlayerService::class.java),
+                connection,
+                Context.BIND_AUTO_CREATE
+            )
+        }
+    }
+
+    private fun stopAudioService() {
+        audioPlayerService?.pause()
+        unbindAudioService()
+        stopService(Intent(this, AudioPlayerService::class.java))
+        audioPlayerService = null
+    }
+
+    private fun unbindAudioService() {
+        if (audioPlayerService != null) {
+            unbindService(connection)
+            audioPlayerService = null
+        }
+    }
+
+    override fun onStart() {
+        super.onStart()
+        bindToAudioService()
+
+        when (playerStatusMutableLiveData.value) {
+            PlayerStatus.Playing() -> miniPlayerView.changeDrawableToPause()
+            else -> {
+                miniPlayerView.changeDrawableToPlay()
+            }
+        }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        if (audioPlayerService?.isPlayerPlaying() == true) {
+            miniPlayerView.changeDrawableToPause()
+        } else {
+            miniPlayerView.changeDrawableToPlay()
+        }
+    }
+
+    override fun onStop() {
+        super.onStop()
+        unbindAudioService()
+    }
+
+    override fun initViews() {
+        initApp()
+        initAudioService()
+        askPermissionsAndCollectAudioFromExternalStorage()
+        initBroadcastReceiver()
+        initToolbar()
+        initDrawerLayout()
+        initNavigation()
+        initObservers()
+        setOnclickListenersOnMiniPlayerView()
+    }
+
+    private fun initApp() {
+        mainComponent = (applicationContext as MainComponentProvider).provideMainComponent()
+        mainComponent.inject(this)
+    }
+
+    private fun collectAudioFromExternalStorage() {
+        viewModel.collectAudioAndAddToMainPlaylist()
+//        musicDatabaseRepositoryImpl?.initFavouritePlaylist()
+    }
+
+    private fun initAudioService() {
+        startService(Intent(this, AudioPlayerService::class.java))
+        bindToAudioService()
+    }
+
+    private fun initBroadcastReceiver() {
+        val filterForData = IntentFilter(SEND_DATA_TO_MINI_PLAYER_ACTION)
+        val filterForCurrentPosition = IntentFilter(SEND_CURRENT_POSITION_ACTION)
+
+
+        broadcastReceiverForData = object : BroadcastReceiver() {
+            override fun onReceive(context: Context?, intent: Intent?) {
+
+                when (intent?.action) {
+                    SEND_DATA_TO_MINI_PLAYER_ACTION -> {
+                        val artist = intent.getStringExtra(ARTIST_TAG)
+                            ?: getString(R.string.empty_string_dots)
+                        val title = intent.getStringExtra(TITLE_TAG)
+                            ?: getString(R.string.empty_string_dots)
+                        val uriImage = intent.getStringExtra(ALBUM_URI_TAG)
+                            ?: Stubs.Images().FAKE_POSTER_NYAN_CAT
+                        duration = intent.getIntExtra(DURATION_TAG, 0)
+
+                        miniPlayerBinding?.apply {
+                            textViewArtist.text = artist
+                            textViewSongName.text = title
+
+                            miniPlayerBinding?.imageAlbum?.let { imageView ->
+                                if (context != null) {
+                                    ImageLoader().loadPoster(
+                                        context, uriImage,
+                                        imageView
+                                    )
+                                }
+                            }
+                        }
+                    }
+                    SEND_CURRENT_POSITION_ACTION -> {
+                        val currentPosition =
+                            intent.getLongExtra(CURRENT_POSITION_TAG, 0)
+                        miniPlayerBinding?.seekBar?.progress =
+                            convertFromMillisToPercents(currentPosition, duration)
+                    }
+                }
+            }
+        }
+        registerReceiver(broadcastReceiverForData, filterForCurrentPosition)
+        registerReceiver(broadcastReceiverForData, filterForData)
+    }
+
+    private fun initObservers() {
+        playerStatusMutableLiveData.observe(this, { playerStatus ->
+
+            when (playerStatus) {
+                is PlayerStatus.Playing -> miniPlayerView.changeDrawableToPause()
+                is PlayerStatus.Paused -> miniPlayerView.changeDrawableToPlay()
+                is PlayerStatus.Cancelled -> Snackbar.make(
+                    miniPlayerView,
+                    getString(R.string.player_canceled),
+                    Snackbar.LENGTH_SHORT
+                ).show()
+                is PlayerStatus.Error -> Snackbar.make(
+                    miniPlayerView,
+                    getString(R.string.player_error),
+                    Snackbar.LENGTH_SHORT
+                ).show()
+                is PlayerStatus.Buffering -> {
+//                    TODO
+                }
+                else -> {
+                }
+            }
+
+        })
+    }
+
+    private fun imageButtonPlaySOCL() {
+        miniPlayerView.changeDrawableToPause()
+
+        if (audioPlayerService == null) {
+            bindToAudioService()
+            audioPlayerService?.resume()
+
+        } else {
+            audioPlayerService?.resume()
+        }
+    }
+
+    private fun imageButtonPauseSOCL() {
+        miniPlayerView.changeDrawableToPlay()
+        audioPlayerService?.pause()
+    }
+
+    private fun initSeekBarSOCL(seekBar: SeekBar) {
+        seekBar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
+            override fun onProgressChanged(
+                seekBar: SeekBar?,
+                progress: Int,
+                fromUser: Boolean
+            ) {
+            }
+
+            override fun onStartTrackingTouch(seekBar: SeekBar?) {}
+            override fun onStopTrackingTouch(seekBar: SeekBar?) {
+                seekBar?.progress?.let { audioPlayerService?.seekTo(it) }
+            }
+        })
+    }
+
+    private fun setOnclickListenersOnMiniPlayerView() {
+        miniPlayerBinding?.apply {
+            root.setOnClickListener { PlayerActivity.start(this@MainActivity) }
+            imageButtonPlay.setOnClickListener {
+                if (audioPlayerService?.isPlayerPlaying() == true) {
+                    imageButtonPauseSOCL()
+                } else {
+                    imageButtonPlaySOCL()
+                }
+            }
+            imageButtonNext.setOnClickListener { audioPlayerService?.next() }
+            imageButtonPrevious.setOnClickListener { audioPlayerService?.goToPreviousOrBeginning() }
+            initSeekBarSOCL(seekBar)
+        }
+    }
 
     private fun initToolbar() {
         setSupportActionBar(findViewById(R.id.toolbar_main))
@@ -78,6 +312,50 @@ class MainActivity : BaseActivity<ActivityMainBinding, MainViewModel>() {
         actionBarDrawerToggle.syncState()
     }
 
+
+    private fun askPermissionsAndCollectAudioFromExternalStorage() {
+        if (ContextCompat.checkSelfPermission(
+                this@MainActivity,
+                android.Manifest.permission.READ_EXTERNAL_STORAGE
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
+            Logger().logcatD("TAGTAGTAG", "PERMISSION denied")
+            if (ActivityCompat.shouldShowRequestPermissionRationale(
+                    this@MainActivity,
+                    android.Manifest.permission.READ_EXTERNAL_STORAGE
+                )
+            ) {
+                ActivityCompat.requestPermissions(
+                    this@MainActivity,
+                    arrayOf(android.Manifest.permission.READ_EXTERNAL_STORAGE),
+                    MY_READ_EXTERNAL_STORAGE_PERMISSION_CODE
+                )
+            } else {
+                ActivityCompat.requestPermissions(
+                    this@MainActivity,
+                    arrayOf(android.Manifest.permission.READ_EXTERNAL_STORAGE),
+                    MY_READ_EXTERNAL_STORAGE_PERMISSION_CODE
+                )
+            }
+
+        } else {
+            Logger().logcatD("TAGTAGTAG", "PERMISSION accessed")
+            collectAudioFromExternalStorage()
+        }
+    }
+
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
+    ) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        if (requestCode == MY_READ_EXTERNAL_STORAGE_PERMISSION_CODE && PackageManager.PERMISSION_GRANTED == grantResults[0]
+        ) {
+            collectAudioFromExternalStorage()
+        }
+    }
+
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             android.R.id.home -> {
@@ -88,7 +366,5 @@ class MainActivity : BaseActivity<ActivityMainBinding, MainViewModel>() {
         return super.onOptionsItemSelected(item)
     }
 
-    override val viewModelClass: Class<MainViewModel> = MainViewModel::class.java
     override fun getViewBinding() = ActivityMainBinding.inflate(layoutInflater)
-
 }

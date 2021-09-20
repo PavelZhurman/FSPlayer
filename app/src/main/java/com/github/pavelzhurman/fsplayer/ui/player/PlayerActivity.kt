@@ -7,8 +7,7 @@ import com.github.pavelzhurman.core.base.BaseActivity
 import com.github.pavelzhurman.fsplayer.R
 import com.github.pavelzhurman.fsplayer.databinding.ActivityPlayerBinding
 
-class PlayerActivity : BaseActivity<ActivityPlayerBinding, PlayerViewModel>() {
-    override fun initObservers(viewModel: PlayerViewModel) {}
+class PlayerActivity : BaseActivity<ActivityPlayerBinding>() {
 
     override fun initViews() {
         initToolbar()
@@ -27,7 +26,6 @@ class PlayerActivity : BaseActivity<ActivityPlayerBinding, PlayerViewModel>() {
         }
     }
 
-    override val viewModelClass: Class<PlayerViewModel> = PlayerViewModel::class.java
     override fun getViewBinding() = ActivityPlayerBinding.inflate(layoutInflater)
 
     companion object {

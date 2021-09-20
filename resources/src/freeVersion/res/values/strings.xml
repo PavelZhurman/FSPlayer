@@ -4,21 +4,27 @@
 
     //contentDescriptions
     <string name="thumbnail_image">thumbnail image</string>
+    <string name="poster_image">poster image</string>
     <string name="shuffle_playlist">shuffle playlist</string>
     <string name="repeat_song">repeat song</string>
     <string name="change_volume">change volume</string>
     <string name="previous_song">previous song</string>
     <string name="play_or_pause_song">play or pause song</string>
+    <string name="play_song">play song</string>
+    <string name="download_song">Скачать песню</string>
     <string name="next_song">next song</string>
     <string name="add_new_playlist">add new playlist</string>
     <string name="open">Open</string>
     <string name="close">Close</string>
+    <string name="set_favourite">set favourite</string>
+    <string name="current_playlist_check">current playlist check</string>
+    <string name="add_song">add song</string>
+    <string name="remove_song_from_playlist">remove song from playlist</string>
 
     <string name="hello_world">Hello free world!</string>
     <string name="favourite_songs">Favourite songs</string>
     <string name="my_playlists">My playlists</string>
     <string name="freesound_org" translatable="false">Freesound.org</string>
-    <string name="language">Language</string>
     <string name="main_fragment">Main fragment</string>
     <string name="login" translatable="false">Login</string>
     <string name="password" translatable="false">Password</string>
@@ -28,6 +34,48 @@
     <string name="search">Search</string>
     <string name="player" translatable="false">player</string>
     <string name="authorization">Authorization</string>
+    <string name="shuffle_mode_on">Shuffle mode on</string>
+    <string name="shuffle_mode_off">Shuffle mode off</string>
+    <string name="repeat_mode_one">Repeat mode one</string>
+    <string name="repeat_mode_all">Repeat mode all</string>
+    <string name="no_sounds_found">No sounds found</string>
+    <string name="enter_playlist_name">Enter playlist name</string>
+    <string name="enter_playlist_name_please">Enter playlist name, please</string>
+    <string name="not_implemented_yet">Not implemented yet</string>
+    <string name="player_canceled">Player canceled</string>
+    <string name="player_error">Player error</string>
+    <string name="no_favourite_songs_added">No favourite songs added</string>
+    <string name="sounds_not_found">Sounds not found</string>
+    <string name="update">Update</string>
+    <string name="you_cannot_add_unloaded_songs_to_favourite">You cannot add unloaded songs to favourite</string>
+    <string name="enter_artist_name_or_song_title">Enter artist name or song title</string>
+    <string name="cancel">Cancel</string>
+    <string name="add_songs_to_playlist">Add songs to playlist</string>
+    <string name="edit_songs_in_playlist">Edit songs in playlist</string>
+    <string name="apply">Apply</string>
+    <string name="delete_playlist">Delete playlist</string>
+    <string name="are_you_sure_you_want_to_delete_playlist">Are you sure you want to delete the playlist?</string>
+    <string name="delete">Delete</string>
+    <string name="you_cannot_edit_main_playlist">You cannot edit Main Playlist</string>
+    <string name="add">Add</string>
+    <string name="are_you_sure_you_want_to_update_database">Are you sure you want to update database?</string>
+    <string name="this_will_scan_your_phone">
+        This will scan your phone for music files and remove nonexistent songs from the app\'s database. This may take some time.
+    </string>
+    <string name="update_songs_in_database">Update songs in database</string>
+    <string name="downloaded">%1s downloaded</string>
+    <string name="sounds_found_zero">Sounds find: 0</string>
+    <string name="sounds_found_with_value">Sounds find: %1d</string>
 
+    <string name="description">Description: \n %1s</string>
+    <string name="tags">Tags: \n %1s</string>
+    <string name="duration">Duration: %1s</string>
+    <string name="file_size">File size: %1dKBs</string>
+    <string name="username">Username: %1s</string>
+    <string name="num_downloads">Number of downloads: %1d</string>
+
+
+    <string name="channel_name_resource" translatable="false">ChannelNameResourceId</string>
+    <string name="zero_time" translatable="false">0:00</string>
 
 </resources>

@@ -6,5 +6,7 @@ import io.reactivex.rxjava3.core.Single
 
 interface FreesoundRepository {
     fun getFreesoundSearchData(query: String): Single<FreesoundSearchData>
+    fun getFreesoundSearchData(query: String, page:Int): Single<FreesoundSearchData>
     fun getSongInfo(id: String): Single<FreesoundSongItem>
+    fun downloadFreesoundSongItem(freesoundSongItem: FreesoundSongItem)
 }

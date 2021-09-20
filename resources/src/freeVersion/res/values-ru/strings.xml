@@ -4,19 +4,54 @@
 
     <string name="favourite_songs">Избранные песни</string>
     <string name="my_playlists">Плейлисты</string>
+    <string name="no_sounds_found">Звуки не найдены</string>
+    <string name="shuffle_mode_on">Режим воспроизведения в случайном порядке включён</string>
+    <string name="shuffle_mode_off">Режим воспроизведения в случайном порядке выключен</string>
+    <string name="repeat_mode_one">Режим повтора одной композиции</string>
+    <string name="repeat_mode_all">Режим повтора плейлиста</string>
+    <string name="no_favourite_songs_added">Избранных песен не добавлено</string>
+    <string name="sounds_not_found">Звуки не найдены</string>
+    <string name="update">Обновить</string>
+    <string name="enter_artist_name_or_song_title">Введите имя артиста или название песни</string>
+    <string name="cancel">Отмена</string>
+    <string name="add_songs_to_playlist">Добавьте песни в плейлист</string>
+    <string name="edit_songs_in_playlist">редактирование песен в плейлисте</string>
+    <string name="apply">Применить</string>
+    <string name="delete_playlist">Удалить плейлист</string>
+    <string name="are_you_sure_you_want_to_delete_playlist">Вы уверены, что хотите удалить плейлист?</string>
+    <string name="delete">Удалить</string>
+    <string name="you_cannot_edit_main_playlist">Вы не можете редактировать Main Playlist</string>
+    <string name="add">Добавить</string>
+    <string name="are_you_sure_you_want_to_update_database">Вы уверены, что хотите обновить базу данных?</string>
+    <string name="this_will_scan_your_phone">Произойдёт сканирование телефона на наличие музыкальных файлов и удалит несуществующие песни из базы данных приложения. Это может занять некоторое время.</string>
+    <string name="update_songs_in_database">Обновить песни в базе данных</string>
+    <string name="downloaded">%1s скачан</string>
+    <string name="sounds_found_zero">Звуковый файлов найдено: 0</string>
+    <string name="sounds_found_with_value">Звуковый файлов найдено: %1d</string>
 
+
+
+
+    <string name="description">Описание: \n %1s</string>
+    <string name="tags">Тэги \n %1s</string>
+    <string name="duration">Длительность: %1s</string>
+    <string name="username">Пользователь: %1s</string>
+    <string name="file_size">Размер файла: %1d KBs</string>
+    <string name="num_downloads">Количество скачиваний: %1d</string>
 
 
     //contentDescriptions
     <string name="thumbnail_image">миниатюра изображения</string>
+    <string name="poster_image">изображение песни</string>
     <string name="repeat_song">повторить песню</string>
     <string name="shuffle_playlist">играть вразнобой</string>
     <string name="change_volume">изменить громкость</string>
     <string name="previous_song">предыдущая песня</string>
     <string name="play_or_pause_song">воспроизвести или приостановить песню</string>
+    <string name="play_song">воспроизвести песню</string>
+    <string name="download_song">download song</string>
     <string name="next_song">следующая песня</string>
     <string name="add_new_playlist">добавить новый плейлист</string>
-    <string name="language">Язык</string>
     <string name="open">Открыть</string>
     <string name="close">Закрыть</string>
     <string name="main_fragment">Главный фрагмент</string>
@@ -24,6 +59,16 @@
     <string name="search_by">Искать по</string>
     <string name="filter_by">Фильтровать по</string>
     <string name="search">Поиск</string>
-
+    <string name="authorization">Авторизация</string>
+    <string name="set_favourite">Установка песни в список любимых</string>
+    <string name="enter_playlist_name">Введите название плейлиста</string>
+    <string name="enter_playlist_name_please">Пожалуйста, введите название плейлиста</string>
+    <string name="not_implemented_yet">Ещё не реализовано</string>
+    <string name="player_canceled">Плейер отменён</string>
+    <string name="player_error">Ошибка плейера</string>
+    <string name="you_cannot_add_unloaded_songs_to_favourite">Вы не пожете добавить не загруженные песни в избранное</string>
+    <string name="current_playlist_check">Текущий плейлист</string>
+    <string name="add_song">Добавить песню</string>
+    <string name="remove_song_from_playlist">Удалить песню из плейлиста</string>
 
 </resources>

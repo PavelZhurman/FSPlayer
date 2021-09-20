@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ImageView
+        android:id="@+id/image_view_poster"
+        style="@style/ImageViewPosterForPlayerPager"
+        android:background="@color/background_item_freesound_search_songs"
+        android:contentDescription="@string/poster_image"
+        android:scaleType="centerCrop"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageButton
+        android:id="@+id/image_button_favourite"
+        style="@style/PagerImageButtonFavourite"
+        android:contentDescription="@string/set_favourite"
+        android:src="@drawable/ic_baseline_favorite_border_24"
+        app:layout_constraintBottom_toTopOf="@+id/text_view_artist"
+        app:layout_constraintEnd_toEndOf="@+id/image_view_poster"
+        app:layout_constraintTop_toBottomOf="@+id/text_view_song" />
+
+    <TextView
+        android:id="@+id/text_view_song"
+        style="@style/TextHeader.PlayerSong"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:singleLine="true"
+        android:ellipsize="marquee"
+        android:marqueeRepeatLimit="marquee_forever"
+        app:layout_constraintEnd_toEndOf="@+id/image_view_poster"
+        app:layout_constraintStart_toStartOf="@+id/image_view_poster"
+        app:layout_constraintTop_toBottomOf="@+id/image_view_poster"
+        tools:text="Believer" />
+
+    <TextView
+        android:id="@+id/text_view_artist"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:singleLine="true"
+        android:ellipsize="marquee"
+        android:marqueeRepeatLimit="marquee_forever"
+        app:layout_constraintEnd_toEndOf="@+id/text_view_song"
+        app:layout_constraintStart_toStartOf="@+id/text_view_song"
+        app:layout_constraintTop_toBottomOf="@+id/text_view_song"
+        tools:text="Imagine dragons" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

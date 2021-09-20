@@ -10,6 +10,15 @@
     <style name="ImageViewPosterForRecyclerViewMainFragmentItem">
         <item name="android:layout_width">190dp</item>
         <item name="android:layout_height">190dp</item>
+    </style>
 
+    <style name="ImageViewPosterForPlayerPager">
+        <item name="android:layout_width">260dp</item>
+        <item name="android:layout_height">260dp</item>
+    </style>
+
+    <style name="ImageViewCurrentPlaylistCheck">
+        <item name="android:layout_width">48dp</item>
+        <item name="android:layout_height">48dp</item>
     </style>
 </resources>
